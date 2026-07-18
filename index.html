@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Skills 설치 가이드</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #09090f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(124,106,247,0.4);
+    --text: #ececf4;
+    --muted: #7a7a90;
+    --accent: #7c6af7;
+    --accent2: #c084fc;
+    --accent3: #38bdf8;
+    --green: #4ade80;
+    --orange: #fb923c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 40px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(9,9,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-gh {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); text-decoration: none; padding: 6px 14px;
+    border-radius: 8px; font-size: 12px; font-weight: 600; transition: all 0.2s;
+  }
+  .nav-gh:hover { border-color: var(--border-hover); background: rgba(124,106,247,0.08); }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 2px; z-index: 200;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.1s linear;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 100px 24px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute; width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 65%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    animation: breathe 7s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes breathe {
+    0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.7; }
+    50% { transform: translate(-50%,-50%) scale(1.1); opacity: 1; }
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,106,247,0.1); border: 1px solid rgba(124,106,247,0.25);
+    color: var(--accent2); font-size: 12px; font-weight: 700;
+    padding: 6px 16px; border-radius: 100px; margin-bottom: 32px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    animation: fadeDown 0.7s ease both;
+  }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 900; line-height: 1.05; letter-spacing: -0.04em;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(135deg, #a78bfa, #c084fc, #60a5fa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--muted);
+    max-width: 520px; margin: 24px auto 0;
+    animation: fadeUp 0.8s 0.2s ease both; line-height: 1.8;
+  }
+  .hero-meta {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    justify-content: center; margin-top: 20px;
+    animation: fadeUp 0.8s 0.25s ease both;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--muted); font-weight: 500;
+  }
+  .hero-meta-item span { color: var(--text); font-weight: 700; }
+  .hero-btns {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+    margin-top: 40px; animation: fadeUp 0.8s 0.3s ease both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 28px; border-radius: 12px; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; text-decoration: none; border: none;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--accent); color: white;
+    box-shadow: 0 0 28px rgba(124,106,247,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(124,106,247,0.55); }
+  .btn-ghost {
+    background: var(--surface2); color: var(--text); border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--border-hover); }
+
+  .scroll-cue {
+    position: absolute; bottom: 36px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    animation: bob 2.5s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+
+  /* ── SECTION ── */
+  .section { padding: 100px 24px; max-width: 960px; margin: 0 auto; }
+  .sec-eyebrow {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+  }
+  .sec-title {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 900;
+    line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 16px;
+  }
+  .sec-desc { color: var(--muted); font-size: 1rem; max-width: 540px; line-height: 1.8; }
+
+  /* ── WHAT IS IT ── */
+  .what-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin-top: 48px;
+  }
+  .what-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px 24px;
+    opacity: 0; transform: translateY(24px);
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .what-card.vis { animation: slideUp 0.5s ease forwards; }
+  @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+  .what-card:hover { border-color: var(--border-hover); transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+  .what-icon { font-size: 28px; margin-bottom: 14px; }
+  .what-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+  .what-body { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 0 24px; }
+
+  /* ── STEPS ── */
+  .steps { margin-top: 56px; display: flex; flex-direction: column; gap: 20px; }
+  .step-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 32px 36px; display: grid; grid-template-columns: 56px 1fr; gap: 24px;
+    opacity: 0; transform: translateY(32px);
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  }
+  .step-card.vis { animation: slideUp 0.55s ease forwards; }
+  .step-card:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.45); }
+  .step-num {
+    width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; color: white;
+  }
+  .step-h { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .step-p { font-size: 0.9rem; color: var(--muted); line-height: 1.75; }
+  .code-block {
+    margin-top: 16px; background: var(--bg);
+    border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;
+    padding: 18px 20px; position: relative; overflow: hidden;
+  }
+  .code-block::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+  }
+  .code-block pre {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9;
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .c-comment { color: #44445a; }
+  .c-kw { color: var(--accent2); }
+  .c-str { color: var(--green); }
+  .c-path { color: var(--accent3); }
+  .c-ok { color: var(--green); }
+  .copy-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    color: var(--muted); padding: 3px 10px; border-radius: 6px;
+    font-size: 11px; cursor: pointer; transition: all 0.2s; font-family: inherit;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+
+  /* ── METHOD TABS ── */
+  .method-tabs { display: flex; gap: 8px; margin-top: 48px; flex-wrap: wrap; }
+  .mtab {
+    padding: 8px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--muted); font-family: inherit;
+  }
+  .mtab.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .method-pane { display: none; margin-top: 20px; }
+  .method-pane.active { display: block; }
+
+  /* ── SKILL CARDS ── */
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px; margin-top: 56px;
+  }
+  .skill-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 18px; padding: 26px; cursor: pointer;
+    opacity: 0; transform: translateY(24px);
+    transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden; text-decoration: none; color: inherit;
+    display: block;
+  }
+  .skill-card.vis { animation: slideUp 0.5s ease forwards; }
+  .skill-card:hover { border-color: var(--border-hover); transform: translateY(-5px); box-shadow: 0 20px 56px rgba(0,0,0,0.5); }
+  .skill-card-glow {
+    position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .skill-card:hover .skill-card-glow { opacity: 1; }
+  .skill-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .skill-emoji { font-size: 30px; line-height: 1; }
+  .skill-stars {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 3px 8px; border-radius: 6px;
+  }
+  .skill-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .skill-repo { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--muted); margin-bottom: 12px; }
+  .skill-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .tag {
+    padding: 2px 9px; border-radius: 5px; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .tag-purple { background: rgba(124,106,247,0.12); color: #a78bfa; }
+  .tag-blue { background: rgba(56,189,248,0.1); color: #38bdf8; }
+  .tag-green { background: rgba(74,222,128,0.1); color: #4ade80; }
+  .tag-orange { background: rgba(251,146,60,0.1); color: #fb923c; }
+  .tag-pink { background: rgba(244,114,182,0.12); color: #f472b6; }
+
+  .skill-install {
+    margin-top: 18px; padding: 12px 14px;
+    background: var(--bg); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--accent3); word-break: break-all; line-height: 1.6;
+  }
+
+  /* ── TERMINAL ── */
+  .terminal-wrap { margin-top: 48px; }
+  .terminal {
+    background: #0b0b12; border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .term-bar {
+    background: #131320; padding: 13px 18px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+  .term-title { font-size: 12px; color: var(--muted); font-family: 'JetBrains Mono', monospace; flex: 1; text-align: center; }
+  .term-body {
+    padding: 24px 26px; font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; line-height: 2; min-height: 200px;
+  }
+  .t-pr { color: var(--accent); } .t-cm { color: var(--text); }
+  .t-out { color: #3a3a55; } .t-ok { color: var(--green); } .t-info { color: var(--accent3); }
+  .cursor { display: inline-block; width: 7px; height: 14px; background: var(--accent2); border-radius: 2px; animation: blink 1s step-end infinite; vertical-align: middle; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── FAQ ── */
+  .faq-list { margin-top: 48px; display: flex; flex-direction: column; gap: 10px; }
+  .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.3s; }
+  .faq-item:hover { border-color: rgba(124,106,247,0.25); }
+  .faq-q { width: 100%; background: none; border: none; color: var(--text); font-family: inherit; font-size: 0.9rem; font-weight: 600; padding: 18px 22px; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .faq-arrow { color: var(--muted); transition: transform 0.3s; flex-shrink: 0; font-size: 18px; }
+  .faq-item.open .faq-arrow { transform: rotate(90deg); color: var(--accent); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; color: var(--muted); font-size: 0.87rem; line-height: 1.8; padding: 0 22px; }
+  .faq-item.open .faq-a { max-height: 300px; padding: 0 22px 18px; }
+
+  /* ── FOOTER CTA ── */
+  .footer-cta { text-align: center; padding: 120px 24px; position: relative; overflow: hidden; }
+  .footer-cta::before { content: ''; position: absolute; width: 700px; height: 700px; background: radial-gradient(circle, rgba(192,132,252,0.1) 0%, transparent 65%); bottom: -300px; left: 50%; transform: translateX(-50%); pointer-events: none; }
+  .footer-cta h2 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 18px; }
+  .footer-cta p { color: var(--muted); font-size: 1rem; margin-bottom: 40px; }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    padding: 40px 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    margin: 0; background: var(--surface);
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 2rem; font-weight: 900; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .stat-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 4px; letter-spacing: 0.03em; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; } .nav-links { display: none; }
+    .section { padding: 80px 16px; }
+    .step-card { grid-template-columns: 1fr; padding: 24px; }
+    .stats-bar { gap: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,*::before,*::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="prog"></div>
+
+<nav>
+  <div class="nav-logo"><div class="dot"></div> Claude Skills 가이드</div>
+  <ul class="nav-links">
+    <li><a href="#what">스킬이란</a></li>
+    <li><a href="#how">설치방법</a></li>
+    <li><a href="#picks">추천 스킬</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a class="nav-gh" href="https://github.com/search?q=claude+skills&type=repositories" target="_blank">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.83-.26.83-.58v-2.02c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.3c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+    GitHub
+  </a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">✦ Anthropic 공식 기능 · Claude Code</div>
+  <h1>Claude에<br><span class="grad">스킬을 설치</span>하면<br>전문가가 됩니다</h1>
+  <p class="hero-sub">`.md` 파일 하나로 Claude에게 새로운 능력을 심는 공식 플러그인 시스템.<br>GitHub에서 무료로 배포되는 수천 개의 스킬을 2분 안에 설치하세요.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">⭐ GitHub <span>40,000+</span> 스타 스킬</div>
+    <div class="hero-meta-item">📦 <span>900,000+</span> 설치</div>
+    <div class="hero-meta-item">🆓 <span>완전 무료</span></div>
+  </div>
+  <div class="hero-btns">
+    <a href="#how" class="btn btn-primary">⚡ 설치 방법 보기</a>
+    <a href="#picks" class="btn btn-ghost">✦ 추천 스킬 5선</a>
+  </div>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">40,000</div><div class="stat-label">Marketing Skills ⭐</div></div>
+  <div class="stat"><div class="stat-num">428K</div><div class="stat-label">Remotion 설치수</div></div>
+  <div class="stat"><div class="stat-num">345개</div><div class="stat-label">단일 컬렉션 최대</div></div>
+  <div class="stat"><div class="stat-num">2분</div><div class="stat-label">평균 설치 소요 시간</div></div>
+</div>
+
+<!-- What is it -->
+<section class="section" id="what">
+  <div class="sec-eyebrow">💡 WHAT IS CLAUDE SKILLS</div>
+  <h2 class="sec-title">스킬이 뭔가요?</h2>
+  <p class="sec-desc">Anthropic이 Claude Code에 공식 도입한 확장 시스템. <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:2px 6px;border-radius:4px;">.md</code> 파일로 만든 커스텀 명령을 Claude에게 가르쳐서, 특정 분야의 전문가처럼 작동하게 만듭니다.</p>
+
+  <div class="what-grid">
+    <div class="what-card">
+      <div class="what-icon">📦</div>
+      <div class="what-title">AI를 위한 npm</div>
+      <div class="what-body">스킬 = AI 에이전트의 패키지. npm처럼 원하는 능력을 골라서 설치하고, 필요 없으면 제거합니다.</div>
+    </div>
+    <div class="what-card">
+      <div class="what-icon">🔗</div>
+      <div class="what-title">오픈 스탠다드</div>
+      <div class="what-body">Claude Code뿐 아니라 Cursor, Codex, Windsurf, Gemini CLI 등 주요 AI 에이전트 전체에서 동작합니다.</div>
+    </div>
+    <div class="what-card">
+      <div class="what-icon">📁</div>
+      <div class="what-title">파일 기반 관리</div>
+      <div class="what-body"><code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">~/.claude/skills/</code> 폴더에 넣으면 전체 적용, <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">.claude/skills/</code>에 넣으면 해당 프로젝트만 적용.</div>
+    </div>
+    <div class="what-card">
+      <div class="what-icon">⚡</div>
+      <div class="what-title">슬래시 커맨드로 호출</div>
+      <div class="what-body">설치 후 <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">/skill-name</code> 또는 <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">@skill-name</code> 으로 즉시 호출. 배우는 시간 필요 없이 바로 씁니다.</div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- How to install -->
+<section class="section" id="how">
+  <div class="sec-eyebrow">🚀 INSTALLATION GUIDE</div>
+  <h2 class="sec-title">설치 방법,<br>3가지 중 하나면 됩니다</h2>
+  <p class="sec-desc">Claude Code가 설치된 환경에서 진행하세요. 가장 빠른 건 방법 A — 명령어 한 줄이면 끝납니다.</p>
+
+  <div class="method-tabs">
+    <button class="mtab active" onclick="switchTab(this,'a')">A. 명령어 한 줄</button>
+    <button class="mtab" onclick="switchTab(this,'b')">B. 수동 파일 설치</button>
+    <button class="mtab" onclick="switchTab(this,'c')">C. Git 클론</button>
+  </div>
+
+  <!-- Method A -->
+  <div class="method-pane active" id="pane-a">
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-h">터미널에서 명령어 실행</div>
+          <div class="step-p">Claude Code CLI가 설치된 터미널을 열고 아래 명령어를 붙여넣으세요. <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">plugin install</code> 명령 하나로 다운로드→설치가 자동으로 됩니다.</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyText(this,'claude-code plugin install https://github.com/coreyhaines31/marketingskills')">복사</button>
+            <pre><span class="c-comment"># 예시: Marketing Skills 설치</span>
+<span class="t-pr">$</span> <span class="c-kw">claude-code</span> plugin install <span class="c-path">https://github.com/coreyhaines31/marketingskills</span>
+
+<span class="c-comment"># Superpowers 설치</span>
+<span class="t-pr">$</span> <span class="c-kw">claude-code</span> plugin install <span class="c-path">https://github.com/obra/superpowers-lab</span>
+
+<span class="c-comment"># Remotion Skills 설치</span>
+<span class="t-pr">$</span> <span class="c-kw">claude-code</span> plugin install <span class="c-path">https://github.com/remotion-dev/skills</span></pre>
+          </div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-h">설치 확인</div>
+          <div class="step-p">설치가 완료되면 Claude Code를 재시작하거나 새 대화를 시작하세요. <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/</code> 를 입력하면 설치된 스킬 목록이 자동완성으로 표시됩니다.</div>
+          <div class="code-block">
+            <pre><span class="c-ok">✓</span> <span class="c-str">marketingskills installed</span>
+<span class="c-ok">✓</span> <span class="c-str">Available as /marketing, /copywriting, /seo ...</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Method B -->
+  <div class="method-pane" id="pane-b">
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-h">GitHub에서 SKILL.md 파일 다운로드</div>
+          <div class="step-p">원하는 스킬의 GitHub 저장소로 이동해서 <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">SKILL.md</code> 또는 <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">skills/</code> 폴더의 파일을 다운로드하세요.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-h">스킬 폴더에 파일 배치</div>
+          <div class="step-p">다운로드한 파일을 아래 경로에 넣으면 됩니다. 폴더가 없으면 직접 만드세요.</div>
+          <div class="code-block">
+            <pre><span class="c-comment"># 전체 적용 (개인 설정)</span>
+~/.claude/skills/<span class="c-kw">스킬이름</span>/SKILL.md
+
+<span class="c-comment"># 현재 프로젝트만 적용</span>
+.claude/skills/<span class="c-kw">스킬이름</span>/SKILL.md</pre>
+          </div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-h">Claude Code 재시작 후 사용</div>
+          <div class="step-p"><code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/스킬이름</code> 으로 바로 호출하세요. SKILL.md 안에 정의된 모든 커맨드가 활성화됩니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Method C -->
+  <div class="method-pane" id="pane-c">
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-h">저장소 클론</div>
+          <div class="step-p">스킬 컬렉션 전체를 한 번에 받아서 원하는 것만 골라 쓰는 방법입니다. 345개 스킬이 들어있는 컬렉션도 있어요.</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyText(this,'git clone https://github.com/alirezarezvani/claude-skills')">복사</button>
+            <pre><span class="t-pr">$</span> <span class="c-kw">git clone</span> <span class="c-path">https://github.com/alirezarezvani/claude-skills</span>
+<span class="c-comment"># ⭐ 22,700 · 345개 스킬 모음집</span></pre>
+          </div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-h">원하는 스킬만 복사</div>
+          <div class="step-p">클론된 폴더에서 원하는 스킬 디렉토리를 <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">~/.claude/skills/</code> 로 복사하면 됩니다.</div>
+          <div class="code-block">
+            <pre><span class="t-pr">$</span> cp -r claude-skills/marketing <span class="c-path">~/.claude/skills/marketing</span>
+<span class="t-pr">$</span> cp -r claude-skills/remotion <span class="c-path">~/.claude/skills/remotion</span>
+<span class="c-ok">✓</span> <span class="c-str">Done! 2 skills installed</span></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Terminal Demo -->
+<section class="section">
+  <div class="sec-eyebrow">💻 LIVE EXAMPLE</div>
+  <h2 class="sec-title">설치 후 이런 게<br>가능해집니다</h2>
+  <div class="terminal-wrap">
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="term-title">claude — skills demo</div>
+      </div>
+      <div class="term-body" id="termBody"></div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- Skill Picks -->
+<section class="section" id="picks">
+  <div class="sec-eyebrow">⚡ TOP 5 PICKS</div>
+  <h2 class="sec-title">진짜 써먹히는<br>사기급 스킬 5선</h2>
+  <p class="sec-desc">GitHub 스타 수·설치 수·커뮤니티 반응 기준으로 추린 실존하는 스킬들입니다. 전부 무료예요.</p>
+
+  <div class="skills-grid">
+
+    <!-- Remotion -->
+    <a class="skill-card" href="https://github.com/remotion-dev/skills" target="_blank">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(251,146,60,0.05),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎬</div>
+        <div class="skill-stars">⭐ 4,000+</div>
+      </div>
+      <div class="skill-name">Remotion</div>
+      <div class="skill-repo">remotion-dev/skills</div>
+      <div class="skill-desc">공식 Remotion 팀이 직접 만든 스킬. 코드로 영상 생성 — 유튜브 인트로, 데이터 시각화 영상, 발표 애니메이션까지. 428,000+ 설치 · skills.sh 26위.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">공식 팀 제작</span>
+        <span class="tag tag-blue">영상 제작</span>
+      </div>
+      <div class="skill-install">claude-code plugin install github.com/remotion-dev/skills</div>
+    </a>
+
+    <!-- Superpowers -->
+    <a class="skill-card" href="https://github.com/obra/superpowers-lab" target="_blank">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(124,106,247,0.05),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">⭐</div>
+        <div class="skill-stars">⭐ 1,100+</div>
+      </div>
+      <div class="skill-name">Superpowers</div>
+      <div class="skill-repo">obra/superpowers-lab</div>
+      <div class="skill-desc">시맨틱 코드 중복 탐지, tmux 인터랙티브 명령, MCP CLI 통합 등 Claude Code를 극한까지 끌어올리는 스킬 모음. obra/superpowers-skills(원본)의 실험적 후속.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">올인원</span>
+        <span class="tag tag-blue">코딩 강화</span>
+      </div>
+      <div class="skill-install">claude-code plugin install github.com/obra/superpowers-lab</div>
+    </a>
+
+    <!-- Marketing Skills -->
+    <a class="skill-card" href="https://github.com/coreyhaines31/marketingskills" target="_blank">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(74,222,128,0.04),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">📣</div>
+        <div class="skill-stars">⭐ 40,000</div>
+      </div>
+      <div class="skill-name">Marketing Skills</div>
+      <div class="skill-repo">coreyhaines31/marketingskills</div>
+      <div class="skill-desc">단일 스킬 저장소 최고 인기 ⭐40,000. CRO, 카피라이팅, SEO, 성장 엔지니어링 등 마케터의 두뇌를 그대로 이식. 31개 브랜치 활발히 업데이트 중.</div>
+      <div class="skill-tags">
+        <span class="tag tag-green">최고 인기</span>
+        <span class="tag tag-orange">마케팅</span>
+      </div>
+      <div class="skill-install">claude-code plugin install github.com/coreyhaines31/marketingskills</div>
+    </a>
+
+    <!-- UI/UX Pro Max -->
+    <a class="skill-card" href="https://github.com/ca-who-codes/ultimate.UIUX.design.skills" target="_blank">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(56,189,248,0.05),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎨</div>
+        <div class="skill-stars">⭐ Growing</div>
+      </div>
+      <div class="skill-name">UI/UX Pro Max</div>
+      <div class="skill-repo">ca-who-codes/ultimate.UIUX.design.skills</div>
+      <div class="skill-desc">인터페이스 + 비주얼·마케팅 디자인 두 트랙. HTML→PNG/PDF/PPTX/MP4 프로덕션 파이프라인 포함. Claude Code, Cursor, Windsurf 전부 지원.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">UI/UX</span>
+        <span class="tag tag-pink">멀티 에이전트</span>
+      </div>
+      <div class="skill-install">claude-code plugin install github.com/ca-who-codes/ultimate.UIUX.design.skills</div>
+    </a>
+
+    <!-- Claude Skills 컬렉션 -->
+    <a class="skill-card" href="https://github.com/alirezarezvani/claude-skills" target="_blank">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(192,132,252,0.05),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🗂️</div>
+        <div class="skill-stars">⭐ 22,700</div>
+      </div>
+      <div class="skill-name">Claude Skills 컬렉션</div>
+      <div class="skill-repo">alirezarezvani/claude-skills</div>
+      <div class="skill-desc">345개 스킬이 담긴 단일 저장소. 메모리 시스템, 코드 리뷰, 문서화, 테스트, 데이터 분석까지 — 이거 하나 클론하면 당분간은 다른 거 필요 없음.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">최대 컬렉션</span>
+        <span class="tag tag-green">345개 스킬</span>
+      </div>
+      <div class="skill-install">git clone github.com/alirezarezvani/claude-skills</div>
+    </a>
+
+  </div>
+</section>
+
+<hr>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="sec-eyebrow">❓ FAQ</div>
+  <h2 class="sec-title">자주 묻는 것들</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Claude.ai 웹사이트에서도 스킬을 쓸 수 있나요?
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-a">Claude Skills는 현재 <strong>Claude Code</strong>(터미널 기반 AI 코딩 에이전트)에서 동작하는 기능입니다. claude.ai 웹 브라우저 버전에서는 직접 지원되지 않습니다. 단, Cursor나 Windsurf 같은 에디터에서도 같은 스킬 파일을 사용할 수 있어요.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        스킬을 찾는 공식 검색 엔진이 있나요?
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-a"><strong>skills.sh</strong> (Vercel 제작)가 사실상 공식 스킬 디렉토리 역할을 합니다. 905,000개 이상의 스킬이 등록되어 있고, 설치 수·인기 순위로 검색할 수 있어요. claudeskills.com은 큐레이션 마켓플레이스로 waitlist 운영 중입니다.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        스킬을 여러 개 설치하면 충돌이 생기나요?
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-a">기본적으로 스킬은 독립적으로 동작해 충돌이 거의 없습니다. 다만 같은 커맨드 이름이 중복되면 마지막에 설치된 스킬이 우선합니다. 너무 많이 설치하면 컨텍스트 로딩 시간이 늘어날 수 있으니 자주 쓰는 것 위주로 10개 이내로 관리하는 게 좋아요.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        내가 직접 스킬을 만들어서 공개할 수 있나요?
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-a">당연히 가능합니다. <code style="font-family:'JetBrains Mono';font-size:0.85em">SKILL.md</code> 파일에 YAML 프론트매터와 마크다운 지시사항을 작성하면 됩니다. Agent Skills Open Standard를 따르면 Claude뿐 아니라 Cursor, Codex, Gemini CLI에서도 동작하는 범용 스킬을 만들 수 있어요.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        유료인 스킬도 있나요?
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-a">현재 GitHub에 올라온 스킬들은 대부분 무료 오픈소스입니다. claudeskills.com 같은 마켓플레이스가 활성화되면 프리미엄 스킬도 등장할 수 있지만, 지금 단계에서는 사실상 전부 무료입니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer CTA -->
+<section class="footer-cta">
+  <h2>지금 바로<br><span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">시작하세요</span></h2>
+  <p>Marketing Skills ⭐40,000 · Remotion 428K 설치 · 전부 무료</p>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="https://skills.sh" target="_blank" class="btn btn-primary">✦ skills.sh 에서 찾기</a>
+    <a href="https://github.com/search?q=claude+skills&type=repositories&sort=stars" target="_blank" class="btn btn-ghost">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.83-.26.83-.58v-2.02c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.3c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
+      GitHub 전체 탐색
+    </a>
+  </div>
+</section>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  document.getElementById('prog').style.width = (window.scrollY / (h.scrollHeight - h.clientHeight) * 100) + '%';
+});
+
+// Scroll reveal
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('vis'), i * 90);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.step-card, .skill-card, .what-card').forEach(el => io.observe(el));
+
+// Tab switch
+function switchTab(btn, id) {
+  document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.method-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-' + id).classList.add('active');
+}
+
+// FAQ
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item'), open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!open) item.classList.add('open');
+}
+
+// Copy
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    setTimeout(() => btn.textContent = orig, 1800);
+  });
+}
+
+// Terminal animation
+const termLines = [
+  { cls: 't-pr', text: '$ ' },
+  { cls: 't-cm', text: 'claude-code plugin install https://github.com/coreyhaines31/marketingskills', speed: 30, delay: 0 },
+  { cls: '', text: '\n' },
+  { cls: 't-info', text: '⟳ Fetching skill manifest...', delayBefore: 500 },
+  { cls: '', text: '\n' },
+  { cls: 't-ok', text: '✓ marketingskills@2.1.0 installed', delayBefore: 700 },
+  { cls: '', text: '\n' },
+  { cls: 't-out', text: '  skills: /marketing /copywriting /cro /seo /growth', delayBefore: 200 },
+  { cls: '', text: '\n\n' },
+  { cls: 't-pr', text: '$ ', delayBefore: 600 },
+  { cls: 't-cm', text: '/marketing 우리 제품 USP 정리하고 랜딩페이지 헤드라인 5개 써줘', speed: 28, delay: 800 },
+  { cls: '', text: '\n' },
+  { cls: 't-out', text: '> Marketing Skills 활성화', delayBefore: 400 },
+  { cls: '', text: '\n' },
+  { cls: 't-out', text: '> USP 분석 중 → 헤드라인 프레임워크 적용...', delayBefore: 300 },
+  { cls: '', text: '\n' },
+  { cls: 't-ok', text: '1. "경쟁사가 따라올 수 없는 단 하나의 이유"', delayBefore: 600 },
+  { cls: '', text: '\n' },
+  { cls: 't-ok', text: '2. "고객이 떠나지 않는 제품의 비밀"', delayBefore: 150 },
+  { cls: '', text: '\n' },
+  { cls: 't-ok', text: '3. "30일 안에 ROI를 증명합니다"', delayBefore: 150 },
+  { cls: '', text: '\n\n' },
+  { cls: 't-pr', text: '$ ', delayBefore: 800 },
+  { cls: '', text: '', type: 'cursor' },
+];
+
+function runTerm() {
+  const body = document.getElementById('termBody');
+  let i = 0;
+  function next() {
+    if (i >= termLines.length) return;
+    const l = termLines[i];
+    const before = l.delayBefore || 0;
+    setTimeout(() => {
+      if (l.text === '\n' || l.text === '\n\n') {
+        body.innerHTML += l.text.replace(/\n/g, '<br>');
+        i++; next(); return;
+      }
+      if (l.type === 'cursor') {
+        body.innerHTML += '<span class="cursor"></span>';
+        i++; return;
+      }
+      const span = document.createElement('span');
+      if (l.cls) span.className = l.cls;
+      body.appendChild(span);
+      const speed = l.speed || 16;
+      let ci = 0;
+      function typeChar() {
+        if (ci < l.text.length) { span.textContent += l.text[ci++]; setTimeout(typeChar, speed); }
+        else { i++; setTimeout(next, 80); }
+      }
+      typeChar();
+    }, before);
+  }
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) { setTimeout(next, 500); obs.disconnect(); }
+  });
+  obs.observe(body);
+}
+runTerm();
+</script>
+</body>
+</html>
