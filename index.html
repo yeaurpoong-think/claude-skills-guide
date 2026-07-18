@@ -50,6 +50,63 @@
     --ease-std: cubic-bezier(0.4,0,0.2,1);
   }
 
+  /* ── Hero Author Block (강조) ── */
+  .hero-author-block {
+    display:flex; flex-direction:column; align-items:center;
+    margin-bottom:var(--s5); position:relative; z-index:1;
+    animation:fadeDown 0.5s var(--ease-out) both;
+  }
+  .hero-author-eyebrow {
+    font-size:10px; font-weight:700; letter-spacing:0.2em;
+    text-transform:uppercase; color:var(--violet-400); margin-bottom:6px;
+    opacity:0.7;
+  }
+  .hero-author-name {
+    font-size:clamp(2rem, 5vw, 3.6rem);
+    font-weight:900; letter-spacing:-0.04em; line-height:1;
+    background:linear-gradient(135deg, #fff 0%, var(--violet-300) 50%, var(--sky-400) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    position:relative;
+  }
+  .hero-author-name::after {
+    content:''; position:absolute; bottom:-6px; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--violet-500), var(--sky-400), transparent);
+    border-radius:2px;
+  }
+  .hero-author-sub {
+    font-size:clamp(0.9rem, 2vw, 1.2rem); font-weight:600;
+    color:var(--muted); margin-top:10px; letter-spacing:-0.01em;
+  }
+
+  /* ── Site Footer ── */
+  .site-footer {
+    border-top:1px solid var(--border);
+    padding:var(--s7) var(--s8);
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:var(--s5);
+  }
+  .site-footer-left { display:flex; flex-direction:column; gap:6px; }
+  .site-footer-name {
+    font-size:1rem; font-weight:800; letter-spacing:-0.02em;
+    background:linear-gradient(135deg, var(--text), var(--violet-300));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .site-footer-email {
+    font-size:13px; color:var(--muted);
+    display:flex; align-items:center; gap:6px; text-decoration:none;
+    transition:color 0.2s;
+  }
+  .site-footer-email:hover { color:var(--accent2); }
+  .site-footer-email svg { opacity:0.5; }
+  .site-footer-right {
+    font-size:11px; color:var(--gray-600); letter-spacing:0.03em;
+    text-align:right;
+  }
+  @media (max-width:640px) {
+    .site-footer { padding:var(--s6) var(--s4); flex-direction:column; align-items:flex-start; }
+    .site-footer-right { text-align:left; }
+  }
+
   /* ── Reset ── */
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
@@ -575,7 +632,11 @@
 <!-- Hero -->
 <section class="hero">
   <div class="hero-glow"></div>
-  <div class="hero-author-badge">슈퍼휴먼 김석원의 AI 가이드</div>
+  <div class="hero-author-block">
+    <div class="hero-author-eyebrow">✦ Curated by</div>
+    <div class="hero-author-name">슈퍼휴먼 김석원</div>
+    <div class="hero-author-sub">의 AI 가이드</div>
+  </div>
   <div class="hero-badge">✦ Anthropic 공식 기능 · Claude Code</div>
   <h1>Claude에<br><span class="grad">스킬을 설치</span>하면<br>전문가가 됩니다</h1>
   <p class="hero-sub">`.md` 파일 하나로 Claude에게 새로운 능력을 심는 공식 플러그인 시스템.<br>GitHub에서 무료로 배포되는 수천 개의 스킬을 2분 안에 설치하세요.</p>
@@ -1110,6 +1171,21 @@
     </a>
   </div>
 </section>
+
+<!-- Site Footer -->
+<footer class="site-footer">
+  <div class="site-footer-left">
+    <div class="site-footer-name">김석원</div>
+    <a class="site-footer-email" href="mailto:sw@srbiotek.co.kr">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+      sw@srbiotek.co.kr
+    </a>
+  </div>
+  <div class="site-footer-right">
+    슈퍼휴먼 김석원의 AI 가이드<br>
+    <span style="opacity:0.4">© 2026 SR바이오텍</span>
+  </div>
+</footer>
 
 <script>
 // Progress bar
