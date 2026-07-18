@@ -23,6 +23,52 @@
     --orange: #fb923c;
   }
 
+  /* ── Hero Author Badge ── */
+  .hero-author-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent2);
+    background: rgba(192,132,252,0.08); border: 1px solid rgba(192,132,252,0.25);
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 16px;
+  }
+  .hero-author-badge::before { content: "✦"; opacity: 0.7; }
+
+  /* ── Skill Card Action Bar ── */
+  .skill-card { cursor: default; }
+  .skill-card:hover { cursor: default; }
+  .skill-action-bar {
+    margin-top: 18px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .skill-install-cmd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; color: var(--accent3);
+    background: var(--bg); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px; padding: 9px 12px;
+    word-break: break-all; line-height: 1.6;
+  }
+  .skill-btns { display: flex; gap: 8px; }
+  .skill-copy-btn {
+    flex: 1; padding: 8px 0;
+    background: var(--accent); border: none; border-radius: 8px;
+    color: #fff; font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; transition: opacity 0.15s, transform 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .skill-copy-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .skill-copy-btn.copied { background: var(--green); }
+  .skill-gh-btn {
+    flex: 1; padding: 8px 0; text-align: center;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--muted);
+    font-size: 0.78rem; font-weight: 600;
+    text-decoration: none; transition: border-color 0.15s, color 0.15s, transform 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .skill-gh-btn:hover { border-color: var(--border-hover); color: var(--text); transform: translateY(-1px); }
+
   /* ── Terminal Guide ── */
   .term-os-tabs { display:flex; gap:8px; margin-bottom:28px; }
   .tos-tab { background:var(--surface2); border:1px solid var(--border); color:var(--muted); padding:10px 22px; border-radius:8px; cursor:pointer; font-size:0.92rem; font-weight:500; transition:all .2s; }
@@ -403,6 +449,7 @@
 <!-- Hero -->
 <section class="hero">
   <div class="hero-glow"></div>
+  <div class="hero-author-badge">슈퍼휴먼 김석원의 AI 가이드</div>
   <div class="hero-badge">✦ Anthropic 공식 기능 · Claude Code</div>
   <h1>Claude에<br><span class="grad">스킬을 설치</span>하면<br>전문가가 됩니다</h1>
   <p class="hero-sub">`.md` 파일 하나로 Claude에게 새로운 능력을 심는 공식 플러그인 시스템.<br>GitHub에서 무료로 배포되는 수천 개의 스킬을 2분 안에 설치하세요.</p>
@@ -413,7 +460,7 @@
   </div>
   <div class="hero-btns">
     <a href="#how" class="btn btn-primary">⚡ 설치 방법 보기</a>
-    <a href="#picks" class="btn btn-ghost">✦ 추천 스킬 5선</a>
+    <a href="#picks" class="btn btn-ghost">✦ 추천 스킬 7선</a>
   </div>
   <div class="scroll-cue">
     <span>Scroll</span>
@@ -716,7 +763,7 @@
   <div class="skills-grid">
 
     <!-- Remotion -->
-    <a class="skill-card" href="https://github.com/remotion-dev/skills" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(251,146,60,0.05),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🎬</div>
@@ -729,14 +776,20 @@
         <span class="tag tag-orange">공식 팀 제작</span>
         <span class="tag tag-blue">영상 제작</span>
       </div>
-      <div class="skill-install">claude-code plugin install github.com/remotion-dev/skills</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude-code plugin install github.com/remotion-dev/skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/remotion-dev/skills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/remotion-dev/skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
     <!-- Superpowers -->
-    <a class="skill-card" href="https://github.com/obra/superpowers-lab" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(124,106,247,0.05),transparent)"></div>
       <div class="skill-head">
-        <div class="skill-emoji">⭐</div>
+        <div class="skill-emoji">⚡</div>
         <div class="skill-stars">⭐ 1,100+</div>
       </div>
       <div class="skill-name">Superpowers</div>
@@ -746,11 +799,17 @@
         <span class="tag tag-purple">올인원</span>
         <span class="tag tag-blue">코딩 강화</span>
       </div>
-      <div class="skill-install">claude-code plugin install github.com/obra/superpowers-lab</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude-code plugin install github.com/obra/superpowers-lab</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/obra/superpowers-lab')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/obra/superpowers-lab" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
     <!-- Marketing Skills -->
-    <a class="skill-card" href="https://github.com/coreyhaines31/marketingskills" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(74,222,128,0.04),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">📣</div>
@@ -763,11 +822,17 @@
         <span class="tag tag-green">최고 인기</span>
         <span class="tag tag-orange">마케팅</span>
       </div>
-      <div class="skill-install">claude-code plugin install github.com/coreyhaines31/marketingskills</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude-code plugin install github.com/coreyhaines31/marketingskills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/coreyhaines31/marketingskills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/coreyhaines31/marketingskills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
     <!-- UI/UX Pro Max -->
-    <a class="skill-card" href="https://github.com/ca-who-codes/ultimate.UIUX.design.skills" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(56,189,248,0.05),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🎨</div>
@@ -780,11 +845,17 @@
         <span class="tag tag-blue">UI/UX</span>
         <span class="tag tag-pink">멀티 에이전트</span>
       </div>
-      <div class="skill-install">claude-code plugin install github.com/ca-who-codes/ultimate.UIUX.design.skills</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude-code plugin install github.com/ca-who-codes/ultimate.UIUX.design.skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/ca-who-codes/ultimate.UIUX.design.skills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/ca-who-codes/ultimate.UIUX.design.skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
     <!-- Claude Skills 컬렉션 -->
-    <a class="skill-card" href="https://github.com/alirezarezvani/claude-skills" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(192,132,252,0.05),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🗂️</div>
@@ -797,11 +868,17 @@
         <span class="tag tag-purple">최대 컬렉션</span>
         <span class="tag tag-green">345개 스킬</span>
       </div>
-      <div class="skill-install">git clone github.com/alirezarezvani/claude-skills</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">git clone github.com/alirezarezvani/claude-skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'git clone https://github.com/alirezarezvani/claude-skills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/alirezarezvani/claude-skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
     <!-- Video to Superprompt -->
-    <a class="skill-card" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/video-to-superprompt" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(251,146,60,0.06),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🎥</div>
@@ -814,11 +891,17 @@
         <span class="tag tag-orange">영상 분석</span>
         <span class="tag tag-blue">UI 재현</span>
       </div>
-      <div class="skill-install">$video-to-superprompt — MengTo/Skills</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">$video-to-superprompt — MengTo/Skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/MengTo/Skills/tree/main/agent-skills/codex/video-to-superprompt')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/video-to-superprompt" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
     <!-- HTML to Interaction Prompts -->
-    <a class="skill-card" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/html-to-interaction-prompts" target="_blank">
+    <div class="skill-card">
       <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(56,189,248,0.06),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🖱️</div>
@@ -831,8 +914,14 @@
         <span class="tag tag-blue">인터랙션</span>
         <span class="tag tag-pink">UI 아티클</span>
       </div>
-      <div class="skill-install">$html-to-interaction-prompts — MengTo/Skills</div>
-    </a>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">$html-to-interaction-prompts — MengTo/Skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/MengTo/Skills/tree/main/agent-skills/codex/html-to-interaction-prompts')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/html-to-interaction-prompts" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
 
   </div>
 </section>
@@ -930,6 +1019,14 @@ function toggleFaq(btn) {
 }
 
 // Copy
+function copySkill(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ 복사됨';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
 function switchOs(btn, os) {
   document.querySelectorAll('.tos-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tos-pane').forEach(p => p.classList.remove('active'));
