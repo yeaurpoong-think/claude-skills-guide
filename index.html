@@ -7,615 +7,618 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Design Tokens (UI/UX Pro: OKLCH-inspired, 60-30-10 rule) ── */
-  :root {
-    /* Neutral scale */
-    --gray-950: #09090b;
-    --gray-900: #0f0f12;
-    --gray-800: #18181d;
-    --gray-700: #26262f;
-    --gray-600: #3a3a47;
-    --gray-400: #6b6b80;
-    --gray-300: #a0a0b8;
-    --gray-100: #edecf4;
-    /* Brand: violet */
-    --violet-600: #7c3aed;
-    --violet-500: #8b5cf6;
-    --violet-400: #a78bfa;
-    --violet-300: #c4b5fd;
-    /* Accent */
-    --sky-400:   #38bdf8;
-    --pink-400:  #f472b6;
-    --green-400: #4ade80;
-    --amber-400: #fbbf24;
-    /* Semantic */
-    --bg:         var(--gray-950);
-    --surface:    var(--gray-900);
-    --surface2:   var(--gray-800);
-    --border:     rgba(255,255,255,0.07);
-    --border-hi:  rgba(139,92,246,0.45);
-    --text:       var(--gray-100);
-    --muted:      var(--gray-400);
-    --accent:     var(--violet-500);
-    --accent2:    var(--violet-300);
-    --accent3:    var(--sky-400);
-    /* 8pt spacing scale */
-    --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px;
-    --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
-    /* Radius */
-    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 24px;
-    /* Easing */
-    --ease-out: cubic-bezier(0,0,0.2,1);
-    --ease-in:  cubic-bezier(0.4,0,1,1);
-    --ease-std: cubic-bezier(0.4,0,0.2,1);
-  }
+/* ── Anthropic / Claude Brand Tokens ── */
+@font-face {
+  font-family: 'Anthropic Sans';
+  src: url('https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/69971a00a3295036497e1a28_AnthropicSans-Roman-Web.woff2') format('woff2');
+  font-weight: 300 800; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Anthropic Sans';
+  src: url('https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/69971a016067bf14b9b8f48d_AnthropicSans-Italic-Web.woff2') format('woff2');
+  font-weight: 300 800; font-style: italic; font-display: swap;
+}
 
-  /* ── Hero Author Block (강조) ── */
-  .hero-author-block {
-    display:flex; flex-direction:column; align-items:center;
-    margin-bottom:var(--s5); position:relative; z-index:1;
-    animation:fadeDown 0.5s var(--ease-out) both;
-  }
-  .hero-author-eyebrow {
-    font-size:10px; font-weight:700; letter-spacing:0.2em;
-    text-transform:uppercase; color:var(--violet-400); margin-bottom:6px;
-    opacity:0.7;
-  }
-  .hero-author-name {
-    font-size:clamp(2rem, 5vw, 3.6rem);
-    font-weight:900; letter-spacing:-0.04em; line-height:1;
-    background:linear-gradient(135deg, #fff 0%, var(--violet-300) 50%, var(--sky-400) 100%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    position:relative;
-  }
-  .hero-author-name::after {
-    content:''; position:absolute; bottom:-6px; left:0; right:0; height:2px;
-    background:linear-gradient(90deg, var(--violet-500), var(--sky-400), transparent);
-    border-radius:2px;
-  }
-  .hero-author-sub {
-    font-size:clamp(0.9rem, 2vw, 1.2rem); font-weight:600;
-    color:var(--muted); margin-top:10px; letter-spacing:-0.01em;
-  }
+:root {
+  /* Claude brand */
+  --clay:        #d97757;
+  --clay-hi:     #e8896a;
+  --clay-lo:     #c96442;
+  --clay-subtle: rgba(217,119,87,0.12);
+  --clay-border: rgba(217,119,87,0.28);
 
-  /* ── Site Footer ── */
-  .site-footer {
-    border-top:1px solid var(--border);
-    padding:var(--s7) var(--s8);
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap; gap:var(--s5);
-  }
-  .site-footer-left { display:flex; flex-direction:column; gap:6px; }
-  .site-footer-name {
-    font-size:1rem; font-weight:800; letter-spacing:-0.02em;
-    background:linear-gradient(135deg, var(--text), var(--violet-300));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  }
-  .site-footer-email {
-    font-size:13px; color:var(--muted);
-    display:flex; align-items:center; gap:6px; text-decoration:none;
-    transition:color 0.2s;
-  }
-  .site-footer-email:hover { color:var(--accent2); }
-  .site-footer-email svg { opacity:0.5; }
-  .site-footer-right {
-    font-size:11px; color:var(--gray-600); letter-spacing:0.03em;
-    text-align:right;
-  }
-  @media (max-width:640px) {
-    .site-footer { padding:var(--s6) var(--s4); flex-direction:column; align-items:flex-start; }
-    .site-footer-right { text-align:left; }
-  }
+  /* Dark surfaces (Anthropic dark scale) */
+  --ink:      #141413;
+  --ink-2:    #1a1918;
+  --ink-3:    #262624;
+  --ink-4:    #30302e;
+  --ink-5:    #3d3d3a;
 
-  /* ── Reset ── */
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-    line-height: 1.6;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-  }
-  img, svg { display:block; }
-  a { color: inherit; }
-  button { font-family: inherit; }
+  /* Text */
+  --text:     #f5f4ed;
+  --text-2:   #b0aea5;
+  --text-3:   #87867f;
 
-  /* ── Progress bar ── */
-  .progress-bar {
-    position:fixed; top:0; left:0; height:2px; z-index:200;
-    background: linear-gradient(90deg, var(--violet-600), var(--violet-300), var(--sky-400));
-    transition: width 0.1s linear;
-    box-shadow: 0 0 8px var(--violet-500);
-  }
+  /* Semantic aliases */
+  --bg:       var(--ink);
+  --surface:  var(--ink-2);
+  --surface2: var(--ink-3);
+  --border:   rgba(255,255,255,0.07);
+  --border-hi:rgba(217,119,87,0.4);
+  --muted:    var(--text-3);
+  --accent:   var(--clay);
+  --accent2:  var(--clay-hi);
+  --accent3:  #88b4d4;
 
-  /* ── NAV ── */
-  nav {
-    position:fixed; top:0; left:0; right:0; z-index:100;
-    height:56px; padding:0 var(--s8);
-    display:flex; align-items:center; justify-content:space-between;
-    background:rgba(9,9,11,0.82);
-    backdrop-filter:blur(20px) saturate(180%);
-    border-bottom:1px solid var(--border);
-  }
-  .nav-logo {
-    font-size:13px; font-weight:800; letter-spacing:-0.02em;
-    display:flex; align-items:center; gap:var(--s2);
-  }
-  .nav-logo .dot {
-    width:7px; height:7px; border-radius:50%;
-    background:var(--accent);
-    box-shadow:0 0 10px var(--accent), 0 0 20px rgba(139,92,246,0.4);
-  }
-  .nav-links { display:flex; gap:var(--s5); list-style:none; }
-  .nav-links a {
-    color:var(--muted); text-decoration:none;
-    font-size:13px; font-weight:500;
-    transition:color 0.2s var(--ease-std);
-    position:relative;
-  }
-  .nav-links a::after {
-    content:''; position:absolute; bottom:-2px; left:0; right:0;
-    height:1px; background:var(--accent);
-    transform:scaleX(0); transition:transform 0.2s var(--ease-out);
-    transform-origin:left;
-  }
-  .nav-links a:hover { color:var(--text); }
-  .nav-links a:hover::after { transform:scaleX(1); }
-  .nav-gh {
-    display:flex; align-items:center; gap:var(--s2);
-    background:var(--surface2); border:1px solid var(--border);
-    color:var(--text); text-decoration:none;
-    padding:var(--s2) var(--s4);
-    border-radius:var(--r-sm); font-size:12px; font-weight:600;
-    transition:border-color 0.2s, background 0.2s, transform 0.2s;
-  }
-  .nav-gh:hover { border-color:var(--border-hi); background:rgba(139,92,246,0.08); transform:translateY(-1px); }
+  /* Accent swatches (Anthropic palette) */
+  --olive:   #788c5d;
+  --cactus:  #bcd1ca;
+  --sky:     #6a9bcc;
+  --plum:    #827dbd;
+  --fig:     #c46686;
+  --green:   #7ab87a;
 
-  /* ── HERO ── */
-  .hero {
-    min-height:100vh; display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    text-align:center; padding:100px var(--s5) 80px;
-    position:relative; overflow:hidden;
-  }
-  /* Mesh gradient bg */
-  .hero::before {
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 40% at 80% 60%, rgba(56,189,248,0.06) 0%, transparent 50%),
-      radial-gradient(ellipse 50% 40% at 20% 70%, rgba(192,132,252,0.06) 0%, transparent 50%);
-  }
-  /* Subtle grid */
-  .hero::after {
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size:64px 64px;
-    mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
-  }
-  .hero-author-badge {
-    display:inline-flex; align-items:center; gap:var(--s2);
-    font-size:11px; font-weight:700; letter-spacing:0.1em;
-    text-transform:uppercase; color:var(--accent2);
-    background:rgba(167,139,250,0.08);
-    border:1px solid rgba(167,139,250,0.2);
-    padding:var(--s2) var(--s4); border-radius:100px; margin-bottom:var(--s4);
-    animation:fadeDown 0.6s var(--ease-out) both;
-    position:relative; z-index:1;
-  }
-  .hero-author-badge::before { content:"✦"; opacity:0.6; font-size:9px; }
-  .hero-badge {
-    display:inline-flex; align-items:center; gap:var(--s2);
-    background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2);
-    color:var(--accent); font-size:11px; font-weight:700;
-    padding:5px 14px; border-radius:100px; margin-bottom:var(--s6);
-    letter-spacing:0.08em; text-transform:uppercase;
-    animation:fadeDown 0.6s 0.08s var(--ease-out) both;
-    position:relative; z-index:1;
-  }
-  .hero h1 {
-    font-size:clamp(2.8rem, 7.5vw, 6rem);
-    font-weight:900; line-height:1.05; letter-spacing:-0.04em;
-    animation:fadeUp 0.7s 0.15s var(--ease-out) both;
-    position:relative; z-index:1;
-    text-wrap:balance;
-  }
-  .hero h1 .grad {
-    background:linear-gradient(135deg, #a78bfa 0%, #c4b5fd 40%, #7dd3fc 100%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  }
-  .hero-sub {
-    font-size:clamp(1rem, 2vw, 1.125rem); color:var(--muted);
-    max-width:520px; margin:var(--s5) auto 0;
-    animation:fadeUp 0.7s 0.22s var(--ease-out) both;
-    line-height:1.75; position:relative; z-index:1;
-    text-wrap:pretty;
-  }
-  .hero-meta {
-    display:flex; align-items:center; gap:var(--s5); flex-wrap:wrap;
-    justify-content:center; margin-top:var(--s5);
-    animation:fadeUp 0.7s 0.28s var(--ease-out) both;
-    position:relative; z-index:1;
-  }
-  .hero-meta-item {
-    display:flex; align-items:center; gap:6px;
-    font-size:12px; color:var(--muted); font-weight:500;
-    background:var(--surface); border:1px solid var(--border);
-    padding:6px 12px; border-radius:var(--r-sm);
-  }
-  .hero-meta-item span { color:var(--text); font-weight:700; }
-  .hero-btns {
-    display:flex; gap:var(--s3); flex-wrap:wrap; justify-content:center;
-    margin-top:var(--s7); animation:fadeUp 0.7s 0.33s var(--ease-out) both;
-    position:relative; z-index:1;
-  }
-  .btn {
-    display:inline-flex; align-items:center; gap:var(--s2);
-    padding:12px var(--s6); border-radius:var(--r-md);
-    font-size:14px; font-weight:700; cursor:pointer;
-    transition:transform 0.2s var(--ease-out), box-shadow 0.2s, background 0.2s, border-color 0.2s;
-    text-decoration:none; border:none; letter-spacing:-0.01em;
-  }
-  .btn:hover { transform:translateY(-2px); }
-  .btn-primary {
-    background:var(--accent); color:#fff;
-    box-shadow:0 0 0 0 rgba(139,92,246,0.4), 0 4px 16px rgba(139,92,246,0.3);
-  }
-  .btn-primary:hover { box-shadow:0 0 0 4px rgba(139,92,246,0.15), 0 8px 32px rgba(139,92,246,0.45); }
-  .btn-ghost {
-    background:var(--surface2); color:var(--text);
-    border:1px solid var(--border);
-  }
-  .btn-ghost:hover { border-color:var(--border-hi); background:rgba(139,92,246,0.06); }
-  .scroll-cue {
-    position:absolute; bottom:var(--s6);
-    display:flex; flex-direction:column; align-items:center; gap:6px;
-    color:var(--muted); font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
-    animation:bob 2.5s ease-in-out infinite;
-    z-index:1;
-  }
-  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+  /* 8pt spacing */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px;
+  --s5:24px; --s6:32px; --s7:48px; --s8:64px;
 
-  /* ── KEYFRAMES ── */
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(20px)}  to{opacity:1;transform:translateY(0)} }
-  @keyframes slideUp  { to{opacity:1;transform:translateY(0)} }
+  /* Radius */
+  --r-sm:6px; --r-md:10px; --r-lg:14px; --r-xl:20px;
 
-  /* ── STATS BAR ── */
-  .stats-bar {
-    display:flex; justify-content:center; gap:0; flex-wrap:wrap;
-    background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-  }
-  .stat {
-    text-align:center; padding:var(--s7) var(--s8);
-    border-right:1px solid var(--border); flex:1; min-width:160px;
-  }
-  .stat:last-child { border-right:none; }
-  .stat-num {
-    font-size:clamp(1.6rem, 3vw, 2.2rem); font-weight:900; letter-spacing:-0.04em;
-    background:linear-gradient(135deg, var(--violet-400), var(--violet-300));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    line-height:1;
-  }
-  .stat-label { font-size:11px; color:var(--muted); font-weight:600; margin-top:var(--s2); letter-spacing:0.04em; text-transform:uppercase; }
+  /* Easing */
+  --ease-out:cubic-bezier(0,0,0.2,1);
+  --ease-std:cubic-bezier(0.4,0,0.2,1);
+}
 
-  /* ── SECTION ── */
-  .section { padding:96px var(--s5); max-width:960px; margin:0 auto; }
-  .sec-eyebrow {
-    font-size:10px; font-weight:800; letter-spacing:0.18em;
-    text-transform:uppercase; color:var(--accent); margin-bottom:var(--s4);
-    display:flex; align-items:center; gap:var(--s2);
-  }
-  .sec-eyebrow::before { content:''; width:20px; height:1px; background:var(--accent); }
-  .sec-title {
-    font-size:clamp(1.8rem, 4.5vw, 2.8rem); font-weight:900;
-    line-height:1.1; letter-spacing:-0.03em; margin-bottom:var(--s4);
-    text-wrap:balance;
-  }
-  .sec-desc { color:var(--muted); font-size:1rem; max-width:520px; line-height:1.8; }
+/* ── Reset ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  font-family:'Anthropic Sans','Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg); color:var(--text);
+  overflow-x:hidden; line-height:1.6; font-size:16px;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;}
+a{color:inherit;}
+button{font-family:inherit;}
 
-  /* ── WHAT GRID ── */
-  .what-grid {
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:var(--s4); margin-top:var(--s7);
-  }
-  .what-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:var(--r-lg); padding:var(--s6) var(--s5);
-    opacity:0; transform:translateY(20px);
-    transition:border-color 0.25s var(--ease-std), transform 0.25s var(--ease-out), box-shadow 0.25s;
-    position:relative; overflow:hidden;
-  }
-  .what-card::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background:linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
-    opacity:0; transition:opacity 0.3s;
-  }
-  .what-card.vis { animation:slideUp 0.5s var(--ease-out) forwards; }
-  .what-card:hover { border-color:var(--border-hi); transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,0.5); }
-  .what-card:hover::before { opacity:1; }
-  .what-icon { font-size:24px; margin-bottom:var(--s4); }
-  .what-title { font-size:0.9rem; font-weight:700; margin-bottom:var(--s2); letter-spacing:-0.01em; }
-  .what-body { font-size:0.84rem; color:var(--muted); line-height:1.75; }
+/* ── Progress bar ── */
+.progress-bar{
+  position:fixed;top:0;left:0;height:2px;z-index:200;
+  background:linear-gradient(90deg,var(--clay-lo),var(--clay),var(--clay-hi));
+  transition:width .1s linear;
+  box-shadow:0 0 12px var(--clay);
+}
 
-  /* ── DIVIDER ── */
-  hr { border:none; border-top:1px solid var(--border); }
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:56px;padding:0 var(--s8);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(20,20,19,0.88);
+  backdrop-filter:blur(24px) saturate(160%);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-size:13px;font-weight:700;letter-spacing:-0.01em;
+  display:flex;align-items:center;gap:var(--s2);
+}
+.nav-logo-icon{width:20px;height:20px;flex-shrink:0;}
+.nav-links{display:flex;gap:var(--s5);list-style:none;}
+.nav-links a{
+  color:var(--text-2);text-decoration:none;
+  font-size:13px;font-weight:500;
+  transition:color .2s var(--ease-std);
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;
+  height:1px;background:var(--clay);
+  transform:scaleX(0);transition:transform .2s var(--ease-out);
+  transform-origin:left;
+}
+.nav-links a:hover{color:var(--text);}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-gh{
+  display:flex;align-items:center;gap:var(--s2);
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);text-decoration:none;
+  padding:var(--s2) var(--s4);
+  border-radius:var(--r-sm);font-size:12px;font-weight:600;
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.nav-gh:hover{border-color:var(--border-hi);background:var(--clay-subtle);transform:translateY(-1px);}
 
-  /* ── STEPS ── */
-  .steps { margin-top:var(--s7); display:flex; flex-direction:column; gap:var(--s4); }
-  .step-card {
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--r-xl);
-    padding:var(--s6) var(--s8); display:grid; grid-template-columns:52px 1fr; gap:var(--s5);
-    opacity:0; transform:translateY(24px);
-    transition:border-color 0.25s, transform 0.25s var(--ease-out), box-shadow 0.25s;
-    position:relative; overflow:hidden;
-  }
-  .step-card::after {
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(135deg, rgba(139,92,246,0.03) 0%, transparent 60%);
-    opacity:0; transition:opacity 0.3s;
-  }
-  .step-card.vis { animation:slideUp 0.55s var(--ease-out) forwards; }
-  .step-card:hover { border-color:var(--border-hi); transform:translateY(-3px); box-shadow:0 20px 56px rgba(0,0,0,0.5); }
-  .step-card:hover::after { opacity:1; }
-  .step-num {
-    width:44px; height:44px; border-radius:var(--r-md); flex-shrink:0;
-    background:linear-gradient(135deg, var(--violet-600), var(--violet-400));
-    display:flex; align-items:center; justify-content:center;
-    font-size:16px; font-weight:900; color:#fff;
-    box-shadow:0 4px 16px rgba(124,58,237,0.4);
-  }
-  .step-h { font-size:1rem; font-weight:700; margin-bottom:var(--s2); letter-spacing:-0.01em; }
-  .step-p { font-size:0.875rem; color:var(--muted); line-height:1.8; }
-  .code-block {
-    margin-top:var(--s4); background:var(--gray-950);
-    border:1px solid rgba(255,255,255,0.06); border-radius:var(--r-md);
-    padding:var(--s5) var(--s5); position:relative; overflow:hidden;
-  }
-  .code-block::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:1px;
-    background:linear-gradient(90deg, var(--violet-600), var(--violet-300), transparent);
-  }
-  .code-block pre { font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.9; white-space:pre-wrap; word-break:break-all; }
-  .c-comment { color:var(--gray-600); } .c-kw { color:var(--violet-300); }
-  .c-str { color:var(--green-400); } .c-path { color:var(--sky-400); } .c-ok { color:var(--green-400); }
-  .copy-btn {
-    position:absolute; top:var(--s3); right:var(--s3);
-    background:rgba(255,255,255,0.04); border:1px solid var(--border);
-    color:var(--muted); padding:3px var(--s3); border-radius:6px;
-    font-size:10px; font-weight:600; cursor:pointer;
-    transition:background 0.2s, color 0.2s; letter-spacing:0.03em; text-transform:uppercase;
-  }
-  .copy-btn:hover { background:rgba(255,255,255,0.08); color:var(--text); }
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:100px var(--s5) 80px;
+  position:relative;overflow:hidden;
+}
+/* Dot-grid bg */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(circle, rgba(217,119,87,0.18) 1px, transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 0%,transparent 70%);
+}
+/* Glow orbs */
+.hero::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% -10%,rgba(217,119,87,0.14) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 60%,rgba(106,155,204,0.07) 0%,transparent 50%),
+    radial-gradient(ellipse 40% 40% at 20% 70%,rgba(130,125,189,0.07) 0%,transparent 50%);
+}
+/* Claude logo mark — big, faint, behind */
+.hero-logo-bg{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-52%);
+  width:min(700px,90vw);height:auto;
+  opacity:0.04;pointer-events:none;
+  animation:spin-slow 120s linear infinite;
+  z-index:0;
+}
+@keyframes spin-slow{to{transform:translate(-50%,-52%) rotate(360deg);}}
 
-  /* ── METHOD TABS ── */
-  .method-tabs { display:flex; gap:var(--s2); margin-top:var(--s7); flex-wrap:wrap; }
-  .mtab {
-    padding:var(--s2) var(--s5); border-radius:var(--r-sm);
-    font-size:13px; font-weight:600; cursor:pointer;
-    transition:all 0.2s var(--ease-std); border:1px solid var(--border);
-    background:var(--surface2); color:var(--muted);
-  }
-  .mtab.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 4px 16px rgba(139,92,246,0.3); }
-  .method-pane { display:none; margin-top:var(--s5); }
-  .method-pane.active { display:block; }
+.hero-author-block{
+  display:flex;flex-direction:column;align-items:center;
+  margin-bottom:var(--s6);position:relative;z-index:1;
+  animation:fadeDown .6s var(--ease-out) both;
+}
+.hero-author-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--clay);margin-bottom:var(--s2);opacity:.75;
+}
+.hero-author-name{
+  font-size:clamp(2rem,5vw,3.8rem);
+  font-weight:800;letter-spacing:-.04em;line-height:1;
+  background:linear-gradient(135deg,var(--text) 0%,var(--clay-hi) 55%,var(--sky) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;
+}
+.hero-author-name::after{
+  content:'';position:absolute;bottom:-8px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--clay),var(--sky),transparent);
+  border-radius:2px;
+}
+.hero-author-sub{
+  font-size:clamp(.9rem,2vw,1.15rem);font-weight:500;
+  color:var(--text-2);margin-top:12px;letter-spacing:-.01em;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  background:var(--clay-subtle);border:1px solid var(--clay-border);
+  color:var(--clay-hi);font-size:11px;font-weight:700;
+  padding:5px 14px;border-radius:100px;margin-bottom:var(--s6);
+  letter-spacing:.08em;text-transform:uppercase;
+  animation:fadeDown .6s .08s var(--ease-out) both;
+  position:relative;z-index:1;
+}
+.hero h1{
+  font-size:clamp(2.6rem,7vw,5.6rem);
+  font-weight:900;line-height:1.05;letter-spacing:-.04em;
+  animation:fadeUp .7s .15s var(--ease-out) both;
+  position:relative;z-index:1;
+  text-wrap:balance;
+}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--clay-hi) 0%,#e8a882 40%,var(--sky) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:clamp(1rem,2vw,1.1rem);color:var(--text-2);
+  max-width:500px;margin:var(--s5) auto 0;
+  animation:fadeUp .7s .22s var(--ease-out) both;
+  line-height:1.8;position:relative;z-index:1;
+}
+.hero-meta{
+  display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;
+  justify-content:center;margin-top:var(--s5);
+  animation:fadeUp .7s .28s var(--ease-out) both;
+  position:relative;z-index:1;
+}
+.hero-meta-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--text-2);font-weight:500;
+  background:var(--surface);border:1px solid var(--border);
+  padding:5px 12px;border-radius:var(--r-sm);
+}
+.hero-meta-item span{color:var(--clay-hi);font-weight:700;}
+.hero-btns{
+  display:flex;gap:var(--s3);flex-wrap:wrap;justify-content:center;
+  margin-top:var(--s7);animation:fadeUp .7s .33s var(--ease-out) both;
+  position:relative;z-index:1;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:var(--s2);
+  padding:12px var(--s6);border-radius:var(--r-md);
+  font-size:14px;font-weight:700;cursor:pointer;
+  transition:transform .2s var(--ease-out),box-shadow .2s,background .2s,border-color .2s;
+  text-decoration:none;border:none;letter-spacing:-.01em;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{
+  background:var(--clay);color:var(--ink);
+  box-shadow:0 4px 20px rgba(217,119,87,.35);
+}
+.btn-primary:hover{background:var(--clay-hi);box-shadow:0 8px 32px rgba(217,119,87,.5);}
+.btn-ghost{
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--border-hi);background:var(--clay-subtle);}
+.scroll-cue{
+  position:absolute;bottom:var(--s6);z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:var(--text-3);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  animation:bob 2.5s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 
-  /* ── SKILL CARDS ── */
-  .skills-grid {
-    display:grid; grid-template-columns:repeat(auto-fill,minmax(296px,1fr));
-    gap:var(--s4); margin-top:var(--s7);
-  }
-  .skill-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:var(--r-xl); padding:var(--s6);
-    opacity:0; transform:translateY(20px);
-    transition:border-color 0.25s var(--ease-std), transform 0.25s var(--ease-out), box-shadow 0.25s;
-    position:relative; overflow:hidden; cursor:default;
-    display:flex; flex-direction:column;
-  }
-  .skill-card.vis { animation:slideUp 0.5s var(--ease-out) forwards; }
-  .skill-card:hover { border-color:var(--border-hi); transform:translateY(-5px); box-shadow:0 24px 64px rgba(0,0,0,0.55); }
-  .skill-card-glow { position:absolute; inset:0; opacity:0; transition:opacity 0.35s; pointer-events:none; }
-  .skill-card:hover .skill-card-glow { opacity:1; }
-  .skill-head { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--s3); margin-bottom:var(--s4); }
-  .skill-emoji { font-size:28px; line-height:1; }
-  .skill-stars {
-    font-size:10px; font-weight:700; color:var(--muted);
-    background:var(--surface2); border:1px solid var(--border);
-    padding:3px var(--s2); border-radius:6px; letter-spacing:0.03em;
-    white-space:nowrap;
-  }
-  .skill-name { font-size:1rem; font-weight:800; letter-spacing:-0.02em; margin-bottom:var(--s1); }
-  .skill-repo { font-size:10.5px; font-family:'JetBrains Mono',monospace; color:var(--muted); margin-bottom:var(--s3); opacity:0.7; }
-  .skill-desc { font-size:0.84rem; color:var(--muted); line-height:1.7; flex:1; }
-  .skill-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:var(--s4); }
-  .tag {
-    padding:2px var(--s2); border-radius:4px; font-size:10px; font-weight:700;
-    letter-spacing:0.05em; text-transform:uppercase;
-  }
-  .tag-purple { background:rgba(139,92,246,0.1); color:var(--violet-400); }
-  .tag-blue   { background:rgba(56,189,248,0.1); color:var(--sky-400); }
-  .tag-green  { background:rgba(74,222,128,0.1); color:var(--green-400); }
-  .tag-orange { background:rgba(251,191,36,0.1); color:var(--amber-400); }
-  .tag-pink   { background:rgba(244,114,182,0.1); color:var(--pink-400); }
+/* ── Keyframes ── */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp  {from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp {to{opacity:1;transform:translateY(0)}}
 
-  /* Skill action bar */
-  .skill-action-bar {
-    margin-top:var(--s4); border-top:1px solid var(--border);
-    padding-top:var(--s4); display:flex; flex-direction:column; gap:var(--s2);
-  }
-  .skill-install-cmd {
-    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--sky-400);
-    background:var(--gray-950); border:1px solid rgba(255,255,255,0.05);
-    border-radius:var(--r-sm); padding:var(--s2) var(--s3);
-    word-break:break-all; line-height:1.6;
-  }
-  .skill-btns { display:flex; gap:var(--s2); }
-  .skill-copy-btn {
-    flex:1; padding:9px 0;
-    background:var(--accent); border:none; border-radius:var(--r-sm);
-    color:#fff; font-size:12px; font-weight:700; cursor:pointer;
-    transition:opacity 0.15s, transform 0.15s var(--ease-out), box-shadow 0.15s;
-    letter-spacing:0.02em;
-    box-shadow:0 2px 8px rgba(139,92,246,0.3);
-  }
-  .skill-copy-btn:hover { opacity:0.88; transform:translateY(-1px); box-shadow:0 4px 16px rgba(139,92,246,0.45); }
-  .skill-copy-btn.copied { background:var(--green-400); color:var(--gray-950); box-shadow:0 2px 8px rgba(74,222,128,0.3); }
-  .skill-gh-btn {
-    flex:1; padding:9px 0; text-align:center;
-    background:var(--surface2); border:1px solid var(--border);
-    border-radius:var(--r-sm); color:var(--muted);
-    font-size:12px; font-weight:600; text-decoration:none;
-    transition:border-color 0.2s, color 0.2s, transform 0.2s var(--ease-out);
-    letter-spacing:0.02em;
-  }
-  .skill-gh-btn:hover { border-color:var(--border-hi); color:var(--text); transform:translateY(-1px); }
+/* ── Stats Bar ── */
+.stats-bar{
+  display:flex;justify-content:center;gap:0;flex-wrap:wrap;
+  background:var(--surface);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.stat{
+  text-align:center;padding:var(--s7) var(--s8);
+  border-right:1px solid var(--border);flex:1;min-width:160px;
+}
+.stat:last-child{border-right:none;}
+.stat-num{
+  font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;letter-spacing:-.04em;
+  color:var(--clay);line-height:1;
+}
+.stat-label{font-size:11px;color:var(--text-3);font-weight:600;margin-top:var(--s2);letter-spacing:.04em;text-transform:uppercase;}
 
-  /* ── TERMINAL DEMO ── */
-  .terminal-wrap { margin-top:var(--s7); }
-  .terminal {
-    background:#08080e; border:1px solid rgba(255,255,255,0.07);
-    border-radius:var(--r-lg); overflow:hidden;
-    box-shadow:0 48px 96px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03);
-  }
-  .term-bar {
-    background:#0f0f18; padding:12px var(--s5);
-    display:flex; align-items:center; gap:var(--s2);
-    border-bottom:1px solid rgba(255,255,255,0.04);
-  }
-  .dot { width:11px; height:11px; border-radius:50%; }
-  .dot-r { background:#ff5f57; } .dot-y { background:#febc2e; } .dot-g { background:#28c840; }
-  .term-title { font-size:11px; color:var(--muted); font-family:'JetBrains Mono',monospace; flex:1; text-align:center; }
-  .term-body { padding:var(--s5) var(--s6); font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2; min-height:200px; }
-  .t-pr { color:var(--accent); } .t-cm { color:var(--text); }
-  .t-out { color:var(--gray-600); } .t-ok { color:var(--green-400); } .t-info { color:var(--sky-400); }
-  .cursor { display:inline-block; width:7px; height:14px; background:var(--violet-300); border-radius:2px; animation:blink-cur 1s step-end infinite; vertical-align:middle; }
-  @keyframes blink-cur { 0%,100%{opacity:1} 50%{opacity:0} }
+/* ── Section ── */
+.section{padding:96px var(--s5);max-width:960px;margin:0 auto;}
+.sec-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--clay);margin-bottom:var(--s4);
+  display:flex;align-items:center;gap:var(--s2);
+}
+.sec-eyebrow::before{content:'';width:20px;height:1px;background:var(--clay);}
+.sec-title{
+  font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:900;
+  line-height:1.1;letter-spacing:-.03em;margin-bottom:var(--s4);
+  text-wrap:balance;
+}
+.sec-desc{color:var(--text-2);font-size:1rem;max-width:520px;line-height:1.8;}
 
-  /* ── TERMINAL GUIDE ── */
-  .term-os-tabs { display:flex; gap:var(--s2); margin-bottom:var(--s6); }
-  .tos-tab {
-    background:var(--surface2); border:1px solid var(--border); color:var(--muted);
-    padding:var(--s2) var(--s5); border-radius:var(--r-sm); cursor:pointer;
-    font-size:13px; font-weight:600; transition:all 0.2s var(--ease-std);
-  }
-  .tos-tab.active { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 4px 16px rgba(139,92,246,0.3); }
-  .tos-pane { display:none; } .tos-pane.active { display:block; }
-  .term-methods { display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:var(--s4); margin-bottom:var(--s6); }
-  .term-method-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:var(--r-lg); padding:var(--s5); position:relative;
-    transition:border-color 0.2s, transform 0.2s var(--ease-out);
-  }
-  .term-method-card:hover { border-color:var(--border-hi); transform:translateY(-2px); }
-  .term-method-card.best { border-color:rgba(139,92,246,0.3); background:rgba(139,92,246,0.03); }
-  .term-method-badge {
-    position:absolute; top:var(--s3); right:var(--s3);
-    background:var(--accent); color:#fff; font-size:9px; font-weight:800;
-    padding:2px var(--s2); border-radius:100px; letter-spacing:0.06em; text-transform:uppercase;
-  }
-  .term-method-title { font-size:0.9rem; font-weight:700; color:var(--text); margin-bottom:var(--s4); }
-  .term-method-steps { display:flex; flex-direction:column; gap:var(--s2); }
-  .tm-step {
-    font-size:0.84rem; color:var(--muted); line-height:1.5;
-    display:flex; align-items:flex-start; gap:var(--s2); padding-left:var(--s3);
-    border-left:2px solid var(--gray-700);
-  }
-  .tm-key {
-    display:inline-block; background:var(--surface2);
-    border:1px solid rgba(255,255,255,0.12); border-bottom:2px solid rgba(255,255,255,0.08);
-    color:var(--text); font-size:11px; font-weight:700;
-    padding:1px var(--s2); border-radius:4px; font-family:'JetBrains Mono',monospace;
-  }
-  .tm-code { font-family:'JetBrains Mono',monospace; font-size:0.8em; background:var(--surface2); color:var(--violet-300); padding:1px 5px; border-radius:3px; }
-  /* Win+R dialog mock */
-  .term-fake-dialog { background:#f0f0f0; border:1px solid #b8b8b8; border-radius:4px; padding:12px; max-width:260px; margin-top:var(--s4); font-family:system-ui,sans-serif; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
-  .tfd-title { font-size:11px; font-weight:700; color:#222; margin-bottom:var(--s2); padding-bottom:6px; border-bottom:1px solid #ccc; }
-  .tfd-body { display:flex; align-items:center; gap:var(--s2); margin-bottom:var(--s3); }
-  .tfd-label { font-size:11px; color:#333; white-space:nowrap; }
-  .tfd-input { flex:1; background:#fff; border:1px solid #999; padding:2px 6px; font-size:11px; font-family:'JetBrains Mono',monospace; color:#111; border-radius:2px; }
-  .tfd-cursor { animation:blink 1s step-start infinite; }
-  @keyframes blink { 50%{opacity:0} }
-  .tfd-btns { display:flex; gap:5px; justify-content:flex-end; }
-  .tfd-btn { font-size:10px; background:#e0e0e0; border:1px solid #aaa; border-radius:3px; padding:2px 10px; color:#222; cursor:default; }
-  .tfd-btn-ok { background:#0078d4; color:#fff; border-color:#005fa3; }
-  .term-tip-box {
-    display:flex; gap:var(--s4); align-items:flex-start;
-    background:rgba(139,92,246,0.06); border:1px solid rgba(139,92,246,0.2);
-    border-radius:var(--r-md); padding:var(--s5); font-size:0.875rem; color:var(--muted); line-height:1.7;
-  }
-  .term-tip-icon { font-size:1.2rem; flex-shrink:0; margin-top:1px; }
-  .term-tip-box strong { color:var(--text); }
+/* ── What Grid ── */
+.what-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:var(--s4);margin-top:var(--s7);
+}
+.what-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:var(--s6) var(--s5);
+  opacity:0;transform:translateY(20px);
+  transition:border-color .25s var(--ease-std),transform .25s var(--ease-out),box-shadow .25s;
+  position:relative;overflow:hidden;
+}
+.what-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(217,119,87,.5),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.what-card.vis{animation:slideUp .5s var(--ease-out) forwards;}
+.what-card:hover{border-color:var(--border-hi);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.5);}
+.what-card:hover::before{opacity:1;}
+.what-icon{font-size:24px;margin-bottom:var(--s4);}
+.what-title{font-size:.9rem;font-weight:700;margin-bottom:var(--s2);letter-spacing:-.01em;}
+.what-body{font-size:.84rem;color:var(--text-2);line-height:1.75;}
 
-  /* ── FAQ ── */
-  .faq-list { margin-top:var(--s7); display:flex; flex-direction:column; gap:var(--s2); }
-  .faq-item {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:var(--r-md); overflow:hidden; transition:border-color 0.25s;
-  }
-  .faq-item:hover { border-color:rgba(139,92,246,0.25); }
-  .faq-q {
-    width:100%; background:none; border:none; color:var(--text); font-size:0.9rem; font-weight:600;
-    padding:var(--s5) var(--s5); text-align:left; cursor:pointer;
-    display:flex; justify-content:space-between; align-items:center; gap:var(--s4);
-    transition:color 0.2s;
-  }
-  .faq-q:hover { color:var(--accent2); }
-  .faq-arrow { color:var(--muted); transition:transform 0.3s var(--ease-std), color 0.2s; flex-shrink:0; font-size:18px; }
-  .faq-item.open .faq-arrow { transform:rotate(90deg); color:var(--accent); }
-  .faq-a { max-height:0; overflow:hidden; transition:max-height 0.4s var(--ease-out), padding 0.3s; color:var(--muted); font-size:0.875rem; line-height:1.85; padding:0 var(--s5); }
-  .faq-item.open .faq-a { max-height:400px; padding:0 var(--s5) var(--s5); }
+/* ── Divider ── */
+hr{border:none;border-top:1px solid var(--border);}
 
-  /* ── FOOTER CTA ── */
-  .footer-cta {
-    text-align:center; padding:120px var(--s5); position:relative; overflow:hidden;
-  }
-  .footer-cta::before {
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:
-      radial-gradient(ellipse 60% 80% at 50% 100%, rgba(192,132,252,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 30% 80%, rgba(56,189,248,0.05) 0%, transparent 50%);
-  }
-  .footer-cta h2 {
-    font-size:clamp(2rem, 5.5vw, 3.5rem); font-weight:900;
-    letter-spacing:-0.035em; margin-bottom:var(--s4);
-    position:relative; z-index:1; text-wrap:balance;
-  }
-  .footer-cta p { color:var(--muted); font-size:1rem; margin-bottom:var(--s7); position:relative; z-index:1; }
+/* ── Steps ── */
+.steps{margin-top:var(--s7);display:flex;flex-direction:column;gap:var(--s4);}
+.step-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:var(--s6) var(--s8);display:grid;grid-template-columns:52px 1fr;gap:var(--s5);
+  opacity:0;transform:translateY(24px);
+  transition:border-color .25s,transform .25s var(--ease-out),box-shadow .25s;
+  position:relative;overflow:hidden;
+}
+.step-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(217,119,87,.03) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.step-card.vis{animation:slideUp .55s var(--ease-out) forwards;}
+.step-card:hover{border-color:var(--border-hi);transform:translateY(-3px);box-shadow:0 20px 56px rgba(0,0,0,.5);}
+.step-card:hover::after{opacity:1;}
+.step-num{
+  width:44px;height:44px;border-radius:var(--r-md);flex-shrink:0;
+  background:linear-gradient(135deg,var(--clay-lo),var(--clay));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:900;color:var(--ink);
+  box-shadow:0 4px 16px rgba(217,119,87,.4);
+}
+.step-h{font-size:1rem;font-weight:700;margin-bottom:var(--s2);letter-spacing:-.01em;}
+.step-p{font-size:.875rem;color:var(--text-2);line-height:1.8;}
+.code-block{
+  margin-top:var(--s4);background:var(--ink);
+  border:1px solid rgba(255,255,255,.06);border-radius:var(--r-md);
+  padding:var(--s5);position:relative;overflow:hidden;
+}
+.code-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--clay-lo),var(--clay-hi),transparent);
+}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.9;white-space:pre-wrap;word-break:break-all;}
+.c-comment{color:var(--ink-5);}
+.c-kw{color:var(--clay-hi);}
+.c-str{color:var(--green);}
+.c-path{color:var(--sky);}
+.c-ok{color:var(--green);}
+.copy-btn{
+  position:absolute;top:var(--s3);right:var(--s3);
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text-3);padding:3px var(--s3);border-radius:5px;
+  font-size:10px;font-weight:600;cursor:pointer;
+  transition:background .2s,color .2s;letter-spacing:.03em;text-transform:uppercase;
+}
+.copy-btn:hover{background:rgba(217,119,87,.12);color:var(--clay-hi);}
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    nav { padding:0 var(--s4); }
-    .nav-links { display:none; }
-    .section { padding:80px var(--s4); }
-    .step-card { grid-template-columns:1fr; padding:var(--s5); }
-    .stats-bar { gap:0; }
-    .stat { padding:var(--s5) var(--s4); min-width:50%; border-bottom:1px solid var(--border); }
-    .stat:nth-child(even) { border-right:none; }
-    .skills-grid { grid-template-columns:1fr; }
-  }
-  @media (max-width: 480px) {
-    .hero h1 { font-size:2.4rem; }
-    .hero-btns { flex-direction:column; align-items:stretch; }
-    .btn { justify-content:center; }
-  }
-  @media (prefers-reduced-motion:reduce) {
-    *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
-  }
+/* ── Method Tabs ── */
+.method-tabs{display:flex;gap:var(--s2);margin-top:var(--s7);flex-wrap:wrap;}
+.mtab{
+  padding:var(--s2) var(--s5);border-radius:var(--r-sm);
+  font-size:13px;font-weight:600;cursor:pointer;
+  transition:all .2s var(--ease-std);border:1px solid var(--border);
+  background:var(--surface2);color:var(--text-2);
+}
+.mtab.active{background:var(--clay);color:var(--ink);border-color:var(--clay);box-shadow:0 4px 16px rgba(217,119,87,.35);}
+.method-pane{display:none;margin-top:var(--s5);}
+.method-pane.active{display:block;}
+
+/* ── Skill Cards ── */
+.skills-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(296px,1fr));
+  gap:var(--s4);margin-top:var(--s7);
+}
+.skill-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:var(--s6);
+  opacity:0;transform:translateY(20px);
+  transition:border-color .25s var(--ease-std),transform .25s var(--ease-out),box-shadow .25s;
+  position:relative;overflow:hidden;cursor:default;
+  display:flex;flex-direction:column;
+}
+.skill-card.vis{animation:slideUp .5s var(--ease-out) forwards;}
+.skill-card:hover{border-color:var(--border-hi);transform:translateY(-5px);box-shadow:0 24px 64px rgba(0,0,0,.55);}
+.skill-card-glow{position:absolute;inset:0;opacity:0;transition:opacity .35s;pointer-events:none;}
+.skill-card:hover .skill-card-glow{opacity:1;}
+.skill-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4);}
+.skill-emoji{font-size:28px;line-height:1;}
+.skill-stars{
+  font-size:10px;font-weight:700;color:var(--text-3);
+  background:var(--surface2);border:1px solid var(--border);
+  padding:3px var(--s2);border-radius:5px;letter-spacing:.03em;white-space:nowrap;
+}
+.skill-name{font-size:1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:var(--s1);}
+.skill-repo{font-size:10.5px;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:var(--s3);opacity:.7;}
+.skill-desc{font-size:.84rem;color:var(--text-2);line-height:1.7;flex:1;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--s4);}
+.tag{padding:2px var(--s2);border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+.tag-purple{background:rgba(130,125,189,.12);color:var(--plum);}
+.tag-blue  {background:rgba(106,155,204,.12);color:var(--sky);}
+.tag-green {background:rgba(120,140,93,.12); color:var(--olive);}
+.tag-orange{background:rgba(217,119,87,.12); color:var(--clay-hi);}
+.tag-pink  {background:rgba(196,102,134,.12);color:var(--fig);}
+
+/* Skill action bar */
+.skill-action-bar{
+  margin-top:var(--s4);border-top:1px solid var(--border);
+  padding-top:var(--s4);display:flex;flex-direction:column;gap:var(--s2);
+}
+.skill-install-cmd{
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sky);
+  background:var(--ink);border:1px solid rgba(255,255,255,.05);
+  border-radius:var(--r-sm);padding:var(--s2) var(--s3);
+  word-break:break-all;line-height:1.6;
+}
+.skill-btns{display:flex;gap:var(--s2);}
+.skill-copy-btn{
+  flex:1;padding:9px 0;
+  background:var(--clay);border:none;border-radius:var(--r-sm);
+  color:var(--ink);font-size:12px;font-weight:700;cursor:pointer;
+  transition:opacity .15s,transform .15s var(--ease-out),box-shadow .15s;
+  letter-spacing:.02em;box-shadow:0 2px 8px rgba(217,119,87,.3);
+}
+.skill-copy-btn:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 4px 16px rgba(217,119,87,.45);}
+.skill-copy-btn.copied{background:var(--green);color:var(--ink);box-shadow:0 2px 8px rgba(122,184,122,.3);}
+.skill-gh-btn{
+  flex:1;padding:9px 0;text-align:center;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r-sm);color:var(--text-2);
+  font-size:12px;font-weight:600;text-decoration:none;
+  transition:border-color .2s,color .2s,transform .2s var(--ease-out);
+}
+.skill-gh-btn:hover{border-color:var(--border-hi);color:var(--text);transform:translateY(-1px);}
+
+/* ── Terminal Demo ── */
+.terminal-wrap{margin-top:var(--s7);}
+.terminal{
+  background:#0c0b0a;border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:0 48px 96px rgba(0,0,0,.7),0 0 0 1px rgba(217,119,87,.05);
+}
+.term-bar{
+  background:#131210;padding:12px var(--s5);
+  display:flex;align-items:center;gap:var(--s2);
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot-r{background:#ff5f57;}.dot-y{background:#febc2e;}.dot-g{background:#28c840;}
+.term-title{font-size:11px;color:var(--text-3);font-family:'JetBrains Mono',monospace;flex:1;text-align:center;}
+.term-body{padding:var(--s5) var(--s6);font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;min-height:200px;}
+.t-pr{color:var(--clay);}.t-cm{color:var(--text);}
+.t-out{color:var(--ink-5);}.t-ok{color:var(--green);}.t-info{color:var(--sky);}
+.cursor{display:inline-block;width:7px;height:14px;background:var(--clay-hi);border-radius:2px;animation:blink-cur 1s step-end infinite;vertical-align:middle;}
+@keyframes blink-cur{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── Terminal Guide ── */
+.term-os-tabs{display:flex;gap:var(--s2);margin-bottom:var(--s6);}
+.tos-tab{
+  background:var(--surface2);border:1px solid var(--border);color:var(--text-2);
+  padding:var(--s2) var(--s5);border-radius:var(--r-sm);cursor:pointer;
+  font-size:13px;font-weight:600;transition:all .2s var(--ease-std);
+}
+.tos-tab.active{background:var(--clay);border-color:var(--clay);color:var(--ink);box-shadow:0 4px 16px rgba(217,119,87,.3);}
+.tos-pane{display:none;}.tos-pane.active{display:block;}
+.term-methods{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:var(--s4);margin-bottom:var(--s6);}
+.term-method-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:var(--s5);position:relative;
+  transition:border-color .2s,transform .2s var(--ease-out);
+}
+.term-method-card:hover{border-color:var(--border-hi);transform:translateY(-2px);}
+.term-method-card.best{border-color:rgba(217,119,87,.3);background:rgba(217,119,87,.03);}
+.term-method-badge{
+  position:absolute;top:var(--s3);right:var(--s3);
+  background:var(--clay);color:var(--ink);font-size:9px;font-weight:800;
+  padding:2px var(--s2);border-radius:100px;letter-spacing:.06em;text-transform:uppercase;
+}
+.term-method-title{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:var(--s4);}
+.term-method-steps{display:flex;flex-direction:column;gap:var(--s2);}
+.tm-step{
+  font-size:.84rem;color:var(--text-2);line-height:1.5;
+  display:flex;align-items:flex-start;gap:var(--s2);padding-left:var(--s3);
+  border-left:2px solid var(--ink-5);
+}
+.tm-key{
+  display:inline-block;background:var(--surface2);
+  border:1px solid rgba(255,255,255,.12);border-bottom:2px solid rgba(255,255,255,.08);
+  color:var(--text);font-size:11px;font-weight:700;
+  padding:1px var(--s2);border-radius:4px;font-family:'JetBrains Mono',monospace;
+}
+.tm-code{font-family:'JetBrains Mono',monospace;font-size:.8em;background:var(--surface2);color:var(--clay-hi);padding:1px 5px;border-radius:3px;}
+.term-fake-dialog{background:#f0f0f0;border:1px solid #b8b8b8;border-radius:4px;padding:12px;max-width:260px;margin-top:var(--s4);font-family:system-ui,sans-serif;box-shadow:0 4px 12px rgba(0,0,0,.15);}
+.tfd-title{font-size:11px;font-weight:700;color:#222;margin-bottom:var(--s2);padding-bottom:6px;border-bottom:1px solid #ccc;}
+.tfd-body{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s3);}
+.tfd-label{font-size:11px;color:#333;white-space:nowrap;}
+.tfd-input{flex:1;background:#fff;border:1px solid #999;padding:2px 6px;font-size:11px;font-family:'JetBrains Mono',monospace;color:#111;border-radius:2px;}
+.tfd-cursor{animation:blink 1s step-start infinite;}
+@keyframes blink{50%{opacity:0}}
+.tfd-btns{display:flex;gap:5px;justify-content:flex-end;}
+.tfd-btn{font-size:10px;background:#e0e0e0;border:1px solid #aaa;border-radius:3px;padding:2px 10px;color:#222;cursor:default;}
+.tfd-btn-ok{background:#0078d4;color:#fff;border-color:#005fa3;}
+.term-tip-box{
+  display:flex;gap:var(--s4);align-items:flex-start;
+  background:var(--clay-subtle);border:1px solid var(--clay-border);
+  border-radius:var(--r-md);padding:var(--s5);font-size:.875rem;color:var(--text-2);line-height:1.7;
+}
+.term-tip-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px;}
+.term-tip-box strong{color:var(--text);}
+
+/* ── FAQ ── */
+.faq-list{margin-top:var(--s7);display:flex;flex-direction:column;gap:var(--s2);}
+.faq-item{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);overflow:hidden;transition:border-color .25s;
+}
+.faq-item:hover{border-color:rgba(217,119,87,.25);}
+.faq-q{
+  width:100%;background:none;border:none;color:var(--text);font-size:.9rem;font-weight:600;
+  padding:var(--s5) var(--s5);text-align:left;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;gap:var(--s4);
+  transition:color .2s;
+}
+.faq-q:hover{color:var(--clay-hi);}
+.faq-arrow{color:var(--text-3);transition:transform .3s var(--ease-std),color .2s;flex-shrink:0;font-size:18px;}
+.faq-item.open .faq-arrow{transform:rotate(90deg);color:var(--clay);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease-out),padding .3s;color:var(--text-2);font-size:.875rem;line-height:1.85;padding:0 var(--s5);}
+.faq-item.open .faq-a{max-height:400px;padding:0 var(--s5) var(--s5);}
+
+/* ── Footer CTA ── */
+.footer-cta{
+  text-align:center;padding:120px var(--s5);position:relative;overflow:hidden;
+}
+.footer-cta::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 100%,rgba(217,119,87,.12) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 30% 80%,rgba(106,155,204,.05) 0%,transparent 50%);
+}
+.footer-cta h2{
+  font-size:clamp(2rem,5.5vw,3.5rem);font-weight:900;
+  letter-spacing:-.035em;margin-bottom:var(--s4);
+  position:relative;z-index:1;text-wrap:balance;
+}
+.footer-cta p{color:var(--text-2);font-size:1rem;margin-bottom:var(--s7);position:relative;z-index:1;}
+
+/* ── Site Footer ── */
+.site-footer{
+  border-top:1px solid var(--border);
+  padding:var(--s7) var(--s8);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:var(--s5);
+  background:var(--surface);
+}
+.site-footer-left{display:flex;align-items:center;gap:var(--s4);}
+.site-footer-logo{display:flex;align-items:center;gap:var(--s3);}
+.site-footer-name{
+  font-size:1rem;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(135deg,var(--text),var(--clay-hi));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.site-footer-divider{width:1px;height:20px;background:var(--border);}
+.site-footer-email{
+  font-size:13px;color:var(--text-3);
+  display:flex;align-items:center;gap:6px;text-decoration:none;
+  transition:color .2s;
+}
+.site-footer-email:hover{color:var(--clay-hi);}
+.site-footer-right{font-size:11px;color:var(--ink-5);letter-spacing:.03em;text-align:right;}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  nav{padding:0 var(--s4);}
+  .nav-links{display:none;}
+  .section{padding:80px var(--s4);}
+  .step-card{grid-template-columns:1fr;padding:var(--s5);}
+  .stats-bar{gap:0;}
+  .stat{padding:var(--s5) var(--s4);min-width:50%;border-bottom:1px solid var(--border);}
+  .stat:nth-child(even){border-right:none;}
+  .skills-grid{grid-template-columns:1fr;}
+  .site-footer{padding:var(--s6) var(--s4);flex-direction:column;align-items:flex-start;}
+  .site-footer-right{text-align:left;}
+}
+@media(max-width:480px){
+  .hero h1{font-size:2.4rem;}
+  .hero-btns{flex-direction:column;align-items:stretch;}
+  .btn{justify-content:center;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
 </style>
 </head>
-
 <body>
 
 <div class="progress-bar" id="prog"></div>
 
 <nav>
-  <div class="nav-logo"><div class="dot"></div> Claude Skills 가이드</div>
+  <div class="nav-logo">
+    <!-- Claude icon SVG -->
+    <svg class="nav-logo-icon" viewBox="0 0 125 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M54.375 118.75L56.125 111L58.125 101L59.75 93L61.25 83.125L62.125 79.875L62 79.625L61.375 79.75L53.875 90L42.5 105.375L33.5 114.875L31.375 115.75L27.625 113.875L28 110.375L30.125 107.375L42.5 91.5L50 81.625L54.875 76L54.75 75.25H54.5L21.5 96.75L15.625 97.5L13 95.125L13.375 91.25L14.625 90L24.5 83.125L49.125 69.375L49.5 68.125L49.125 67.5H47.875L43.75 67.25L29.75 66.875L17.625 66.375L5.75 65.75L2.75 65.125L0 61.375L0.25 59.5L2.75 57.875L6.375 58.125L14.25 58.75L26.125 59.5L34.75 60L47.5 61.375H49.5L49.75 60.5L49.125 60L48.625 59.5L36.25 51.25L23 42.5L16 37.375L12.25 34.75L10.375 32.375L9.625 27.125L13 23.375L17.625 23.75L18.75 24L23.375 27.625L33.25 35.25L46.25 44.875L48.125 46.375L49 45.875V45.5L48.125 44.125L41.125 31.375L33.625 18.375L30.25 13L29.375 9.75C29.0417 8.625 28.875 7.375 28.875 6L32.75 0.750006L34.875 0L40.125 0.750006L42.25 2.625L45.5 10L50.625 21.625L58.75 37.375L61.125 42.125L62.375 46.375L62.875 47.75H63.75V47L64.375 38L65.625 27.125L66.875 13.125L67.25 9.125L69.25 4.375L73.125 1.87501L76.125 3.25L78.625 6.875L78.25 9.125L76.875 18.75L73.875 33.875L72 44.125H73.125L74.375 42.75L79.5 36L88.125 25.25L91.875 21L96.375 16.25L99.25 14H104.625L108.5 19.875L106.75 26L101.25 33L96.625 38.875L90 47.75L86 54.875L86.375 55.375H87.25L102.125 52.125L110.25 50.75L119.75 49.125L124.125 51.125L124.625 53.125L122.875 57.375L112.625 59.875L100.625 62.25L82.75 66.5L82.5 66.625L82.75 67L90.75 67.75L94.25 68H102.75L118.5 69.125L122.625 71.875L125 75.125L124.625 77.75L118.25 80.875L109.75 78.875L89.75 74.125L83 72.5H82V73L87.75 78.625L98.125 88L111.25 100.125L111.875 103.125L110.25 105.625L108.5 105.375L97 96.625L92.5 92.75L82.5 84.375H81.875V85.25L84.125 88.625L96.375 107L97 112.625L96.125 114.375L92.875 115.5L89.5 114.875L82.25 104.875L74.875 93.5L68.875 83.375L68.25 83.875L64.625 121.625L63 123.5L59.25 125L56.125 122.625L54.375 118.75Z" fill="#d97757"/>
+    </svg>
+    Claude Skills 가이드
+  </div>
   <ul class="nav-links">
     <li><a href="#what">스킬이란</a></li>
     <li><a href="#terminal">터미널 열기</a></li>
@@ -631,7 +634,11 @@
 
 <!-- Hero -->
 <section class="hero">
-  <div class="hero-glow"></div>
+  <!-- Claude 아이콘 대형 배경 -->
+  <svg class="hero-logo-bg" viewBox="0 0 125 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M54.375 118.75L56.125 111L58.125 101L59.75 93L61.25 83.125L62.125 79.875L62 79.625L61.375 79.75L53.875 90L42.5 105.375L33.5 114.875L31.375 115.75L27.625 113.875L28 110.375L30.125 107.375L42.5 91.5L50 81.625L54.875 76L54.75 75.25H54.5L21.5 96.75L15.625 97.5L13 95.125L13.375 91.25L14.625 90L24.5 83.125L49.125 69.375L49.5 68.125L49.125 67.5H47.875L43.75 67.25L29.75 66.875L17.625 66.375L5.75 65.75L2.75 65.125L0 61.375L0.25 59.5L2.75 57.875L6.375 58.125L14.25 58.75L26.125 59.5L34.75 60L47.5 61.375H49.5L49.75 60.5L49.125 60L48.625 59.5L36.25 51.25L23 42.5L16 37.375L12.25 34.75L10.375 32.375L9.625 27.125L13 23.375L17.625 23.75L18.75 24L23.375 27.625L33.25 35.25L46.25 44.875L48.125 46.375L49 45.875V45.5L48.125 44.125L41.125 31.375L33.625 18.375L30.25 13L29.375 9.75C29.0417 8.625 28.875 7.375 28.875 6L32.75 0.750006L34.875 0L40.125 0.750006L42.25 2.625L45.5 10L50.625 21.625L58.75 37.375L61.125 42.125L62.375 46.375L62.875 47.75H63.75V47L64.375 38L65.625 27.125L66.875 13.125L67.25 9.125L69.25 4.375L73.125 1.87501L76.125 3.25L78.625 6.875L78.25 9.125L76.875 18.75L73.875 33.875L72 44.125H73.125L74.375 42.75L79.5 36L88.125 25.25L91.875 21L96.375 16.25L99.25 14H104.625L108.5 19.875L106.75 26L101.25 33L96.625 38.875L90 47.75L86 54.875L86.375 55.375H87.25L102.125 52.125L110.25 50.75L119.75 49.125L124.125 51.125L124.625 53.125L122.875 57.375L112.625 59.875L100.625 62.25L82.75 66.5L82.5 66.625L82.75 67L90.75 67.75L94.25 68H102.75L118.5 69.125L122.625 71.875L125 75.125L124.625 77.75L118.25 80.875L109.75 78.875L89.75 74.125L83 72.5H82V73L87.75 78.625L98.125 88L111.25 100.125L111.875 103.125L110.25 105.625L108.5 105.375L97 96.625L92.5 92.75L82.5 84.375H81.875V85.25L84.125 88.625L96.375 107L97 112.625L96.125 114.375L92.875 115.5L89.5 114.875L82.25 104.875L74.875 93.5L68.875 83.375L68.25 83.875L64.625 121.625L63 123.5L59.25 125L56.125 122.625L54.375 118.75Z" fill="#d97757"/>
+  </svg>
+
   <div class="hero-author-block">
     <div class="hero-author-eyebrow">✦ Curated by</div>
     <div class="hero-author-name">슈퍼휴먼 김석원</div>
@@ -667,7 +674,7 @@
 <section class="section" id="what">
   <div class="sec-eyebrow">💡 WHAT IS CLAUDE SKILLS</div>
   <h2 class="sec-title">스킬이 뭔가요?</h2>
-  <p class="sec-desc">Anthropic이 Claude Code에 공식 도입한 확장 시스템. <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:2px 6px;border-radius:4px;">.md</code> 파일로 만든 커스텀 명령을 Claude에게 가르쳐서, 특정 분야의 전문가처럼 작동하게 만듭니다.</p>
+  <p class="sec-desc">Anthropic이 Claude Code에 공식 도입한 확장 시스템. <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:2px 6px;border-radius:4px;">.md</code> 파일로 만든 커스텀 명령을 Claude에게 가르쳐서, 특정 분야의 전문가처럼 작동하게 만듭니다.</p>
 
   <div class="what-grid">
     <div class="what-card">
@@ -686,15 +693,15 @@
       <div class="what-body">
         스킬을 어디에 설치하느냐에 따라 적용 범위가 달라져요.<br><br>
         <strong style="color:var(--text)">🌍 내 컴퓨터 전체에 적용</strong><br>
-        <span style="font-size:0.85em">홈 폴더(내 문서 같은 곳) 안의 <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">.claude/skills/</code> 에 설치하면, Claude Code를 어디서 켜든 이 스킬이 항상 켜져 있어요.</span><br><br>
+        <span style="font-size:.85em">홈 폴더 안의 <code style="font-family:'JetBrains Mono';font-size:.82em;background:var(--ink);padding:1px 5px;border-radius:3px;">.claude/skills/</code> 에 설치하면, Claude Code를 어디서 켜든 항상 켜져 있어요.</span><br><br>
         <strong style="color:var(--text)">📂 특정 작업 폴더에만 적용</strong><br>
-        <span style="font-size:0.85em">작업 중인 프로젝트 폴더 안에 <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">.claude/skills/</code> 를 만들어 넣으면, 그 폴더에서 Claude Code를 켤 때만 이 스킬이 동작해요. 다른 작업엔 영향 없어요.</span>
+        <span style="font-size:.85em">프로젝트 폴더 안에 넣으면, 그 폴더에서만 동작해요.</span>
       </div>
     </div>
     <div class="what-card">
       <div class="what-icon">⚡</div>
       <div class="what-title">슬래시 커맨드로 호출</div>
-      <div class="what-body">설치 후 <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">/skill-name</code> 또는 <code style="font-family:'JetBrains Mono';font-size:0.82em;background:var(--bg);padding:1px 5px;border-radius:3px;">@skill-name</code> 으로 즉시 호출. 배우는 시간 필요 없이 바로 씁니다.</div>
+      <div class="what-body">설치 후 <code style="font-family:'JetBrains Mono';font-size:.82em;background:var(--ink);padding:1px 5px;border-radius:3px;">/skill-name</code> 또는 <code style="font-family:'JetBrains Mono';font-size:.82em;background:var(--ink);padding:1px 5px;border-radius:3px;">@skill-name</code> 으로 즉시 호출. 배우는 시간 없이 바로 씁니다.</div>
     </div>
   </div>
 </section>
@@ -715,7 +722,6 @@
   <!-- Windows -->
   <div class="tos-pane active" id="tos-win">
     <div class="term-methods">
-
       <div class="term-method-card best">
         <div class="term-method-badge">추천</div>
         <div class="term-method-title">방법 1 — Win + R 단축키</div>
@@ -735,7 +741,6 @@
           </div>
         </div>
       </div>
-
       <div class="term-method-card">
         <div class="term-method-title">방법 2 — 검색창에서 열기</div>
         <div class="term-method-steps">
@@ -744,7 +749,6 @@
           <div class="tm-step">Windows PowerShell 앱을 클릭해서 열기</div>
         </div>
       </div>
-
       <div class="term-method-card">
         <div class="term-method-title">방법 3 — Windows Terminal (최신 추천)</div>
         <div class="term-method-steps">
@@ -753,7 +757,6 @@
           <div class="tm-step">탭 방식으로 여러 터미널을 동시에 쓸 수 있어요</div>
         </div>
       </div>
-
       <div class="term-method-card">
         <div class="term-method-title">방법 4 — VS Code 내장 터미널</div>
         <div class="term-method-steps">
@@ -762,14 +765,12 @@
           <div class="tm-step">단축키: <span class="tm-key">Ctrl</span> + <span class="tm-key">`</span> (백틱)</div>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- macOS -->
   <div class="tos-pane" id="tos-mac">
     <div class="term-methods">
-
       <div class="term-method-card best">
         <div class="term-method-badge">추천</div>
         <div class="term-method-title">방법 1 — Spotlight 검색</div>
@@ -779,7 +780,6 @@
           <div class="tm-step">흰색 또는 검은 창이 열리면 성공 ✅</div>
         </div>
       </div>
-
       <div class="term-method-card">
         <div class="term-method-title">방법 2 — Finder에서 찾기</div>
         <div class="term-method-steps">
@@ -787,7 +787,6 @@
           <div class="tm-step"><code class="tm-code">Terminal.app</code> 더블클릭</div>
         </div>
       </div>
-
       <div class="term-method-card">
         <div class="term-method-title">방법 3 — iTerm2 (개발자 추천)</div>
         <div class="term-method-steps">
@@ -795,7 +794,6 @@
           <div class="tm-step">기본 Terminal보다 기능이 풍부하고 다루기 편해요</div>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -829,7 +827,7 @@
         <div class="step-num">1</div>
         <div>
           <div class="step-h">터미널에서 명령어 실행</div>
-          <div class="step-p">Claude Code CLI가 설치된 터미널을 열고 아래 명령어를 붙여넣으세요. <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">plugin install</code> 명령 하나로 다운로드→설치가 자동으로 됩니다.</div>
+          <div class="step-p">Claude Code CLI가 설치된 터미널을 열고 아래 명령어를 붙여넣으세요. <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">plugin install</code> 명령 하나로 다운로드→설치가 자동으로 됩니다.</div>
           <div class="code-block">
             <button class="copy-btn" onclick="copyText(this,'claude-code plugin install https://github.com/coreyhaines31/marketingskills')">복사</button>
             <pre><span class="c-comment"># 예시: Marketing Skills 설치</span>
@@ -846,12 +844,8 @@
       <div class="step-card">
         <div class="step-num">2</div>
         <div>
-          <div class="step-h">설치 확인</div>
-          <div class="step-p">설치가 완료되면 Claude Code를 재시작하거나 새 대화를 시작하세요. <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/</code> 를 입력하면 설치된 스킬 목록이 자동완성으로 표시됩니다.</div>
-          <div class="code-block">
-            <pre><span class="c-ok">✓</span> <span class="c-str">marketingskills installed</span>
-<span class="c-ok">✓</span> <span class="c-str">Available as /marketing, /copywriting, /seo ...</span></pre>
-          </div>
+          <div class="step-h">Claude Code 재시작</div>
+          <div class="step-p">설치 후 Claude Code를 재시작하면 스킬이 자동으로 활성화됩니다. <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/skill-name</code>으로 호출할 수 있어요.</div>
         </div>
       </div>
     </div>
@@ -864,20 +858,20 @@
         <div class="step-num">1</div>
         <div>
           <div class="step-h">GitHub에서 SKILL.md 파일 다운로드</div>
-          <div class="step-p">원하는 스킬의 GitHub 저장소로 이동해서 <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">SKILL.md</code> 또는 <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">skills/</code> 폴더의 파일을 다운로드하세요.</div>
+          <div class="step-p">원하는 스킬의 GitHub 저장소에서 SKILL.md 파일을 직접 다운로드합니다.</div>
         </div>
       </div>
       <div class="step-card">
         <div class="step-num">2</div>
         <div>
-          <div class="step-h">스킬 폴더에 파일 배치</div>
-          <div class="step-p">다운로드한 파일을 아래 경로에 넣으면 됩니다. 폴더가 없으면 직접 만드세요.</div>
+          <div class="step-h">스킬 폴더에 저장</div>
+          <div class="step-p">다운로드한 파일을 스킬 폴더에 저장합니다.</div>
           <div class="code-block">
-            <pre><span class="c-comment"># 전체 적용 (개인 설정)</span>
-~/.claude/skills/<span class="c-kw">스킬이름</span>/SKILL.md
+            <pre><span class="c-comment"># 전체 적용 (홈 폴더)</span>
+~/.claude/skills/스킬이름/SKILL.md
 
-<span class="c-comment"># 현재 프로젝트만 적용</span>
-.claude/skills/<span class="c-kw">스킬이름</span>/SKILL.md</pre>
+<span class="c-comment"># 프로젝트만 적용 (현재 폴더 내)</span>
+.claude/skills/스킬이름/SKILL.md</pre>
           </div>
         </div>
       </div>
@@ -885,7 +879,7 @@
         <div class="step-num">3</div>
         <div>
           <div class="step-h">Claude Code 재시작 후 사용</div>
-          <div class="step-p"><code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/스킬이름</code> 으로 바로 호출하세요. SKILL.md 안에 정의된 모든 커맨드가 활성화됩니다.</div>
+          <div class="step-p"><code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/스킬이름</code> 으로 바로 호출하세요. SKILL.md 안에 정의된 모든 커맨드가 활성화됩니다.</div>
         </div>
       </div>
     </div>
@@ -910,7 +904,7 @@
         <div class="step-num">2</div>
         <div>
           <div class="step-h">원하는 스킬만 복사</div>
-          <div class="step-p">클론된 폴더에서 원하는 스킬 디렉토리를 <code style="font-family:'JetBrains Mono';font-size:0.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">~/.claude/skills/</code> 로 복사하면 됩니다.</div>
+          <div class="step-p">클론된 폴더에서 원하는 스킬 디렉토리를 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">~/.claude/skills/</code> 로 복사하면 됩니다.</div>
           <div class="code-block">
             <pre><span class="t-pr">$</span> cp -r claude-skills/marketing <span class="c-path">~/.claude/skills/marketing</span>
 <span class="t-pr">$</span> cp -r claude-skills/remotion <span class="c-path">~/.claude/skills/remotion</span>
@@ -929,17 +923,13 @@
   <div class="terminal-wrap">
     <div class="terminal">
       <div class="term-bar">
-        <div class="dot dot-r"></div>
-        <div class="dot dot-y"></div>
-        <div class="dot dot-g"></div>
-        <div class="term-title">claude — skills demo</div>
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="term-title">claude-code — Marketing Skills</div>
       </div>
       <div class="term-body" id="termBody"></div>
     </div>
   </div>
 </section>
-
-<hr>
 
 <!-- Skill Picks -->
 <section class="section" id="picks">
@@ -951,7 +941,7 @@
 
     <!-- Remotion -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(251,146,60,0.05),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,87,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🎬</div>
         <div class="skill-stars">⭐ 4,000+</div>
@@ -974,7 +964,7 @@
 
     <!-- Superpowers -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(124,106,247,0.05),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(130,125,189,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">⚡</div>
         <div class="skill-stars">⭐ 1,100+</div>
@@ -997,7 +987,7 @@
 
     <!-- Marketing Skills -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(74,222,128,0.04),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(120,140,93,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">📣</div>
         <div class="skill-stars">⭐ 40,000</div>
@@ -1020,7 +1010,7 @@
 
     <!-- UI/UX Pro Max -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(56,189,248,0.05),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(106,155,204,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🎨</div>
         <div class="skill-stars">⭐ Growing</div>
@@ -1043,7 +1033,7 @@
 
     <!-- Claude Skills 컬렉션 -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(192,132,252,0.05),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(196,102,134,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🗂️</div>
         <div class="skill-stars">⭐ 22,700</div>
@@ -1066,14 +1056,14 @@
 
     <!-- Video to Superprompt -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(251,146,60,0.06),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,87,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🎥</div>
         <div class="skill-stars">MengTo/Skills</div>
       </div>
       <div class="skill-name">Video to Superprompt</div>
       <div class="skill-repo">agent-skills/codex/video-to-superprompt</div>
-      <div class="skill-desc">영상 하나를 붙여넣으면 — 레이아웃, 모션, 스크롤 인터랙션, WebGL, GSAP, 색상 팔레트까지 — AI가 그대로 재현 가능한 상세 빌드 프롬프트를 뽑아냅니다. ffmpeg 프레임 분석 → 레이어별 해부 → 에셋 맵 자동 생성.</div>
+      <div class="skill-desc">영상 하나를 붙여넣으면 — 레이아웃, 모션, 스크롤 인터랙션, WebGL, GSAP, 색상 팔레트까지 — AI가 그대로 재현 가능한 상세 빌드 프롬프트를 뽑아냅니다.</div>
       <div class="skill-tags">
         <span class="tag tag-orange">영상 분석</span>
         <span class="tag tag-blue">UI 재현</span>
@@ -1089,7 +1079,7 @@
 
     <!-- HTML to Interaction Prompts -->
     <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(56,189,248,0.06),transparent)"></div>
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(106,155,204,0.07),transparent)"></div>
       <div class="skill-head">
         <div class="skill-emoji">🖱️</div>
         <div class="skill-stars">MengTo/Skills</div>
@@ -1133,37 +1123,37 @@
         스킬을 찾는 공식 검색 엔진이 있나요?
         <span class="faq-arrow">›</span>
       </button>
-      <div class="faq-a"><strong>skills.sh</strong> (Vercel 제작)가 사실상 공식 스킬 디렉토리 역할을 합니다. 905,000개 이상의 스킬이 등록되어 있고, 설치 수·인기 순위로 검색할 수 있어요. claudeskills.com은 큐레이션 마켓플레이스로 waitlist 운영 중입니다.</div>
+      <div class="faq-a"><strong>skills.sh</strong>가 현재 가장 큰 Claude Skills 디렉토리입니다. GitHub에서 직접 검색하거나 커뮤니티 Discord/Reddit에서도 추천 스킬을 찾을 수 있어요.</div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">
         스킬을 여러 개 설치하면 충돌이 생기나요?
         <span class="faq-arrow">›</span>
       </button>
-      <div class="faq-a">기본적으로 스킬은 독립적으로 동작해 충돌이 거의 없습니다. 다만 같은 커맨드 이름이 중복되면 마지막에 설치된 스킬이 우선합니다. 너무 많이 설치하면 컨텍스트 로딩 시간이 늘어날 수 있으니 자주 쓰는 것 위주로 10개 이내로 관리하는 게 좋아요.</div>
+      <div class="faq-a">일반적으로 충돌은 없습니다. 각 스킬은 독립적으로 작동하며 고유한 이름을 가집니다. 다만 두 스킬이 같은 슬래시 커맨드를 정의하면 나중에 설치된 것이 우선합니다.</div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">
         내가 직접 스킬을 만들어서 공개할 수 있나요?
         <span class="faq-arrow">›</span>
       </button>
-      <div class="faq-a">당연히 가능합니다. <code style="font-family:'JetBrains Mono';font-size:0.85em">SKILL.md</code> 파일에 YAML 프론트매터와 마크다운 지시사항을 작성하면 됩니다. Agent Skills Open Standard를 따르면 Claude뿐 아니라 Cursor, Codex, Gemini CLI에서도 동작하는 범용 스킬을 만들 수 있어요.</div>
+      <div class="faq-a">네! <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 5px;border-radius:4px;">SKILL.md</code> 파일을 만들어 GitHub에 올리면 바로 배포됩니다. Anthropic 공식 문서에 스킬 작성 가이드가 있어요.</div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">
         유료인 스킬도 있나요?
         <span class="faq-arrow">›</span>
       </button>
-      <div class="faq-a">현재 GitHub에 올라온 스킬들은 대부분 무료 오픈소스입니다. claudeskills.com 같은 마켓플레이스가 활성화되면 프리미엄 스킬도 등장할 수 있지만, 지금 단계에서는 사실상 전부 무료입니다.</div>
+      <div class="faq-a">현재 대부분의 스킬은 오픈소스로 무료입니다. 일부 커머셜 도구(Remotion Pro 등)가 자체 스킬을 제공하지만, 스킬 자체는 무료로 제공되고 도구 구독이 별도로 필요할 수 있습니다.</div>
     </div>
   </div>
 </section>
 
 <!-- Footer CTA -->
 <section class="footer-cta">
-  <h2>지금 바로<br><span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">시작하세요</span></h2>
+  <h2>지금 바로<br><span style="background:linear-gradient(135deg,var(--clay),var(--clay-hi));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">시작하세요</span></h2>
   <p>Marketing Skills ⭐40,000 · Remotion 428K 설치 · 전부 무료</p>
-  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;">
     <a href="https://skills.sh" target="_blank" class="btn btn-primary">✦ skills.sh 에서 찾기</a>
     <a href="https://github.com/search?q=claude+skills&type=repositories&sort=stars" target="_blank" class="btn btn-ghost">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.83-.26.83-.58v-2.02c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.74-1.33-1.74-1.08-.74.08-.73.08-.73 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.3-1.23 3.3-1.23.64 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.3c0 .32.22.69.83.57C20.57 21.8 24 17.3 24 12 24 5.37 18.63 0 12 0z"/></svg>
@@ -1175,7 +1165,13 @@
 <!-- Site Footer -->
 <footer class="site-footer">
   <div class="site-footer-left">
-    <div class="site-footer-name">김석원</div>
+    <div class="site-footer-logo">
+      <svg width="18" height="18" viewBox="0 0 125 125" fill="none">
+        <path d="M54.375 118.75L56.125 111L58.125 101L59.75 93L61.25 83.125L62.125 79.875L62 79.625L61.375 79.75L53.875 90L42.5 105.375L33.5 114.875L31.375 115.75L27.625 113.875L28 110.375L30.125 107.375L42.5 91.5L50 81.625L54.875 76L54.75 75.25H54.5L21.5 96.75L15.625 97.5L13 95.125L13.375 91.25L14.625 90L24.5 83.125L49.125 69.375L49.5 68.125L49.125 67.5H47.875L43.75 67.25L29.75 66.875L17.625 66.375L5.75 65.75L2.75 65.125L0 61.375L0.25 59.5L2.75 57.875L6.375 58.125L14.25 58.75L26.125 59.5L34.75 60L47.5 61.375H49.5L49.75 60.5L49.125 60L48.625 59.5L36.25 51.25L23 42.5L16 37.375L12.25 34.75L10.375 32.375L9.625 27.125L13 23.375L17.625 23.75L18.75 24L23.375 27.625L33.25 35.25L46.25 44.875L48.125 46.375L49 45.875V45.5L48.125 44.125L41.125 31.375L33.625 18.375L30.25 13L29.375 9.75C29.0417 8.625 28.875 7.375 28.875 6L32.75 0.750006L34.875 0L40.125 0.750006L42.25 2.625L45.5 10L50.625 21.625L58.75 37.375L61.125 42.125L62.375 46.375L62.875 47.75H63.75V47L64.375 38L65.625 27.125L66.875 13.125L67.25 9.125L69.25 4.375L73.125 1.87501L76.125 3.25L78.625 6.875L78.25 9.125L76.875 18.75L73.875 33.875L72 44.125H73.125L74.375 42.75L79.5 36L88.125 25.25L91.875 21L96.375 16.25L99.25 14H104.625L108.5 19.875L106.75 26L101.25 33L96.625 38.875L90 47.75L86 54.875L86.375 55.375H87.25L102.125 52.125L110.25 50.75L119.75 49.125L124.125 51.125L124.625 53.125L122.875 57.375L112.625 59.875L100.625 62.25L82.75 66.5L82.5 66.625L82.75 67L90.75 67.75L94.25 68H102.75L118.5 69.125L122.625 71.875L125 75.125L124.625 77.75L118.25 80.875L109.75 78.875L89.75 74.125L83 72.5H82V73L87.75 78.625L98.125 88L111.25 100.125L111.875 103.125L110.25 105.625L108.5 105.375L97 96.625L92.5 92.75L82.5 84.375H81.875V85.25L84.125 88.625L96.375 107L97 112.625L96.125 114.375L92.875 115.5L89.5 114.875L82.25 104.875L74.875 93.5L68.875 83.375L68.25 83.875L64.625 121.625L63 123.5L59.25 125L56.125 122.625L54.375 118.75Z" fill="#d97757"/>
+      </svg>
+      <div class="site-footer-name">김석원</div>
+    </div>
+    <div class="site-footer-divider"></div>
     <a class="site-footer-email" href="mailto:sw@srbiotek.co.kr">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
       sw@srbiotek.co.kr
@@ -1183,7 +1179,7 @@
   </div>
   <div class="site-footer-right">
     슈퍼휴먼 김석원의 AI 가이드<br>
-    <span style="opacity:0.4">© 2026 SR바이오텍</span>
+    <span style="opacity:.4">© 2026 SR바이오텍</span>
   </div>
 </footer>
 
@@ -1215,12 +1211,13 @@ function switchTab(btn, id) {
 
 // FAQ
 function toggleFaq(btn) {
-  const item = btn.closest('.faq-item'), open = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if (!open) item.classList.add('open');
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
 }
 
-// Copy
+// Copy skill command
 function copySkill(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
     btn.textContent = '✓ 복사됨';
@@ -1229,6 +1226,7 @@ function copySkill(btn, text) {
   });
 }
 
+// OS tab switch
 function switchOs(btn, os) {
   document.querySelectorAll('.tos-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tos-pane').forEach(p => p.classList.remove('active'));
@@ -1236,6 +1234,7 @@ function switchOs(btn, os) {
   document.getElementById('tos-' + os).classList.add('active');
 }
 
+// Copy text
 function copyText(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
     const orig = btn.textContent;
