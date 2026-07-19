@@ -185,6 +185,23 @@ nav{
 .hero-outro-title{
   font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;letter-spacing:-.03em;
   color:var(--text);
+  /* 로고 파티클이 완성된 자리(가슴) 바로 위에 겹치므로, 살짝 어두운
+     배경 판 + blur를 깔아 파티클보다 확실히 앞에 떠 있는 느낌을 준다. */
+  background:rgba(20,20,19,.72);
+  backdrop-filter:blur(10px);
+  padding:14px 28px;border-radius:var(--r-md);
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+}
+/* 아웃트로 배지도 같은 이유로 불투명 배경 + blur 처리 */
+.hero-outro .hero-badge{
+  background:rgba(20,20,19,.78);
+  backdrop-filter:blur(10px);
+  border-color:var(--clay-border);
+}
+.hero-outro .hero-btns{
+  background:rgba(20,20,19,.55);
+  backdrop-filter:blur(8px);
+  padding:var(--s4);border-radius:var(--r-lg);
 }
 
 /* Three.js 파티클 캔버스 */
