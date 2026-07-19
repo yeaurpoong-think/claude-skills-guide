@@ -138,7 +138,10 @@ nav{
    애니메이션이 천천히 재생된다. */
 .hero-scroll{
   position:relative;
-  height:400vh; /* 스크롤 스토리 총 길이 */
+  /* 100vh(고정 화면) + 300vh(애니메이션 진행 구간) + 160vh(완성 후 정지 구간)
+     정지 구간 덕분에 슈퍼맨 완성 + '이제, 당신 차례입니다' CTA가 한 번 더
+     스크롤해야 다음 섹션으로 넘어갈 만큼 충분히 오래 화면에 머문다. */
+  height:560vh;
 }
 .hero{
   position:sticky;top:0;
@@ -1500,38 +1503,96 @@ import * as THREE from 'three';
   }
 
   /* ══════════════════════════════════════
-     사람 실루엣 포지션 생성 (단순 타원 + 막대 조합)
+     사람 실루엣 포지션 생성 — 관절 기반 캡슐(capsule) 샘플링
+     어깨→팔꿈치→손목, 골반→무릎→발목 구조로 실제 인체 비례에
+     가깝게 생성. 포즈: 두 다리 어깨너비로 서고, 양손은 허리에
+     (히어로 특유의 당당한 자세) — 가슴 중앙은 비워둬서 이후
+     Stage 3에서 로고가 박히는 자리를 자연스럽게 만든다.
   ══════════════════════════════════════ */
   function humanPositions(count) {
-    const pos = [];
-    for (let i = 0; i < count; i++) {
-      const t = Math.random();
-      let x, y, z = (Math.random() - 0.5) * 10;
-      if (t < 0.18) {
-        // 머리 (원)
-        const a = Math.random() * Math.PI * 2;
-        const r = Math.random() * 30;
-        x = Math.cos(a) * r; y = 140 + Math.sin(a) * r;
-      } else if (t < 0.55) {
-        // 몸통
-        x = (Math.random() - 0.5) * 70; y = 20 + Math.random() * 100;
-      } else if (t < 0.7) {
-        // 왼팔
-        x = -55 - Math.random() * 40; y = 50 + Math.random() * 70;
-      } else if (t < 0.85) {
-        // 오른팔
-        x = 55 + Math.random() * 40; y = 50 + Math.random() * 70;
-      } else if (t < 0.925) {
-        // 왼다리
-        x = -20 - Math.random() * 20; y = -60 - Math.random() * 90;
-      } else {
-        // 오른다리
-        x = 20 + Math.random() * 20; y = -60 - Math.random() * 90;
+    const J = {
+      head:    [0, 178],
+      neckTop: [0, 150],  neckBot: [0, 140],
+      shC:     [0, 138],  chest:   [0, 100],
+      waist:   [0, 58],   hip:     [0, 28],
+      shL:     [-42, 136], shR:    [42, 136],
+      elbowL:  [-80, 90],  elbowR: [80, 90],
+      handL:   [-34, 58],  handR:  [34, 58],
+      hipL:    [-27, 26],  hipR:   [27, 26],
+      kneeL:   [-30, -55], kneeR:  [30, -55],
+      ankleL:  [-27, -142],ankleR: [27, -142],
+    };
+
+    const pts = [];
+
+    // 구(sphere) 형태로 점 채우기 — 머리, 손, 발 끝단
+    function addSphere(c, r, n, flatten) {
+      flatten = flatten || 1;
+      for (let k = 0; k < n; k++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        const rad = r * Math.cbrt(Math.random());
+        const x = c[0] + rad * Math.sin(phi) * Math.cos(theta);
+        const y = c[1] + rad * Math.cos(phi) * 0.9;
+        const z = rad * Math.sin(phi) * Math.sin(theta) * flatten;
+        pts.push(x, y, z);
       }
-      pos.push(x, y, z);
     }
-    return pos;
+
+    // 캡슐(capsule) 형태로 점 채우기 — 팔/다리/몸통 각 구간
+    // a→b 축을 따라 반지름이 rA→rB로 테이퍼링되는 원통형 점구름
+    function addCapsule(a, b, rA, rB, n, flatten) {
+      flatten = flatten || 1;
+      const dx = b[0] - a[0], dy = b[1] - a[1];
+      const len = Math.hypot(dx, dy) || 1;
+      const px = -dy / len, py = dx / len; // 세그먼트에 수직인 XY 평면 벡터
+      for (let k = 0; k < n; k++) {
+        const t = Math.random();
+        const rMax = rA + (rB - rA) * t;
+        const r = rMax * Math.sqrt(Math.random());
+        const theta = Math.random() * Math.PI * 2;
+        const cx = a[0] + dx * t, cy = a[1] + dy * t;
+        const ox = Math.cos(theta) * r, oz = Math.sin(theta) * r * flatten;
+        pts.push(cx + px * ox, cy + py * ox, oz);
+      }
+    }
+
+    addSphere(J.head, 25, Math.round(count * 0.085));
+    addCapsule(J.neckTop, J.neckBot, 11, 10, Math.round(count * 0.015));
+    // 몸통: 어깨→가슴→허리→골반 3단 테이퍼로 곡선感 있는 실루엣
+    addCapsule(J.shC,   J.chest, 47, 40, Math.round(count * 0.13), 0.62);
+    addCapsule(J.chest, J.waist, 40, 29, Math.round(count * 0.11), 0.58);
+    addCapsule(J.waist, J.hip,   29, 37, Math.round(count * 0.09), 0.60);
+    // 팔: 어깨→팔꿈치→손목 (양손은 허리에 얹은 히어로 자세)
+    addCapsule(J.shL, J.elbowL, 15, 12, Math.round(count * 0.05));
+    addCapsule(J.shR, J.elbowR, 15, 12, Math.round(count * 0.05));
+    addCapsule(J.elbowL, J.handL, 12, 9, Math.round(count * 0.035));
+    addCapsule(J.elbowR, J.handR, 12, 9, Math.round(count * 0.035));
+    addSphere(J.handL, 11, Math.round(count * 0.015));
+    addSphere(J.handR, 11, Math.round(count * 0.015));
+    // 다리: 골반→무릎→발목
+    addCapsule(J.hipL, J.kneeL, 23, 17, Math.round(count * 0.09));
+    addCapsule(J.hipR, J.kneeR, 23, 17, Math.round(count * 0.09));
+    addCapsule(J.kneeL, J.ankleL, 17, 12, Math.round(count * 0.075));
+    addCapsule(J.kneeR, J.ankleR, 17, 12, Math.round(count * 0.075));
+    // 발
+    addSphere([J.ankleL[0] + 8, J.ankleL[1] - 8], 13, Math.round(count * 0.025), 1.4);
+    addSphere([J.ankleR[0] + 8, J.ankleR[1] - 8], 13, Math.round(count * 0.025), 1.4);
+
+    // 반올림 오차로 개수가 모자라면 기존 점을 살짝 복제해 채움
+    while (pts.length / 3 < count) {
+      const idx = Math.floor(Math.random() * (pts.length / 3)) * 3;
+      pts.push(
+        pts[idx]     + (Math.random() - 0.5) * 2,
+        pts[idx + 1] + (Math.random() - 0.5) * 2,
+        pts[idx + 2] + (Math.random() - 0.5) * 2
+      );
+    }
+    pts.length = count * 3; // 초과분은 잘라내 정확히 count개로 맞춤
+
+    return pts;
   }
+
 
   /* ══════════════════════════════════════
      파티클 시스템 생성
@@ -1605,14 +1666,17 @@ import * as THREE from 'three';
      Stage 3 (0.80~1.0):  사람 가슴에 클로드 로고 박힘
   ══════════════════════════════════════ */
   function getScrollProgress() {
-    // .hero-scroll이 스크롤 스토리 컨테이너(400vh). 그 안에서 hero(100vh)를
-    // 뺀 나머지 구간(300vh)이 실제로 스크롤해야 하는 거리.
+    // .hero-scroll 총 길이 = 100vh(고정) + 300vh(애니메이션 진행) + 160vh(완성 후 정지).
+    // 뒤쪽 160vh 구간은 스크롤해도 prog가 1로 고정되어(정지) 슈퍼맨 완성 +
+    // 아웃트로 CTA가 충분히 오래 화면에 머물다가, 그 구간을 다 지나야
+    // 다음 섹션으로 넘어간다.
     const scrollEl = document.getElementById('heroScroll');
-    const scrollableDist = scrollEl.clientHeight - window.innerHeight;
-    if (scrollableDist <= 0) return 0;
+    const vh = window.innerHeight;
+    const animScrollableDist = 3 * vh; // 애니메이션이 실제로 진행되는 스크롤 거리(300vh)
     const rect = scrollEl.getBoundingClientRect();
     const scrolled = -rect.top;
-    return Math.max(0, Math.min(1, scrolled / scrollableDist));
+    if (animScrollableDist <= 0) return 0;
+    return Math.max(0, Math.min(1, scrolled / animScrollableDist));
   }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
