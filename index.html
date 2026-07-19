@@ -131,11 +131,21 @@ nav{
 .nav-gh:hover{border-color:var(--border-hi);background:var(--clay-subtle);transform:translateY(-1px);}
 
 /* ── HERO ── */
+/* 스크롤 연동 파티클 스토리: 4단계 애니메이션이 진행되는 동안
+   .hero는 뷰포트에 고정(sticky)되고, .hero-scroll이 그 뒤로
+   400vh 만큼의 스크롤 공간을 제공한다. 이렇게 해야 폰에서
+   스와이프 한 번에 다 지나가지 않고 스크롤 진행에 맞춰
+   애니메이션이 천천히 재생된다. */
+.hero-scroll{
+  position:relative;
+  height:400vh; /* 스크롤 스토리 총 길이 */
+}
 .hero{
-  min-height:100vh;display:flex;flex-direction:column;
+  position:sticky;top:0;
+  min-height:100vh;height:100vh;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   text-align:center;padding:100px var(--s5) 80px;
-  position:relative;overflow:hidden;
+  overflow:hidden;
 }
 /* Dot-grid bg */
 .hero::before{
@@ -154,6 +164,25 @@ nav{
 }
 /* Claude logo mark — hidden (replaced by canvas) */
 .hero-logo-bg{ display:none; }
+
+/* 스크롤 진행에 따라 JS(setProperty)로 opacity/transform 조절 */
+.hero-content{
+  position:relative;z-index:1;
+  transition:opacity .15s linear, transform .15s linear, filter .15s linear;
+  will-change:opacity, transform;
+}
+.hero-outro{
+  position:absolute;inset:0;z-index:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:var(--s5);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s linear;
+}
+.hero-outro.visible{ opacity:1;pointer-events:auto; }
+.hero-outro-title{
+  font-size:clamp(1.6rem,4vw,2.6rem);font-weight:900;letter-spacing:-.03em;
+  color:var(--text);
+}
 
 /* Three.js 파티클 캔버스 */
 #particle-canvas{
@@ -630,7 +659,8 @@ hr{border:none;border-top:1px solid var(--border);}
   </a>
 </nav>
 
-<!-- Hero -->
+<!-- Hero (스크롤 고정 파티클 스토리) -->
+<div class="hero-scroll" id="heroScroll">
 <section class="hero">
   <!-- Three.js 파티클 캔버스 -->
   <canvas id="particle-canvas"></canvas>
@@ -640,6 +670,7 @@ hr{border:none;border-top:1px solid var(--border);}
     <path d="M54.375 118.75L56.125 111L58.125 101L59.75 93L61.25 83.125L62.125 79.875L62 79.625L61.375 79.75L53.875 90L42.5 105.375L33.5 114.875L31.375 115.75L27.625 113.875L28 110.375L30.125 107.375L42.5 91.5L50 81.625L54.875 76L54.75 75.25H54.5L21.5 96.75L15.625 97.5L13 95.125L13.375 91.25L14.625 90L24.5 83.125L49.125 69.375L49.5 68.125L49.125 67.5H47.875L43.75 67.25L29.75 66.875L17.625 66.375L5.75 65.75L2.75 65.125L0 61.375L0.25 59.5L2.75 57.875L6.375 58.125L14.25 58.75L26.125 59.5L34.75 60L47.5 61.375H49.5L49.75 60.5L49.125 60L48.625 59.5L36.25 51.25L23 42.5L16 37.375L12.25 34.75L10.375 32.375L9.625 27.125L13 23.375L17.625 23.75L18.75 24L23.375 27.625L33.25 35.25L46.25 44.875L48.125 46.375L49 45.875V45.5L48.125 44.125L41.125 31.375L33.625 18.375L30.25 13L29.375 9.75C29.0417 8.625 28.875 7.375 28.875 6L32.75 0.750006L34.875 0L40.125 0.750006L42.25 2.625L45.5 10L50.625 21.625L58.75 37.375L61.125 42.125L62.375 46.375L62.875 47.75H63.75V47L64.375 38L65.625 27.125L66.875 13.125L67.25 9.125L69.25 4.375L73.125 1.87501L76.125 3.25L78.625 6.875L78.25 9.125L76.875 18.75L73.875 33.875L72 44.125H73.125L74.375 42.75L79.5 36L88.125 25.25L91.875 21L96.375 16.25L99.25 14H104.625L108.5 19.875L106.75 26L101.25 33L96.625 38.875L90 47.75L86 54.875L86.375 55.375H87.25L102.125 52.125L110.25 50.75L119.75 49.125L124.125 51.125L124.625 53.125L122.875 57.375L112.625 59.875L100.625 62.25L82.75 66.5L82.5 66.625L82.75 67L90.75 67.75L94.25 68H102.75L118.5 69.125L122.625 71.875L125 75.125L124.625 77.75L118.25 80.875L109.75 78.875L89.75 74.125L83 72.5H82V73L87.75 78.625L98.125 88L111.25 100.125L111.875 103.125L110.25 105.625L108.5 105.375L97 96.625L92.5 92.75L82.5 84.375H81.875V85.25L84.125 88.625L96.375 107L97 112.625L96.125 114.375L92.875 115.5L89.5 114.875L82.25 104.875L74.875 93.5L68.875 83.375L68.25 83.875L64.625 121.625L63 123.5L59.25 125L56.125 122.625L54.375 118.75Z" fill="#d97757"/>
   </svg>
 
+  <div class="hero-content" id="heroContent">
   <div class="hero-author-block">
     <div class="hero-author-eyebrow">✦ Curated by</div>
     <div class="hero-author-name">슈퍼휴먼 김석원</div>
@@ -661,7 +692,19 @@ hr{border:none;border-top:1px solid var(--border);}
     <span>Scroll</span>
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
   </div>
+  </div>
+  <!-- 스토리 종료 후 재등장하는 CTA (파티클 애니메이션 100% 도달 시 페이드인) -->
+  <div class="hero-outro" id="heroOutro">
+    <div class="hero-badge">✦ Claude Code + Skills = 슈퍼휴먼</div>
+    <div class="hero-outro-title">이제, 당신 차례입니다</div>
+    <div class="hero-btns">
+      <a href="#how" class="btn btn-primary">⚡ 설치 방법 보기</a>
+      <a href="#picks" class="btn btn-ghost">✦ 추천 스킬 7선</a>
+    </div>
+  </div>
 </section>
+</div>
+<!-- /hero-scroll -->
 
 <!-- Stats -->
 <div class="stats-bar">
@@ -1562,9 +1605,14 @@ import * as THREE from 'three';
      Stage 3 (0.80~1.0):  사람 가슴에 클로드 로고 박힘
   ══════════════════════════════════════ */
   function getScrollProgress() {
-    const heroH = hero.clientHeight;
-    const scrollY = window.scrollY;
-    return Math.max(0, Math.min(1, scrollY / heroH));
+    // .hero-scroll이 스크롤 스토리 컨테이너(400vh). 그 안에서 hero(100vh)를
+    // 뺀 나머지 구간(300vh)이 실제로 스크롤해야 하는 거리.
+    const scrollEl = document.getElementById('heroScroll');
+    const scrollableDist = scrollEl.clientHeight - window.innerHeight;
+    if (scrollableDist <= 0) return 0;
+    const rect = scrollEl.getBoundingClientRect();
+    const scrolled = -rect.top;
+    return Math.max(0, Math.min(1, scrolled / scrollableDist));
   }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -1585,12 +1633,25 @@ import * as THREE from 'three';
   let time = 0;
   const clock = new THREE.Clock();
 
+  const heroContentEl = document.getElementById('heroContent');
+  const heroOutroEl   = document.getElementById('heroOutro');
+
   function animate() {
     requestAnimationFrame(animate);
     time += clock.getDelta();
 
     const prog = getScrollProgress();
     const pos  = posAttr.array;
+
+    // 텍스트/버튼 블록 페이드: 0~15% 구간에서 완전히 사라져
+    // 파티클 애니메이션(로고→폭발→사람→슈퍼맨)을 가리지 않게 함.
+    // 100% 도달 시(슈퍼맨 완성) 새로운 CTA를 페이드인.
+    const contentFade = 1 - Math.min(1, prog / 0.15);
+    heroContentEl.style.opacity = contentFade;
+    heroContentEl.style.transform = `translateY(${(1 - contentFade) * -24}px) scale(${lerp(1, 0.94, 1 - contentFade)})`;
+    heroContentEl.style.filter = `blur(${(1 - contentFade) * 6}px)`;
+    if (prog > 0.97) heroOutroEl.classList.add('visible');
+    else heroOutroEl.classList.remove('visible');
 
     for (let i = 0; i < N; i++) {
       const i3 = i * 3;
