@@ -152,16 +152,14 @@ nav{
     radial-gradient(ellipse 40% 40% at 80% 60%,rgba(106,155,204,0.07) 0%,transparent 50%),
     radial-gradient(ellipse 40% 40% at 20% 70%,rgba(130,125,189,0.07) 0%,transparent 50%);
 }
-/* Claude logo mark — big, faint, behind */
-.hero-logo-bg{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-52%);
-  width:min(700px,90vw);height:auto;
-  opacity:0.04;pointer-events:none;
-  animation:spin-slow 120s linear infinite;
-  z-index:0;
+/* Claude logo mark — hidden (replaced by canvas) */
+.hero-logo-bg{ display:none; }
+
+/* Three.js 파티클 캔버스 */
+#particle-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
 }
-@keyframes spin-slow{to{transform:translate(-50%,-52%) rotate(360deg);}}
 
 .hero-author-block{
   display:flex;flex-direction:column;align-items:center;
@@ -634,7 +632,10 @@ hr{border:none;border-top:1px solid var(--border);}
 
 <!-- Hero -->
 <section class="hero">
-  <!-- Claude 아이콘 대형 배경 -->
+  <!-- Three.js 파티클 캔버스 -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Claude 아이콘 (숨김 — 파티클 소스로만 사용) -->
   <svg class="hero-logo-bg" viewBox="0 0 125 125" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M54.375 118.75L56.125 111L58.125 101L59.75 93L61.25 83.125L62.125 79.875L62 79.625L61.375 79.75L53.875 90L42.5 105.375L33.5 114.875L31.375 115.75L27.625 113.875L28 110.375L30.125 107.375L42.5 91.5L50 81.625L54.875 76L54.75 75.25H54.5L21.5 96.75L15.625 97.5L13 95.125L13.375 91.25L14.625 90L24.5 83.125L49.125 69.375L49.5 68.125L49.125 67.5H47.875L43.75 67.25L29.75 66.875L17.625 66.375L5.75 65.75L2.75 65.125L0 61.375L0.25 59.5L2.75 57.875L6.375 58.125L14.25 58.75L26.125 59.5L34.75 60L47.5 61.375H49.5L49.75 60.5L49.125 60L48.625 59.5L36.25 51.25L23 42.5L16 37.375L12.25 34.75L10.375 32.375L9.625 27.125L13 23.375L17.625 23.75L18.75 24L23.375 27.625L33.25 35.25L46.25 44.875L48.125 46.375L49 45.875V45.5L48.125 44.125L41.125 31.375L33.625 18.375L30.25 13L29.375 9.75C29.0417 8.625 28.875 7.375 28.875 6L32.75 0.750006L34.875 0L40.125 0.750006L42.25 2.625L45.5 10L50.625 21.625L58.75 37.375L61.125 42.125L62.375 46.375L62.875 47.75H63.75V47L64.375 38L65.625 27.125L66.875 13.125L67.25 9.125L69.25 4.375L73.125 1.87501L76.125 3.25L78.625 6.875L78.25 9.125L76.875 18.75L73.875 33.875L72 44.125H73.125L74.375 42.75L79.5 36L88.125 25.25L91.875 21L96.375 16.25L99.25 14H104.625L108.5 19.875L106.75 26L101.25 33L96.625 38.875L90 47.75L86 54.875L86.375 55.375H87.25L102.125 52.125L110.25 50.75L119.75 49.125L124.125 51.125L124.625 53.125L122.875 57.375L112.625 59.875L100.625 62.25L82.75 66.5L82.5 66.625L82.75 67L90.75 67.75L94.25 68H102.75L118.5 69.125L122.625 71.875L125 75.125L124.625 77.75L118.25 80.875L109.75 78.875L89.75 74.125L83 72.5H82V73L87.75 78.625L98.125 88L111.25 100.125L111.875 103.125L110.25 105.625L108.5 105.375L97 96.625L92.5 92.75L82.5 84.375H81.875V85.25L84.125 88.625L96.375 107L97 112.625L96.125 114.375L92.875 115.5L89.5 114.875L82.25 104.875L74.875 93.5L68.875 83.375L68.25 83.875L64.625 121.625L63 123.5L59.25 125L56.125 122.625L54.375 118.75Z" fill="#d97757"/>
   </svg>
@@ -1374,6 +1375,295 @@ function runTerm() {
   obs.observe(body);
 }
 runTerm();
+</script>
+
+<!-- ══════════════════════════════════════════
+     Three.js 파티클 애니메이션
+     스토리: Claude 로고 → 파티클 분해 → 사람에게 흡수 → 슈퍼맨 변신
+     ══════════════════════════════════════════ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+(function() {
+  const canvas = document.getElementById('particle-canvas');
+  const hero   = canvas.parentElement;
+
+  /* ── 렌더러 ── */
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+
+  /* ── 씬 / 카메라 ── */
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 2000);
+  camera.position.z = 500;
+
+  /* ── 사이즈 동기화 ── */
+  function resize() {
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  new ResizeObserver(resize).observe(hero);
+
+  /* ══════════════════════════════════════
+     Claude 로고 파티클 포지션 생성
+     SVG path를 오프스크린 캔버스에 래스터라이징 → 픽셀 샘플링
+  ══════════════════════════════════════ */
+  const PARTICLE_COUNT = 3000;
+
+  // 오프스크린 캔버스에 Claude 로고 그리기
+  const offW = 500, offH = 500;
+  const off  = document.createElement('canvas');
+  off.width = offW; off.height = offH;
+  const ctx  = off.getContext('2d');
+
+  // Claude 로고 SVG path (viewBox 0 0 125 125 → 500x500 스케일)
+  const scale = offW / 125;
+  ctx.fillStyle = '#d97757';
+  const p = new Path2D(
+    'M54.375 118.75L56.125 111L58.125 101L59.75 93L61.25 83.125L62.125 79.875L62 79.625L61.375 79.75L53.875 90L42.5 105.375L33.5 114.875L31.375 115.75L27.625 113.875L28 110.375L30.125 107.375L42.5 91.5L50 81.625L54.875 76L54.75 75.25H54.5L21.5 96.75L15.625 97.5L13 95.125L13.375 91.25L14.625 90L24.5 83.125L49.125 69.375L49.5 68.125L49.125 67.5H47.875L43.75 67.25L29.75 66.875L17.625 66.375L5.75 65.75L2.75 65.125L0 61.375L0.25 59.5L2.75 57.875L6.375 58.125L14.25 58.75L26.125 59.5L34.75 60L47.5 61.375H49.5L49.75 60.5L49.125 60L48.625 59.5L36.25 51.25L23 42.5L16 37.375L12.25 34.75L10.375 32.375L9.625 27.125L13 23.375L17.625 23.75L18.75 24L23.375 27.625L33.25 35.25L46.25 44.875L48.125 46.375L49 45.875V45.5L48.125 44.125L41.125 31.375L33.625 18.375L30.25 13L29.375 9.75C29.0417 8.625 28.875 7.375 28.875 6L32.75 0.750006L34.875 0L40.125 0.750006L42.25 2.625L45.5 10L50.625 21.625L58.75 37.375L61.125 42.125L62.375 46.375L62.875 47.75H63.75V47L64.375 38L65.625 27.125L66.875 13.125L67.25 9.125L69.25 4.375L73.125 1.87501L76.125 3.25L78.625 6.875L78.25 9.125L76.875 18.75L73.875 33.875L72 44.125H73.125L74.375 42.75L79.5 36L88.125 25.25L91.875 21L96.375 16.25L99.25 14H104.625L108.5 19.875L106.75 26L101.25 33L96.625 38.875L90 47.75L86 54.875L86.375 55.375H87.25L102.125 52.125L110.25 50.75L119.75 49.125L124.125 51.125L124.625 53.125L122.875 57.375L112.625 59.875L100.625 62.25L82.75 66.5L82.5 66.625L82.75 67L90.75 67.75L94.25 68H102.75L118.5 69.125L122.625 71.875L125 75.125L124.625 77.75L118.25 80.875L109.75 78.875L89.75 74.125L83 72.5H82V73L87.75 78.625L98.125 88L111.25 100.125L111.875 103.125L110.25 105.625L108.5 105.375L97 96.625L92.5 92.75L82.5 84.375H81.875V85.25L84.125 88.625L96.375 107L97 112.625L96.125 114.375L92.875 115.5L89.5 114.875L82.25 104.875L74.875 93.5L68.875 83.375L68.25 83.875L64.625 121.625L63 123.5L59.25 125L56.125 122.625L54.375 118.75Z'
+  );
+  ctx.save();
+  ctx.scale(scale, scale);
+  ctx.fill(p);
+  ctx.restore();
+
+  // 픽셀 샘플링 → 파티클 목표 위치 수집
+  const imageData = ctx.getImageData(0, 0, offW, offH).data;
+  const logoPositions = [];
+  const step = 3;
+  for (let y = 0; y < offH; y += step) {
+    for (let x = 0; x < offW; x += step) {
+      const i = (y * offW + x) * 4;
+      if (imageData[i + 3] > 128) {
+        // 중앙 기준 Three.js 좌표로 변환
+        logoPositions.push(
+          (x - offW / 2) * 0.6,
+          -(y - offH / 2) * 0.6,
+          (Math.random() - 0.5) * 20
+        );
+      }
+    }
+  }
+
+  /* ══════════════════════════════════════
+     사람 실루엣 포지션 생성 (단순 타원 + 막대 조합)
+  ══════════════════════════════════════ */
+  function humanPositions(count) {
+    const pos = [];
+    for (let i = 0; i < count; i++) {
+      const t = Math.random();
+      let x, y, z = (Math.random() - 0.5) * 10;
+      if (t < 0.18) {
+        // 머리 (원)
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.random() * 30;
+        x = Math.cos(a) * r; y = 140 + Math.sin(a) * r;
+      } else if (t < 0.55) {
+        // 몸통
+        x = (Math.random() - 0.5) * 70; y = 20 + Math.random() * 100;
+      } else if (t < 0.7) {
+        // 왼팔
+        x = -55 - Math.random() * 40; y = 50 + Math.random() * 70;
+      } else if (t < 0.85) {
+        // 오른팔
+        x = 55 + Math.random() * 40; y = 50 + Math.random() * 70;
+      } else if (t < 0.925) {
+        // 왼다리
+        x = -20 - Math.random() * 20; y = -60 - Math.random() * 90;
+      } else {
+        // 오른다리
+        x = 20 + Math.random() * 20; y = -60 - Math.random() * 90;
+      }
+      pos.push(x, y, z);
+    }
+    return pos;
+  }
+
+  /* ══════════════════════════════════════
+     파티클 시스템 생성
+  ══════════════════════════════════════ */
+  const N = Math.min(PARTICLE_COUNT, Math.floor(logoPositions.length / 3));
+
+  // 목표 위치 배열 (로고)
+  const logoTarget = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const src = Math.floor(Math.random() * (logoPositions.length / 3));
+    logoTarget[i * 3]     = logoPositions[src * 3];
+    logoTarget[i * 3 + 1] = logoPositions[src * 3 + 1];
+    logoTarget[i * 3 + 2] = logoPositions[src * 3 + 2];
+  }
+
+  // 사람 목표 위치 배열
+  const humanPos = humanPositions(N);
+  const humanTarget = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    humanTarget[i * 3]     = humanPos[i * 3];
+    humanTarget[i * 3 + 1] = humanPos[i * 3 + 1];
+    humanTarget[i * 3 + 2] = humanPos[i * 3 + 2];
+  }
+
+  // 현재 위치 (분산에서 시작)
+  const currentPos = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    currentPos[i * 3]     = (Math.random() - 0.5) * 600;
+    currentPos[i * 3 + 1] = (Math.random() - 0.5) * 600;
+    currentPos[i * 3 + 2] = (Math.random() - 0.5) * 200;
+  }
+
+  // 슈퍼맨 가슴 로고 위치 (클로드 로고 작게, 가슴 중앙)
+  const chestTarget = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    chestTarget[i * 3]     = logoTarget[i * 3] * 0.25;
+    chestTarget[i * 3 + 1] = logoTarget[i * 3 + 1] * 0.25 + 40;
+    chestTarget[i * 3 + 2] = logoTarget[i * 3 + 2];
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  const posAttr  = new THREE.BufferAttribute(currentPos.slice(), 3);
+  geometry.setAttribute('position', posAttr);
+
+  // 파티클 색상 (클레이 오렌지 ~ 하늘색)
+  const colors = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const mix = Math.random();
+    colors[i * 3]     = 0.85 + mix * 0.02;  // R
+    colors[i * 3 + 1] = 0.46 + mix * 0.24;  // G
+    colors[i * 3 + 2] = 0.33 + mix * 0.40;  // B
+  }
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+  const material = new THREE.PointsMaterial({
+    size: 2.5,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.85,
+    sizeAttenuation: true,
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  /* ══════════════════════════════════════
+     스크롤 → 애니메이션 스테이지 제어
+     Stage 0 (0~0.25):   분산 → 클로드 로고 집합
+     Stage 1 (0.25~0.55): 클로드 로고 → 파티클 폭발
+     Stage 2 (0.55~0.80): 파티클 → 사람에게 흡수
+     Stage 3 (0.80~1.0):  사람 가슴에 클로드 로고 박힘
+  ══════════════════════════════════════ */
+  function getScrollProgress() {
+    const heroH = hero.clientHeight;
+    const scrollY = window.scrollY;
+    return Math.max(0, Math.min(1, scrollY / heroH));
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function smoothstep(t) { return t * t * (3 - 2 * t); }
+  function easeInOut(t) { return smoothstep(Math.min(1, Math.max(0, t))); }
+
+  // 각 파티클의 폭발 오프셋 (Stage1용)
+  const explodeOffset = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const elev  = (Math.random() - 0.5) * Math.PI;
+    const dist  = 100 + Math.random() * 300;
+    explodeOffset[i * 3]     = Math.cos(angle) * Math.cos(elev) * dist;
+    explodeOffset[i * 3 + 1] = Math.sin(elev) * dist;
+    explodeOffset[i * 3 + 2] = Math.sin(angle) * Math.cos(elev) * dist * 0.3;
+  }
+
+  let time = 0;
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    time += clock.getDelta();
+
+    const prog = getScrollProgress();
+    const pos  = posAttr.array;
+
+    for (let i = 0; i < N; i++) {
+      const i3 = i * 3;
+      let tx, ty, tz;
+
+      if (prog < 0.25) {
+        // Stage 0: 분산 → 클로드 로고
+        const t = easeInOut(prog / 0.25);
+        // 약간 떠다니는 효과 추가
+        const wave = Math.sin(time * 0.8 + i * 0.02) * (1 - t) * 8;
+        tx = lerp(currentPos[i3],     logoTarget[i3],     t);
+        ty = lerp(currentPos[i3 + 1], logoTarget[i3 + 1], t) + wave;
+        tz = lerp(currentPos[i3 + 2], logoTarget[i3 + 2], t);
+      } else if (prog < 0.55) {
+        // Stage 1: 로고 → 폭발
+        const t = easeInOut((prog - 0.25) / 0.30);
+        const burst = Math.sin(time * 2 + i * 0.05) * t * 5;
+        tx = logoTarget[i3]     + explodeOffset[i3]     * t;
+        ty = logoTarget[i3 + 1] + explodeOffset[i3 + 1] * t + burst;
+        tz = logoTarget[i3 + 2] + explodeOffset[i3 + 2] * t;
+      } else if (prog < 0.80) {
+        // Stage 2: 폭발 → 사람에게 흡수
+        const t = easeInOut((prog - 0.55) / 0.25);
+        const ex = logoTarget[i3]     + explodeOffset[i3]     * (1 - t);
+        const ey = logoTarget[i3 + 1] + explodeOffset[i3 + 1] * (1 - t);
+        const ez = logoTarget[i3 + 2] + explodeOffset[i3 + 2] * (1 - t);
+        tx = lerp(ex, humanTarget[i3],     t);
+        ty = lerp(ey, humanTarget[i3 + 1], t);
+        tz = lerp(ez, humanTarget[i3 + 2], t);
+      } else {
+        // Stage 3: 사람 가슴에 클로드 로고 박힘
+        const t = easeInOut((prog - 0.80) / 0.20);
+        tx = lerp(humanTarget[i3],     chestTarget[i3],     t);
+        ty = lerp(humanTarget[i3 + 1], chestTarget[i3 + 1], t);
+        tz = lerp(humanTarget[i3 + 2], chestTarget[i3 + 2], t);
+      }
+
+      pos[i3]     = tx;
+      pos[i3 + 1] = ty;
+      pos[i3 + 2] = tz;
+    }
+
+    posAttr.needsUpdate = true;
+
+    // 카메라 서서히 당기기 (스크롤 연동)
+    camera.position.z = 500 - prog * 80;
+
+    // 파티클 크기 Stage별 조정
+    if (prog < 0.25)       material.size = 2.5;
+    else if (prog < 0.55)  material.size = lerp(2.5, 1.5, easeInOut((prog-0.25)/0.3));
+    else if (prog < 0.80)  material.size = lerp(1.5, 2.0, easeInOut((prog-0.55)/0.25));
+    else                   material.size = lerp(2.0, 2.8, easeInOut((prog-0.80)/0.20));
+
+    // Stage 3에서 가슴 로고 클레이 색으로 강조
+    if (prog > 0.80) {
+      const t = easeInOut((prog - 0.80) / 0.20);
+      const c = posAttr.array; // colors는 별도
+      const carr = geometry.attributes.color.array;
+      for (let i = 0; i < N; i++) {
+        carr[i * 3]     = lerp(0.85, 0.85, t);
+        carr[i * 3 + 1] = lerp(0.60, 0.46, t);
+        carr[i * 3 + 2] = lerp(0.53, 0.33, t);
+      }
+      geometry.attributes.color.needsUpdate = true;
+    }
+
+    particles.rotation.y = prog * 0.3;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+})();
 </script>
 </body>
 </html>
