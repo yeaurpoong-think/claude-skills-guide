@@ -204,10 +204,39 @@ nav{
   padding:var(--s4);border-radius:var(--r-lg);
 }
 
+/* 배경 비디오 (Vibrant Wellness 프롬프트 조합) */
+.hero-bg-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;z-index:-2;
+  filter:saturate(0.85) brightness(0.55) contrast(1.05);
+}
+/* 비디오 위 스크림 — 브랜드 톤(clay/ink) + 파티클/텍스트 가독성 확보 */
+.hero-bg-scrim{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(180deg, rgba(20,20,19,.55) 0%, rgba(20,20,19,.35) 40%, rgba(20,20,19,.82) 100%),
+    radial-gradient(ellipse 70% 55% at 50% 40%, rgba(217,119,87,.16) 0%, transparent 65%);
+}
+
 /* Three.js 파티클 캔버스 */
 #particle-canvas{
   position:absolute;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:0;
+}
+
+/* ── Liquid Glass (Vibrant Wellness 프롬프트 이식) ──
+   nav pill / badge / CTA 버튼에 얇은 액체 유리 질감을 입힌다.
+   기존 컴포넌트 배경(클레이 톤)은 그대로 두고, 추가 광택/굴절 레이어만 얹는다. */
+.liquid-glass{
+  position:relative;overflow:hidden;
+  -webkit-backdrop-filter:blur(4px) saturate(140%);
+  backdrop-filter:blur(4px) saturate(140%);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.14), inset 0 -1px 6px rgba(0,0,0,0.15);
+}
+.liquid-glass::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg, rgba(255,255,255,.08) 0%, transparent 40%, rgba(255,255,255,.03) 100%);
+  mix-blend-mode:overlay;
 }
 
 .hero-author-block{
@@ -658,7 +687,7 @@ hr{border:none;border-top:1px solid var(--border);}
 
 <div class="progress-bar" id="prog"></div>
 
-<nav>
+<nav class="liquid-glass">
   <div class="nav-logo">
     <!-- Claude icon SVG -->
     <svg class="nav-logo-icon" viewBox="0 0 125 125" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -682,6 +711,12 @@ hr{border:none;border-top:1px solid var(--border);}
 <!-- Hero (스크롤 고정 파티클 스토리) -->
 <div class="hero-scroll" id="heroScroll">
 <section class="hero">
+  <!-- 배경 비디오 (Vibrant Wellness 프롬프트 조합) -->
+  <video class="hero-bg-video" autoplay loop muted playsinline>
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260715_082433_69699cf8-444b-4484-93cc-053e57896dfd.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg-scrim"></div>
+
   <!-- Three.js 파티클 캔버스 -->
   <canvas id="particle-canvas"></canvas>
 
@@ -696,7 +731,7 @@ hr{border:none;border-top:1px solid var(--border);}
     <div class="hero-author-name">슈퍼휴먼 김석원</div>
     <div class="hero-author-sub">의 AI 가이드</div>
   </div>
-  <div class="hero-badge">✦ Anthropic 공식 기능 · Claude Code</div>
+  <div class="hero-badge liquid-glass">✦ Anthropic 공식 기능 · Claude Code</div>
   <h1>Claude에<br><span class="grad">스킬을 설치</span>하면<br>전문가가 됩니다</h1>
   <p class="hero-sub">`.md` 파일 하나로 Claude에게 새로운 능력을 심는 공식 플러그인 시스템.<br>GitHub에서 무료로 배포되는 수천 개의 스킬을 2분 안에 설치하세요.</p>
   <div class="hero-meta">
@@ -705,8 +740,8 @@ hr{border:none;border-top:1px solid var(--border);}
     <div class="hero-meta-item">🆓 <span>완전 무료</span></div>
   </div>
   <div class="hero-btns">
-    <a href="#how" class="btn btn-primary">⚡ 설치 방법 보기</a>
-    <a href="#picks" class="btn btn-ghost">✦ 추천 스킬 7선</a>
+    <a href="#how" class="btn btn-primary liquid-glass">⚡ 설치 방법 보기</a>
+    <a href="#picks" class="btn btn-ghost liquid-glass">✦ 추천 스킬 7선</a>
   </div>
   <div class="scroll-cue">
     <span>Scroll</span>
@@ -715,11 +750,11 @@ hr{border:none;border-top:1px solid var(--border);}
   </div>
   <!-- 스토리 종료 후 재등장하는 CTA (파티클 애니메이션 100% 도달 시 페이드인) -->
   <div class="hero-outro" id="heroOutro">
-    <div class="hero-badge">✦ Claude Code + Skills = 슈퍼휴먼</div>
+    <div class="hero-badge liquid-glass">✦ Claude Code + Skills = 슈퍼휴먼</div>
     <div class="hero-outro-title">이제, 당신 차례입니다</div>
     <div class="hero-btns">
-      <a href="#how" class="btn btn-primary">⚡ 설치 방법 보기</a>
-      <a href="#picks" class="btn btn-ghost">✦ 추천 스킬 7선</a>
+      <a href="#how" class="btn btn-primary liquid-glass">⚡ 설치 방법 보기</a>
+      <a href="#picks" class="btn btn-ghost liquid-glass">✦ 추천 스킬 7선</a>
     </div>
   </div>
 </section>
