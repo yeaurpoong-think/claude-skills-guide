@@ -453,7 +453,7 @@ hr{border:none;border-top:1px solid var(--border);}
 .mtab{
   padding:var(--s2) var(--s5);border-radius:var(--r-sm);
   font-size:13px;font-weight:600;cursor:pointer;
-  transition:all .2s var(--ease-std);border:1px solid var(--border);
+  transition:background .2s var(--ease-std),border-color .2s var(--ease-std),color .2s var(--ease-std),box-shadow .2s var(--ease-std);border:1px solid var(--border);
   background:var(--surface2);color:var(--text-2);
 }
 .mtab.active{background:var(--clay);color:var(--ink);border-color:var(--clay);box-shadow:0 4px 16px rgba(217,119,87,.35);}
@@ -551,7 +551,7 @@ hr{border:none;border-top:1px solid var(--border);}
 .tos-tab{
   background:var(--surface2);border:1px solid var(--border);color:var(--text-2);
   padding:var(--s2) var(--s5);border-radius:var(--r-sm);cursor:pointer;
-  font-size:13px;font-weight:600;transition:all .2s var(--ease-std);
+  font-size:13px;font-weight:600;transition:background .2s var(--ease-std),border-color .2s var(--ease-std),color .2s var(--ease-std),box-shadow .2s var(--ease-std);
 }
 .tos-tab.active{background:var(--clay);border-color:var(--clay);color:var(--ink);box-shadow:0 4px 16px rgba(217,119,87,.3);}
 .tos-pane{display:none;}.tos-pane.active{display:block;}
@@ -616,8 +616,16 @@ hr{border:none;border-top:1px solid var(--border);}
 .faq-q:hover{color:var(--clay-hi);}
 .faq-arrow{color:var(--text-3);transition:transform .3s var(--ease-std),color .2s;flex-shrink:0;font-size:18px;}
 .faq-item.open .faq-arrow{transform:rotate(90deg);color:var(--clay);}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease-out),padding .3s;color:var(--text-2);font-size:.875rem;line-height:1.85;padding:0 var(--s5);}
-.faq-item.open .faq-a{max-height:400px;padding:0 var(--s5) var(--s5);}
+/* max-height는 layout/paint를 유발(GPU 비가속) — grid-template-rows fr 트릭으로 교체.
+   grid 컨테이너 안의 텍스트는 브라우저가 자동으로 익명 grid item으로 감싸주므로
+   별도 래퍼 없이 0fr→1fr 트랜지션이 그대로 동작한다. */
+.faq-a{
+  display:grid;grid-template-rows:0fr;overflow:hidden;
+  transition:grid-template-rows .35s var(--ease-out),padding .35s var(--ease-out);
+  color:var(--text-2);font-size:.875rem;line-height:1.85;
+  padding:0 var(--s5);
+}
+.faq-item.open .faq-a{grid-template-rows:1fr;padding:0 var(--s5) var(--s5);}
 
 /* ── Footer CTA ── */
 .footer-cta{
@@ -680,6 +688,14 @@ hr{border:none;border-top:1px solid var(--border);}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+/* 터치 기기(호버 불가) — 탭 후 :hover 상태가 "붙어있는"(sticky hover) 현상 방지.
+   호버 가능한 포인터(마우스/트랙패드)에서만 카드·버튼의 이동/그림자 호버 효과를 유지. */
+@media not all and (hover:hover) and (pointer:fine){
+  .btn:hover,.nav-gh:hover,.what-card:hover,.step-card:hover,.skill-card:hover,
+  .term-method-card:hover,.skill-copy-btn:hover,.skill-gh-btn:hover{
+    transform:none;box-shadow:inherit;
+  }
 }
 </style>
 </head>
