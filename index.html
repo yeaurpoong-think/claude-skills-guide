@@ -756,13 +756,13 @@ hr{border:none;border-top:1px solid var(--border);}
   <h1>Claude에<br><span class="grad">스킬을 설치</span>하면<br>전문가가 됩니다</h1>
   <p class="hero-sub">`.md` 파일 하나로 Claude에게 새로운 능력을 심는 공식 플러그인 시스템.<br>GitHub에서 무료로 배포되는 수천 개의 스킬을 2분 안에 설치하세요.</p>
   <div class="hero-meta">
-    <div class="hero-meta-item">⭐ GitHub <span>40,000+</span> 스타 스킬</div>
+    <div class="hero-meta-item">⭐ GitHub <span>41,000+</span> 스타 스킬</div>
     <div class="hero-meta-item">📦 <span>900,000+</span> 설치</div>
     <div class="hero-meta-item">🆓 <span>완전 무료</span></div>
   </div>
   <div class="hero-btns">
     <a href="#how" class="btn btn-primary liquid-glass">⚡ 설치 방법 보기</a>
-    <a href="#picks" class="btn btn-ghost liquid-glass">✦ 추천 스킬 7선</a>
+    <a href="#picks" class="btn btn-ghost liquid-glass">✦ 추천 스킬 10선</a>
   </div>
   <div class="scroll-cue">
     <span>Scroll</span>
@@ -775,7 +775,7 @@ hr{border:none;border-top:1px solid var(--border);}
     <div class="hero-outro-title">이제, 당신 차례입니다</div>
     <div class="hero-btns">
       <a href="#how" class="btn btn-primary liquid-glass">⚡ 설치 방법 보기</a>
-      <a href="#picks" class="btn btn-ghost liquid-glass">✦ 추천 스킬 7선</a>
+      <a href="#picks" class="btn btn-ghost liquid-glass">✦ 추천 스킬 10선</a>
     </div>
   </div>
 </section>
@@ -784,9 +784,9 @@ hr{border:none;border-top:1px solid var(--border);}
 
 <!-- Stats -->
 <div class="stats-bar">
-  <div class="stat"><div class="stat-num">40,000</div><div class="stat-label">Marketing Skills ⭐</div></div>
-  <div class="stat"><div class="stat-num">428K</div><div class="stat-label">Remotion 설치수</div></div>
-  <div class="stat"><div class="stat-num">345개</div><div class="stat-label">단일 컬렉션 최대</div></div>
+  <div class="stat"><div class="stat-num">41,000</div><div class="stat-label">Marketing Skills ⭐</div></div>
+  <div class="stat"><div class="stat-num">260K</div><div class="stat-label">Superpowers ⭐</div></div>
+  <div class="stat"><div class="stat-num">348개</div><div class="stat-label">단일 컬렉션 최대</div></div>
   <div class="stat"><div class="stat-num">2분</div><div class="stat-label">평균 설치 소요 시간</div></div>
 </div>
 
@@ -1033,18 +1033,21 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="step-num">1</div>
         <div>
           <div class="step-h">터미널에서 명령어 실행</div>
-          <div class="step-p">Claude Code CLI가 설치된 터미널을 열고 아래 명령어를 붙여넣으세요. <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">plugin install</code> 명령 하나로 다운로드→설치가 자동으로 됩니다.</div>
+          <div class="step-p">Claude Code CLI가 설치된 터미널을 열고 아래 명령어를 붙여넣으세요. 마켓플레이스를 등록(<code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">marketplace add</code>)한 뒤 설치(<code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">plugin install</code>)하는 2단계입니다.</div>
           <div class="code-block">
-            <button class="copy-btn" onclick="copyText(this,'claude-code plugin install https://github.com/coreyhaines31/marketingskills')">복사</button>
+            <button class="copy-btn" onclick="copyText(this,'claude plugin marketplace add coreyhaines31/marketingskills && claude plugin install marketing-skills@marketingskills')">복사</button>
             <pre><span class="c-comment"># 예시: Marketing Skills 설치</span>
-<span class="t-pr">$</span> <span class="c-kw">claude-code</span> plugin install <span class="c-path">https://github.com/coreyhaines31/marketingskills</span>
+<span class="t-pr">$</span> <span class="c-kw">claude</span> plugin marketplace add <span class="c-path">coreyhaines31/marketingskills</span>
+<span class="t-pr">$</span> <span class="c-kw">claude</span> plugin install <span class="c-path">marketing-skills@marketingskills</span>
 
 <span class="c-comment"># Superpowers 설치</span>
-<span class="t-pr">$</span> <span class="c-kw">claude-code</span> plugin install <span class="c-path">https://github.com/obra/superpowers-lab</span>
+<span class="t-pr">$</span> <span class="c-kw">claude</span> plugin marketplace add <span class="c-path">obra/superpowers</span>
+<span class="t-pr">$</span> <span class="c-kw">claude</span> plugin install <span class="c-path">superpowers@superpowers-dev</span>
 
-<span class="c-comment"># Remotion Skills 설치</span>
-<span class="t-pr">$</span> <span class="c-kw">claude-code</span> plugin install <span class="c-path">https://github.com/remotion-dev/skills</span></pre>
+<span class="c-comment"># GitHub 저장소를 스킬로 바로 설치하고 싶다면 (marketplace 구조가 없는 경우)</span>
+<span class="t-pr">$</span> npx skills add <span class="c-path">remotion-dev/skills</span> -a claude-code -g -y</pre>
           </div>
+          <div class="step-p" style="margin-top:var(--s3);opacity:.8;">⚠️ 명령어는 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">claude-code</code>가 아니라 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">claude</code>로 시작합니다 (npm 패키지명과 실행 명령어가 다릅니다).</div>
         </div>
       </div>
       <div class="step-card">
@@ -1098,11 +1101,11 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="step-num">1</div>
         <div>
           <div class="step-h">저장소 클론</div>
-          <div class="step-p">스킬 컬렉션 전체를 한 번에 받아서 원하는 것만 골라 쓰는 방법입니다. 345개 스킬이 들어있는 컬렉션도 있어요.</div>
+          <div class="step-p">스킬 컬렉션 전체를 한 번에 받아서 원하는 것만 골라 쓰는 방법입니다. 348개 스킬이 들어있는 컬렉션도 있어요.</div>
           <div class="code-block">
             <button class="copy-btn" onclick="copyText(this,'git clone https://github.com/alirezarezvani/claude-skills')">복사</button>
             <pre><span class="t-pr">$</span> <span class="c-kw">git clone</span> <span class="c-path">https://github.com/alirezarezvani/claude-skills</span>
-<span class="c-comment"># ⭐ 22,700 · 345개 스킬 모음집</span></pre>
+<span class="c-comment"># ⭐ 23,000+ · 348개 스킬 모음집</span></pre>
           </div>
         </div>
       </div>
@@ -1113,12 +1116,268 @@ hr{border:none;border-top:1px solid var(--border);}
           <div class="step-p">클론된 폴더에서 원하는 스킬 디렉토리를 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">~/.claude/skills/</code> 로 복사하면 됩니다.</div>
           <div class="code-block">
             <pre><span class="t-pr">$</span> cp -r claude-skills/marketing <span class="c-path">~/.claude/skills/marketing</span>
-<span class="t-pr">$</span> cp -r claude-skills/remotion <span class="c-path">~/.claude/skills/remotion</span>
+<span class="t-pr">$</span> cp -r claude-skills/finance <span class="c-path">~/.claude/skills/finance</span>
 <span class="c-ok">✓</span> <span class="c-str">Done! 2 skills installed</span></pre>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Terminal Demo -->
+<section class="section">
+  <div class="sec-eyebrow">💻 LIVE EXAMPLE</div>
+  <h2 class="sec-title">설치 후 이런 게<br>가능해집니다</h2>
+  <div class="terminal-wrap">
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="term-title">claude-code — Marketing Skills</div>
+      </div>
+      <div class="term-body" id="termBody"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Skill Picks -->
+<section class="section" id="picks">
+  <div class="sec-eyebrow">⚡ TOP 10 PICKS</div>
+  <h2 class="sec-title">진짜 써먹히는<br>사기급 스킬 10선</h2>
+  <p class="sec-desc">GitHub 스타 수·설치 수·커뮤니티 반응 기준으로 추린 실존하는 스킬들입니다. 전부 무료예요.</p>
+
+  <div class="skills-grid">
+
+    <!-- Remotion -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,87,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎬</div>
+        <div class="skill-stars">⭐ 4,000+</div>
+      </div>
+      <div class="skill-name">Remotion</div>
+      <div class="skill-repo">remotion-dev/skills</div>
+      <div class="skill-desc">공식 Remotion 팀이 직접 만든 스킬. 코드로 영상 생성 — 유튜브 인트로, 데이터 시각화 영상, 발표 애니메이션까지. GitHub ⭐4,000+.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">공식 팀 제작</span>
+        <span class="tag tag-blue">영상 제작</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add remotion-dev/skills -a claude-code -g -y</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add remotion-dev/skills -a claude-code -g -y')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/remotion-dev/skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Superpowers -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(130,125,189,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">⚡</div>
+        <div class="skill-stars">⭐ 260,000+</div>
+      </div>
+      <div class="skill-name">Superpowers</div>
+      <div class="skill-repo">obra/superpowers</div>
+      <div class="skill-desc">TDD, 체계적 디버깅, 실행계획 문서화 등 Claude Code를 위한 검증된 개발 방법론 스킬 모음. 스킬 이름을 대화 중 언급하면 자동 적용됩니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">올인원</span>
+        <span class="tag tag-blue">코딩 강화</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude plugin marketplace add obra/superpowers</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude plugin marketplace add obra/superpowers && claude plugin install superpowers@superpowers-dev')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/obra/superpowers" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing Skills -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(120,140,93,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">📣</div>
+        <div class="skill-stars">⭐ 41,000+</div>
+      </div>
+      <div class="skill-name">Marketing Skills</div>
+      <div class="skill-repo">coreyhaines31/marketingskills</div>
+      <div class="skill-desc">단일 스킬 저장소 최고 인기 ⭐41,000+. CRO, 카피라이팅, SEO, 성장 엔지니어링 등 마케터의 두뇌를 그대로 이식. 48개 마케팅 스킬 수록.</div>
+      <div class="skill-tags">
+        <span class="tag tag-green">최고 인기</span>
+        <span class="tag tag-orange">마케팅</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude plugin marketplace add coreyhaines31/marketingskills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude plugin marketplace add coreyhaines31/marketingskills && claude plugin install marketing-skills@marketingskills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/coreyhaines31/marketingskills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- UI/UX Pro Max -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(106,155,204,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎨</div>
+        <div class="skill-stars">⭐ Growing</div>
+      </div>
+      <div class="skill-name">UI/UX Pro Max</div>
+      <div class="skill-repo">ca-who-codes/ultimate.UIUX.design.skills</div>
+      <div class="skill-desc">인터페이스 + 비주얼·마케팅 디자인 두 트랙. HTML→PNG/PDF/PPTX/MP4 프로덕션 파이프라인 포함. Claude Code, Cursor, Windsurf 전부 지원.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">UI/UX</span>
+        <span class="tag tag-pink">멀티 에이전트</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude plugin marketplace add ca-who-codes/ultimate.UIUX.design.skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude plugin marketplace add ca-who-codes/ultimate.UIUX.design.skills && claude plugin install ui-ux-design-pro@ultimate-uiux-design-skills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/ca-who-codes/ultimate.UIUX.design.skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Claude Skills 컬렉션 -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(196,102,134,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🗂️</div>
+        <div class="skill-stars">⭐ 23,000+</div>
+      </div>
+      <div class="skill-name">Claude Skills 컬렉션</div>
+      <div class="skill-repo">alirezarezvani/claude-skills</div>
+      <div class="skill-desc">348개 스킬, 88개 플러그인이 담긴 단일 저장소. 메모리 시스템, 코드 리뷰, 문서화, 테스트, 데이터 분석까지 — 마켓플레이스 등록 후 원하는 플러그인만 골라 설치합니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">최대 컬렉션</span>
+        <span class="tag tag-green">348개 스킬</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude plugin marketplace add alirezarezvani/claude-skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude plugin marketplace add alirezarezvani/claude-skills && claude plugin list')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/alirezarezvani/claude-skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video to Superprompt -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,87,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎥</div>
+        <div class="skill-stars">MengTo/Skills</div>
+      </div>
+      <div class="skill-name">Video to Superprompt</div>
+      <div class="skill-repo">agent-skills/codex/video-to-superprompt</div>
+      <div class="skill-desc">영상 하나를 붙여넣으면 — 레이아웃, 모션, 스크롤 인터랙션, WebGL, GSAP, 색상 팔레트까지 — AI가 그대로 재현 가능한 상세 빌드 프롬프트를 뽑아냅니다. MengTo/Skills 저장소 전체(100개+ 스킬)에 포함되어 있습니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">영상 분석</span>
+        <span class="tag tag-blue">UI 재현</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add MengTo/Skills -a claude-code -g -y</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add MengTo/Skills -a claude-code -g -y')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/video-to-superprompt" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML to Interaction Prompts -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(106,155,204,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🖱️</div>
+        <div class="skill-stars">MengTo/Skills</div>
+      </div>
+      <div class="skill-name">HTML to Interaction Prompts</div>
+      <div class="skill-repo">agent-skills/codex/html-to-interaction-prompts</div>
+      <div class="skill-desc">HTML 파일 하나를 넣으면 마우스 커서 효과, 스크롤 파티클, hover 카드, GSAP 애니메이션 등 재사용 가능한 인터랙션 프롬프트 팩으로 변환. 스크린샷 자동 캡처 후 아티클로 정리까지. MengTo/Skills 저장소 전체에 포함.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">인터랙션</span>
+        <span class="tag tag-pink">UI 아티클</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add MengTo/Skills -a claude-code -g -y</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add MengTo/Skills -a claude-code -g -y')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/html-to-interaction-prompts" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three.js Skills -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(100,180,120,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎮</div>
+        <div class="skill-stars">⭐ 2,700+</div>
+      </div>
+      <div class="skill-name">Three.js Skills</div>
+      <div class="skill-repo">CloudAI-X/threejs-skills</div>
+      <div class="skill-desc">3D 인터랙티브 웹을 위한 전문 스킬 10개 팩. Interactive 3D Scene · Camera Controls · GLTF Models · Lighting Setup · Particle Effects · Shader Materials · Post Processing까지. Claude가 Three.js를 제대로 이해하게 됩니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-green">3D 웹</span>
+        <span class="tag tag-blue">애니메이션</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add CloudAI-X/threejs-skills -a claude-code -g -y</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add CloudAI-X/threejs-skills -a claude-code -g -y')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/CloudAI-X/threejs-skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design DNA -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(150,100,200,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🧬</div>
+        <div class="skill-stars">⭐ 1,130+</div>
+      </div>
+      <div class="skill-name">Design DNA</div>
+      <div class="skill-repo">zanwei/design-dna</div>
+      <div class="skill-desc">레퍼런스 이미지·URL → 정량화된 Design DNA JSON → 실제 UI 코드. 색상·타이포·여백·모션 토큰 추출 + WebGL·파티클·글래스모피즘 이펙트까지 분석. 6개 언어 지원(한국어 포함).</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">디자인 분석</span>
+        <span class="tag tag-pink">UI 재현</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add zanwei/design-dna -a claude-code -g -y</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add zanwei/design-dna -a claude-code -g -y')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/zanwei/design-dna" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Web Animation Skills -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(220,140,60,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">⚡</div>
+        <div class="skill-stars">GSAP + Lottie + SVG</div>
+      </div>
+      <div class="skill-name">Web Animation Skills</div>
+      <div class="skill-repo">iart-ai/web-animation-skills</div>
+      <div class="skill-desc">GSAP ScrollTrigger · Lottie dotLottie · SVG 패스 애니메이션 · 마이크로인터랙션 · 글래스모피즘 · ASCII 애니메이션까지 — 9개 스킬 올인원. 60fps 최적화, prefers-reduced-motion 접근성까지 포함.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">GSAP</span>
+        <span class="tag tag-blue">Lottie</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add iart-ai/web-animation-skills -a claude-code -g -y</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add iart-ai/web-animation-skills -a claude-code -g -y')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/iart-ai/web-animation-skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1184,262 +1443,6 @@ hr{border:none;border-top:1px solid var(--border);}
   </div>
 </section>
 
-<!-- Terminal Demo -->
-<section class="section">
-  <div class="sec-eyebrow">💻 LIVE EXAMPLE</div>
-  <h2 class="sec-title">설치 후 이런 게<br>가능해집니다</h2>
-  <div class="terminal-wrap">
-    <div class="terminal">
-      <div class="term-bar">
-        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-        <div class="term-title">claude-code — Marketing Skills</div>
-      </div>
-      <div class="term-body" id="termBody"></div>
-    </div>
-  </div>
-</section>
-
-<!-- Skill Picks -->
-<section class="section" id="picks">
-  <div class="sec-eyebrow">⚡ TOP 7 PICKS</div>
-  <h2 class="sec-title">진짜 써먹히는<br>사기급 스킬 7선</h2>
-  <p class="sec-desc">GitHub 스타 수·설치 수·커뮤니티 반응 기준으로 추린 실존하는 스킬들입니다. 전부 무료예요.</p>
-
-  <div class="skills-grid">
-
-    <!-- Remotion -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,87,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🎬</div>
-        <div class="skill-stars">⭐ 4,000+</div>
-      </div>
-      <div class="skill-name">Remotion</div>
-      <div class="skill-repo">remotion-dev/skills</div>
-      <div class="skill-desc">공식 Remotion 팀이 직접 만든 스킬. 코드로 영상 생성 — 유튜브 인트로, 데이터 시각화 영상, 발표 애니메이션까지. 428,000+ 설치 · skills.sh 26위.</div>
-      <div class="skill-tags">
-        <span class="tag tag-orange">공식 팀 제작</span>
-        <span class="tag tag-blue">영상 제작</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">claude-code plugin install github.com/remotion-dev/skills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/remotion-dev/skills')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/remotion-dev/skills" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Superpowers -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(130,125,189,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">⚡</div>
-        <div class="skill-stars">⭐ 1,100+</div>
-      </div>
-      <div class="skill-name">Superpowers</div>
-      <div class="skill-repo">obra/superpowers-lab</div>
-      <div class="skill-desc">시맨틱 코드 중복 탐지, tmux 인터랙티브 명령, MCP CLI 통합 등 Claude Code를 극한까지 끌어올리는 스킬 모음. obra/superpowers-skills(원본)의 실험적 후속.</div>
-      <div class="skill-tags">
-        <span class="tag tag-purple">올인원</span>
-        <span class="tag tag-blue">코딩 강화</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">claude-code plugin install github.com/obra/superpowers-lab</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/obra/superpowers-lab')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/obra/superpowers-lab" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Marketing Skills -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(120,140,93,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">📣</div>
-        <div class="skill-stars">⭐ 40,000</div>
-      </div>
-      <div class="skill-name">Marketing Skills</div>
-      <div class="skill-repo">coreyhaines31/marketingskills</div>
-      <div class="skill-desc">단일 스킬 저장소 최고 인기 ⭐40,000. CRO, 카피라이팅, SEO, 성장 엔지니어링 등 마케터의 두뇌를 그대로 이식. 31개 브랜치 활발히 업데이트 중.</div>
-      <div class="skill-tags">
-        <span class="tag tag-green">최고 인기</span>
-        <span class="tag tag-orange">마케팅</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">claude-code plugin install github.com/coreyhaines31/marketingskills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/coreyhaines31/marketingskills')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/coreyhaines31/marketingskills" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- UI/UX Pro Max -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(106,155,204,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🎨</div>
-        <div class="skill-stars">⭐ Growing</div>
-      </div>
-      <div class="skill-name">UI/UX Pro Max</div>
-      <div class="skill-repo">ca-who-codes/ultimate.UIUX.design.skills</div>
-      <div class="skill-desc">인터페이스 + 비주얼·마케팅 디자인 두 트랙. HTML→PNG/PDF/PPTX/MP4 프로덕션 파이프라인 포함. Claude Code, Cursor, Windsurf 전부 지원.</div>
-      <div class="skill-tags">
-        <span class="tag tag-blue">UI/UX</span>
-        <span class="tag tag-pink">멀티 에이전트</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">claude-code plugin install github.com/ca-who-codes/ultimate.UIUX.design.skills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/ca-who-codes/ultimate.UIUX.design.skills')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/ca-who-codes/ultimate.UIUX.design.skills" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Claude Skills 컬렉션 -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(196,102,134,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🗂️</div>
-        <div class="skill-stars">⭐ 22,700</div>
-      </div>
-      <div class="skill-name">Claude Skills 컬렉션</div>
-      <div class="skill-repo">alirezarezvani/claude-skills</div>
-      <div class="skill-desc">345개 스킬이 담긴 단일 저장소. 메모리 시스템, 코드 리뷰, 문서화, 테스트, 데이터 분석까지 — 이거 하나 클론하면 당분간은 다른 거 필요 없음.</div>
-      <div class="skill-tags">
-        <span class="tag tag-purple">최대 컬렉션</span>
-        <span class="tag tag-green">345개 스킬</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">git clone github.com/alirezarezvani/claude-skills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'git clone https://github.com/alirezarezvani/claude-skills')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/alirezarezvani/claude-skills" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Video to Superprompt -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,87,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🎥</div>
-        <div class="skill-stars">MengTo/Skills</div>
-      </div>
-      <div class="skill-name">Video to Superprompt</div>
-      <div class="skill-repo">agent-skills/codex/video-to-superprompt</div>
-      <div class="skill-desc">영상 하나를 붙여넣으면 — 레이아웃, 모션, 스크롤 인터랙션, WebGL, GSAP, 색상 팔레트까지 — AI가 그대로 재현 가능한 상세 빌드 프롬프트를 뽑아냅니다.</div>
-      <div class="skill-tags">
-        <span class="tag tag-orange">영상 분석</span>
-        <span class="tag tag-blue">UI 재현</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">$video-to-superprompt — MengTo/Skills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/MengTo/Skills/tree/main/agent-skills/codex/video-to-superprompt')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/video-to-superprompt" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- HTML to Interaction Prompts -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(106,155,204,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🖱️</div>
-        <div class="skill-stars">MengTo/Skills</div>
-      </div>
-      <div class="skill-name">HTML to Interaction Prompts</div>
-      <div class="skill-repo">agent-skills/codex/html-to-interaction-prompts</div>
-      <div class="skill-desc">HTML 파일 하나를 넣으면 마우스 커서 효과, 스크롤 파티클, hover 카드, GSAP 애니메이션 등 재사용 가능한 인터랙션 프롬프트 팩으로 변환. 스크린샷 자동 캡처 후 아티클로 정리까지.</div>
-      <div class="skill-tags">
-        <span class="tag tag-blue">인터랙션</span>
-        <span class="tag tag-pink">UI 아티클</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">$html-to-interaction-prompts — MengTo/Skills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'claude-code plugin install https://github.com/MengTo/Skills/tree/main/agent-skills/codex/html-to-interaction-prompts')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/MengTo/Skills/tree/main/agent-skills/codex/html-to-interaction-prompts" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Three.js Skills -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(100,180,120,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🎮</div>
-        <div class="skill-stars">⭐ 2,600+</div>
-      </div>
-      <div class="skill-name">Three.js Skills</div>
-      <div class="skill-repo">CloudAI-X/threejs-skills</div>
-      <div class="skill-desc">3D 인터랙티브 웹을 위한 전문 스킬 10개 팩. Interactive 3D Scene · Camera Controls · GLTF Models · Lighting Setup · Particle Effects · Shader Materials · Post Processing까지. Claude가 Three.js를 제대로 이해하게 됩니다.</div>
-      <div class="skill-tags">
-        <span class="tag tag-green">3D 웹</span>
-        <span class="tag tag-blue">애니메이션</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">git clone github.com/CloudAI-X/threejs-skills ~/.claude/agents/threejs-skills</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'git clone https://github.com/CloudAI-X/threejs-skills ~/.claude/agents/threejs-skills')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/CloudAI-X/threejs-skills" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Design DNA -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(150,100,200,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">🧬</div>
-        <div class="skill-stars">⭐ 1,060+</div>
-      </div>
-      <div class="skill-name">Design DNA</div>
-      <div class="skill-repo">zanwei/design-dna</div>
-      <div class="skill-desc">레퍼런스 이미지·URL → 정량화된 Design DNA JSON → 실제 UI 코드. 색상·타이포·여백·모션 토큰 추출 + WebGL·파티클·글래스모피즘 이펙트까지 분석. 6개 언어 지원(한국어 포함).</div>
-      <div class="skill-tags">
-        <span class="tag tag-purple">디자인 분석</span>
-        <span class="tag tag-pink">UI 재현</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">npx skills add zanwei/design-dna -a claude-code -g -y</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add zanwei/design-dna -a claude-code -g -y')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/zanwei/design-dna" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Web Animation Skills -->
-    <div class="skill-card">
-      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(220,140,60,0.07),transparent)"></div>
-      <div class="skill-head">
-        <div class="skill-emoji">⚡</div>
-        <div class="skill-stars">GSAP + Lottie + SVG</div>
-      </div>
-      <div class="skill-name">Web Animation Skills</div>
-      <div class="skill-repo">iart-ai/web-animation-skills</div>
-      <div class="skill-desc">GSAP ScrollTrigger · Lottie dotLottie · SVG 패스 애니메이션 · 마이크로인터랙션 · 글래스모피즘 · ASCII 애니메이션까지 — 9개 스킬 올인원. 60fps 최적화, prefers-reduced-motion 접근성까지 포함.</div>
-      <div class="skill-tags">
-        <span class="tag tag-orange">GSAP</span>
-        <span class="tag tag-blue">Lottie</span>
-      </div>
-      <div class="skill-action-bar">
-        <div class="skill-install-cmd">npx skills add iart-ai/web-animation-skills -a claude-code -g -y</div>
-        <div class="skill-btns">
-          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add iart-ai/web-animation-skills -a claude-code -g -y')">복사</button>
-          <a class="skill-gh-btn" href="https://github.com/iart-ai/web-animation-skills" target="_blank">GitHub →</a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <hr>
 
 <!-- FAQ -->
@@ -1489,7 +1492,7 @@ hr{border:none;border-top:1px solid var(--border);}
 <!-- Footer CTA -->
 <section class="footer-cta">
   <h2>지금 바로<br><span style="background:linear-gradient(135deg,var(--clay),var(--clay-hi));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">시작하세요</span></h2>
-  <p>Marketing Skills ⭐40,000 · Remotion 428K 설치 · 전부 무료</p>
+  <p>Marketing Skills ⭐41,000+ · Superpowers ⭐260,000+ · 전부 무료</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;">
     <a href="https://skills.sh" target="_blank" class="btn btn-primary">✦ skills.sh 에서 찾기</a>
     <a href="https://github.com/search?q=claude+skills&type=repositories&sort=stars" target="_blank" class="btn btn-ghost">
@@ -1591,7 +1594,7 @@ function copyText(btn, text) {
 // Terminal animation
 const termLines = [
   { cls: 't-pr', text: '$ ' },
-  { cls: 't-cm', text: 'claude-code plugin install https://github.com/coreyhaines31/marketingskills', speed: 30, delay: 0 },
+  { cls: 't-cm', text: 'claude plugin marketplace add coreyhaines31/marketingskills', speed: 30, delay: 0 },
   { cls: '', text: '\n' },
   { cls: 't-info', text: '⟳ Fetching skill manifest...', delayBefore: 500 },
   { cls: '', text: '\n' },
