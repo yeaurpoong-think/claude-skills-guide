@@ -1557,12 +1557,20 @@ function toggleFaq(btn) {
   if (!isOpen) item.classList.add('open');
 }
 
-// Copy skill command
+// Copy skill command (robust fallback 동일 적용)
 function copySkill(btn, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '✓ 복사됨';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  copyToClipboardRobust(text).then((ok) => {
+    if (ok) {
+      btn.textContent = '✓ 복사됨';
+      btn.classList.add('copied');
+    } else {
+      btn.textContent = '✗ 직접 복사';
+      btn.title = '자동 복사 실패 — 아래 명령어 텍스트를 직접 드래그해서 복사해주세요';
+      const bar = btn.closest('.skill-action-bar');
+      const cmdEl = bar ? bar.querySelector('.skill-install-cmd') : null;
+      if (cmdEl) selectElementText(cmdEl);
+    }
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2200);
   });
 }
 
@@ -1582,14 +1590,83 @@ function switchOrgOs(btn, os) {
   document.getElementById('tos-' + os).classList.add('active');
 }
 
-// Copy text
-function copyText(btn, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.textContent;
-    btn.textContent = '✓';
-    setTimeout(() => btn.textContent = orig, 1800);
+// Copy text (robust: Clipboard API → execCommand fallback → 실패 시 선택 안내)
+function copyToClipboardRobust(text) {
+  return new Promise((resolve) => {
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => resolve(true)).catch(() => {
+        resolve(fallbackCopy(text));
+      });
+    } else {
+      resolve(fallbackCopy(text));
+    }
   });
 }
+
+function fallbackCopy(text) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+function copyText(btn, text) {
+  copyToClipboardRobust(text).then((ok) => {
+    const orig = btn.textContent;
+    btn.textContent = ok ? '✓' : '✗';
+    if (!ok) {
+      btn.title = '자동 복사 실패 — 명령어를 직접 드래그해서 복사해주세요';
+      selectPreSibling(btn);
+    }
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  });
+}
+
+// 복사 버튼 클릭 시 자동 복사가 실패하면, 옆의 명령어 텍스트를 자동으로 선택해서
+// 사용자가 바로 Ctrl+C / Cmd+C 만 누르면 되게 해준다.
+function selectPreSibling(btn) {
+  const container = btn.closest('.code-block, .skill-action-bar, div');
+  if (!container) return;
+  const target = container.querySelector('pre, .skill-install-cmd');
+  if (target) selectElementText(target);
+}
+
+function selectElementText(el) {
+  try {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } catch (e) { /* no-op */ }
+}
+
+// 코드 블록/명령어 텍스트를 클릭하면 전체가 자동 선택됨 → 바로 Ctrl+C / Cmd+C 로 복사 가능
+// (자동 클립보드 복사가 브라우저 정책으로 막힌 환경에서도 항상 동작하는 대안)
+function enableClickToSelect() {
+  document.querySelectorAll('.code-block pre, .skill-install-cmd').forEach((el) => {
+    if (el.dataset.selectableBound) return;
+    el.dataset.selectableBound = '1';
+    el.style.cursor = 'text';
+    el.title = (el.title ? el.title + ' — ' : '') + '클릭하면 전체 선택됩니다 (Ctrl+C / Cmd+C로 복사)';
+    el.addEventListener('click', () => selectElementText(el));
+  });
+}
+
+document.addEventListener('DOMContentLoaded', enableClickToSelect);
 
 // Terminal animation
 const termLines = [
