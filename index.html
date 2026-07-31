@@ -159,11 +159,19 @@ nav{
   position:relative;z-index:1;
 }
 
-/* 배경 이미지 (보라빛 벌새 정원 컨셉) */
+/* 배경 이미지 (보라빛 벌새 정원 컨셉, 새는 별도 레이어) */
 .hero-bg-img{
   position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;z-index:-2;
+  object-fit:cover;z-index:-3;
   filter:saturate(1.05) brightness(0.72) contrast(1.05);
+}
+/* 벌새 — 스크롤할 때만 날갯짓하는 스프라이트 레이어 */
+.hero-bird{
+  position:absolute;z-index:-2;pointer-events:none;
+  left:52.4%;top:31.6%;width:45%;
+  transform:translate(-50%,-50%);
+  filter:saturate(1.05) brightness(0.78) contrast(1.05) drop-shadow(0 12px 30px rgba(0,0,0,.35));
+  will-change:transform;
 }
 /* 이미지 위 스크림 — 브랜드 톤(clay/ink) + 텍스트 가독성 확보 */
 .hero-bg-scrim{
@@ -678,9 +686,10 @@ hr{border:none;border-top:1px solid var(--border);}
   </a>
 </nav>
 
-<!-- Hero (몽환적 보라빛 벌새 정원 컨셉) -->
+<!-- Hero (몽환적 보라빛 벌새 정원 컨셉, 벌새는 스크롤 연동 날갯짓 스프라이트) -->
 <section class="hero">
-  <img class="hero-bg-img" src="assets/hero-hummingbird.png" alt="보랏빛 황혼의 라벤더 들판 위를 나는 빛나는 벌새">
+  <img class="hero-bg-img" src="assets/hero-hummingbird-bg.png" alt="보랏빛 황혼의 라벤더 들판">
+  <img class="hero-bird" id="heroBird" src="assets/hummingbird-flap-2.png" alt="날갯짓하는 빛나는 벌새">
   <div class="hero-bg-scrim"></div>
 
   <div class="hero-content" id="heroContent">
@@ -1502,6 +1511,45 @@ window.addEventListener('scroll', () => {
   const h = document.documentElement;
   document.getElementById('prog').style.width = (window.scrollY / (h.scrollHeight - h.clientHeight) * 100) + '%';
 });
+
+// 벌새 — 스크롤할 때만 날갯짓하는 스프라이트 애니메이션
+(function(){
+  const bird = document.getElementById('heroBird');
+  if (!bird) return;
+  const frames = [
+    'assets/hummingbird-flap-1.png', // 날개 위로
+    'assets/hummingbird-flap-2.png', // 날개 중간
+    'assets/hummingbird-flap-3.png', // 날개 아래로
+    'assets/hummingbird-flap-2.png'  // 날개 중간 (복귀)
+  ];
+  let frameIndex = 1; // 기본값: 중간 프레임(정지 시 자연스러운 포즈)
+  let flapTimer = null;
+  let stopTimer = null;
+  let lastScrollY = window.scrollY;
+
+  function setFrame(i){
+    if (bird.src.indexOf(frames[i]) === -1) bird.src = frames[i];
+  }
+
+  function startFlapping(){
+    if (flapTimer) return; // 이미 돌아가는 중
+    flapTimer = setInterval(() => {
+      frameIndex = (frameIndex + 1) % frames.length;
+      setFrame(frameIndex);
+    }, 80); // 스크롤 중에는 빠르게 파닥
+  }
+
+  function stopFlapping(){
+    if (flapTimer){ clearInterval(flapTimer); flapTimer = null; }
+    setFrame(1); // 정지 시 날개 중간 포즈로 안착
+  }
+
+  window.addEventListener('scroll', () => {
+    startFlapping();
+    clearTimeout(stopTimer);
+    stopTimer = setTimeout(stopFlapping, 150); // 스크롤 멈추고 150ms 후 정지
+  }, { passive: true });
+})();
 
 // Scroll reveal
 const io = new IntersectionObserver((entries) => {
