@@ -1078,6 +1078,29 @@ hr{border:none;border-top:1px solid var(--border);}
 <span class="t-pr">$</span> rtk gain</pre>
           </div>
           <div class="step-p" style="margin-top:var(--s3);opacity:.8;">⚠️ 30분 코딩 세션 기준 11.8만 → 2.4만 토큰까지 줄었다는 주장이 있지만, 실제 절감 폭은 프로젝트·명령어 패턴마다 달라요. 도입 후 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">rtk gain</code>으로 직접 측정해서 확인하는 걸 권장합니다. (GitHub ⭐74,000+, Apache 2.0 라이선스 · <a href="https://github.com/rtk-ai/rtk" target="_blank" style="color:var(--clay);">rtk-ai/rtk →</a>)</div>
+
+          <div style="margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--surface2);">
+            <div class="step-h" style="display:flex;align-items:center;gap:6px;">🪟 Windows 버전 설치법</div>
+            <div class="step-p">v0.37.2부터 <strong>네이티브 바이너리 훅</strong>으로 동작해서 Unix 셸(bash/jq) 없이도 CMD·PowerShell·Windows Terminal에서 바로 명령어가 자동으로 rtk로 치환돼요. 더블클릭 실행은 안 되고 반드시 터미널에서 실행해야 합니다.</div>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyText(this,'rtk init -g')">복사</button>
+              <pre><span class="c-comment"># 1. GitHub Releases에서 rtk-x86_64-pc-windows-msvc.zip 다운로드 후 압축 해제</span>
+<span class="c-comment">#    https://github.com/rtk-ai/rtk/releases</span>
+
+<span class="c-comment"># 2. 압축 푼 rtk.exe를 PATH에 있는 폴더로 이동 (예: C:\Users\&lt;내계정&gt;\.local\bin)</span>
+
+<span class="c-comment"># 3. 초기화 — 네이티브 바이너리 훅 설치 (Claude Code / Copilot)</span>
+<span class="t-pr">$</span> rtk init -g
+
+<span class="c-comment"># Hermes용 초기화</span>
+<span class="t-pr">$</span> rtk init --agent hermes
+
+<span class="c-comment"># 설치 확인</span>
+<span class="t-pr">$</span> rtk --version
+<span class="t-pr">$</span> rtk gain</pre>
+            </div>
+            <div class="step-p" style="margin-top:var(--s3);opacity:.8;">💡 일부 필터가 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">ripgrep(rg)</code>을 필요로 해요 — 없으면 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">winget install BurntSushi.ripgrep.MSVC</code>로 설치해두면 경고가 안 뜹니다. WSL 사용자는 macOS/Linux와 동일하게 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">curl -fsSL .../install.sh | sh</code> 한 줄이면 됩니다.</div>
+          </div>
         </div>
       </div>
     </div>
