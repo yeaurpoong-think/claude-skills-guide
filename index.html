@@ -1057,6 +1057,29 @@ hr{border:none;border-top:1px solid var(--border);}
           <div class="step-p">설치 후 Claude Code를 재시작하면 스킬이 자동으로 활성화됩니다. <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">/skill-name</code>으로 호출할 수 있어요.</div>
         </div>
       </div>
+      <div class="step-card">
+        <div class="step-num">+</div>
+        <div>
+          <div class="step-h">💡 보너스 — 토큰 비용까지 줄이고 싶다면: rtk</div>
+          <div class="step-p">스킬이 "어떻게 시키느냐"의 문제라면, <strong>rtk</strong>는 "얼마나 비용이 드느냐"의 문제를 해결하는 도구입니다. 명령어 출력(<code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">git status</code>, <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">테스트 결과</code> 등)이 그대로 모델 컨텍스트에 들어가는 걸 압축해서 넘겨주는 오픈소스 CLI 프록시예요. Claude Code, Cursor는 물론 <strong>Hermes도 공식 지원</strong>합니다.</div>
+          <div class="code-block">
+            <button class="copy-btn" onclick="copyText(this,'brew install rtk && rtk init -g')">복사</button>
+            <pre><span class="c-comment"># 설치 (macOS/Homebrew)</span>
+<span class="t-pr">$</span> brew install rtk
+
+<span class="c-comment"># Claude Code / Copilot용 초기화</span>
+<span class="t-pr">$</span> rtk init -g
+
+<span class="c-comment"># Hermes용 초기화</span>
+<span class="t-pr">$</span> rtk init --agent hermes
+
+<span class="c-comment"># 설치 확인 + 절감량 대시보드</span>
+<span class="t-pr">$</span> rtk --version
+<span class="t-pr">$</span> rtk gain</pre>
+          </div>
+          <div class="step-p" style="margin-top:var(--s3);opacity:.8;">⚠️ 30분 코딩 세션 기준 11.8만 → 2.4만 토큰까지 줄었다는 주장이 있지만, 실제 절감 폭은 프로젝트·명령어 패턴마다 달라요. 도입 후 <code style="font-family:'JetBrains Mono';font-size:.85em;background:var(--surface2);padding:1px 6px;border-radius:4px;">rtk gain</code>으로 직접 측정해서 확인하는 걸 권장합니다. (GitHub ⭐74,000+, Apache 2.0 라이선스 · <a href="https://github.com/rtk-ai/rtk" target="_blank" style="color:var(--clay);">rtk-ai/rtk →</a>)</div>
+        </div>
+      </div>
     </div>
   </div>
 
