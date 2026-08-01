@@ -801,7 +801,8 @@ hr{border:none;border-top:1px solid var(--border);}
   <div class="journey-tint"></div>
   <div class="journey-bird-wrap" id="journeyBirdWrap">
     <div class="journey-bird-glow" id="journeyBirdGlow"></div>
-    <canvas class="journey-bird" id="journeyBird"></canvas>
+    <video class="journey-bird" id="journeyBird" src="assets/hummingbird-vid.mp4" poster="assets/hummingbird-poster.jpg"
+           autoplay loop muted playsinline preload="auto"></video>
   </div>
 </div>
 
@@ -1771,149 +1772,37 @@ hr{border:none;border-top:1px solid var(--border);}
   </div>
 </footer>
 
-<!-- ══ 3D 벌새 렌더러 — Three.js(ESM, CDN)로 실제 GLB 모델을 로드해 journey-bird canvas에 렌더링.
-     기존 2D 스프라이트(hummingbird-flap-*.png)를 대체. 발광은 CSS drop-shadow(2D 레이어)와
-     WebGL 림 라이트(3D 셰이딩)를 함께 사용해 "은은하게" 표현한다.
-     importmap 필수 — GLTFLoader.js가 내부적으로 bare specifier "three"를 import하기 때문에
-     이 매핑이 없으면 "Failed to resolve module specifier three" 에러로 로드 자체가 실패한다. ══ -->
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+<!-- ══ 벌새 영상 렌더러 — 3D(Three.js GLB) 방식은 퀄리티 한계(단일 메시 4,564폴리곤/단일 텍스처)로
+     폐기하고, 실사 참고 영상을 직접 사용하는 방식으로 전환. 발광은 CSS drop-shadow(2D 레이어)로 유지.
+     setGlow는 CSS 변수만 갱신, setBoost는 video.playbackRate로 체감 속도만 살짝 올린다. ══ -->
+<script>
 (function(){
-  const canvas = document.getElementById('journeyBird');
+  const video = document.getElementById('journeyBird');
   const wrap = document.getElementById('journeyBirdWrap');
-  if (!canvas || !wrap) return;
+  if (!video || !wrap) return;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.3;
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-  camera.position.set(0, 0.15, 3.2);
-
-  // Key + rim light — rim light color is swapped live to match the scroll glow color (§setGlow)
-  // 조명 값은 디버그 렌더링 검증을 거쳐 실제로 벌새 텍스처(녹색/청록 메탈릭 깃털)가 드러나는 밝기로 조정함
-  scene.add(new THREE.AmbientLight(0xffffff, 2.0));
-  // 참고 영상 3편 분석 결과 반영: 머리/목은 청록 메탈릭, 가슴/배는 골드 그라데이션이 두드러짐.
-  // 키 라이트를 살짝 따뜻하게(골드), 필 라이트를 살짝 시안 쪽으로 틀어 그 대비를 부각시킴.
-  const key = new THREE.DirectionalLight(0xfff4e0, 2.7);
-  key.position.set(1.5, 2, 2);
-  scene.add(key);
-  const fill = new THREE.DirectionalLight(0xbfeaff, 1.5);
-  fill.position.set(-2, -1, 2);
-  scene.add(fill);
-  const rim = new THREE.PointLight(0xc4b5fd, 3.2, 8);
-  rim.position.set(-1.2, 0.4, -1.4);
-  scene.add(rim);
-
-  let model = null;
-  let mixer = null;
-  const clips = {}; // name -> THREE.AnimationClip
-  let currentAction = null;
-
-  // 참고 영상에서 확인된 패턴: 평소엔 제자리에서 살짝 회전하며 호버링, 스크롤 가속 구간에서만
-  // 빠르게 날아가는 궤적으로 전환. 실제 새 GLB에 내장된 클립 이름과 정확히 맞춰야 한다.
-  const IDLE_CLIP = 'hover_and_spin';
-  const BOOST_CLIP = 'fast_flight';
-  const CROSSFADE = 0.5; // seconds — 급전환 시 뚝 끊기는 느낌 방지
-
-  function playClip(name, { loop = true } = {}) {
-    const clip = clips[name];
-    if (!clip || !mixer) return;
-    const next = mixer.clipAction(clip);
-    next.reset();
-    next.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
-    next.clampWhenFinished = !loop;
-    next.enabled = true;
-    if (currentAction && currentAction !== next) {
-      next.play();
-      currentAction.crossFadeTo(next, CROSSFADE, false);
-    } else {
-      next.play();
-    }
-    currentAction = next;
+  if (reduceMotion) {
+    video.pause();
+  } else {
+    video.play().catch(()=>{}); // 일부 브라우저는 autoplay 정책상 첫 상호작용 전엔 재생 실패할 수 있음 — 무음이라 대부분 통과
   }
-
-  const loader = new GLTFLoader();
-  loader.load('assets/hummingbird-3d.glb', (gltf) => {
-    model = gltf.scene;
-    // Normalize scale/position so the model fills the canvas consistently regardless of source units
-    const box = new THREE.Box3().setFromObject(model);
-    const size = new THREE.Vector3(); box.getSize(size);
-    const center = new THREE.Vector3(); box.getCenter(center);
-    const maxDim = Math.max(size.x, size.y, size.z) || 1;
-    const scale = 1.7 / maxDim;
-    model.scale.setScalar(scale);
-    model.position.sub(center.multiplyScalar(scale));
-    scene.add(model);
-
-    // 신규 GLB는 hover_and_spin / fast_flight / slow_glide / spiral_flight 4개 클립 내장.
-    // 몸통 전체 이동·회전 애니메이션이라 이전의 수동 sin() 회전 흉내보다 훨씬 자연스럽다.
-    if (gltf.animations && gltf.animations.length) {
-      mixer = new THREE.AnimationMixer(model);
-      gltf.animations.forEach(clip => { clips[clip.name] = clip; });
-      const startClip = clips[IDLE_CLIP] ? IDLE_CLIP : gltf.animations[0].name;
-      playClip(startClip, { loop: true });
-    }
-  }, undefined, (err) => console.warn('hummingbird glb load failed', err));
-
-  function resize(){
-    const w = canvas.clientWidth || wrap.clientWidth;
-    const h = canvas.clientHeight || wrap.clientHeight;
-    if (!w || !h) return;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-  }
-  window.addEventListener('resize', resize);
-  resize();
 
   let boosting = false;
-  let t = 0;
-  const clock = new THREE.Clock();
-  function animate(){
-    requestAnimationFrame(animate);
-    const delta = reduceMotion ? 0.004 : clock.getDelta();
-    t += reduceMotion ? 0.004 : (boosting ? 0.05 : 0.016);
-    if (mixer) mixer.update(delta * (boosting ? 1.6 : 1)); // 부스트 중엔 클립 재생 속도도 살짝 빠르게
-    if (model && !mixer){
-      // 클립이 없는 폴백(구 GLB) 대비 — 몸통 이동 애니메이션이 없을 때만 수동 흔들림 사용
-      model.rotation.y = Math.sin(t * 0.8) * 0.35;
-      model.rotation.z = Math.sin(t * 6.5) * (boosting ? 0.05 : 0.02);
-    }
-    renderer.render(scene, camera);
-  }
-  animate();
 
   // Public API — driven by the scroll waypoint system in the main <script> below
   window.hummingbird3D = {
     setGlow(cssColor){
-      // Parse "rgba(r,g,b,a)" from the waypoint glow string and drive the rim light with it
+      // Parse "rgba(r,g,b,a)" from the waypoint glow string and drive the CSS glow layer with it
       const m = /rgba?\(([^)]+)\)/.exec(cssColor);
       if (!m) return;
-      const parts = m[1].split(',').map(s => parseFloat(s));
-      const [r,g,b,a=1] = parts;
-      rim.color.setRGB(r/255, g/255, b/255);
-      rim.intensity = 2.4 + a * 2.2; // 은은한 발광 — 스크롤 진행에 따라 밝기만 살짝 오간다
+      wrap.style.setProperty('--glow-color', cssColor);
     },
     setBoost(on){
       if (boosting === on) return;
       boosting = on;
-      // 참고 영상 패턴: 평소 제자리 호버링(hover_and_spin) ↔ 스크롤 가속 시 빠른 비행 궤적(fast_flight)
-      if (mixer) playClip(on ? BOOST_CLIP : IDLE_CLIP, { loop: true });
+      if (reduceMotion) return;
+      video.playbackRate = on ? 1.6 : 1; // 스크롤 가속 구간에서만 살짝 빠르게 재생
     }
   };
 })();
@@ -1923,6 +1812,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // Progress bar
 window.addEventListener('scroll', () => {
   const h = document.documentElement;
+
   document.getElementById('prog').style.width = (window.scrollY / (h.scrollHeight - h.clientHeight) * 100) + '%';
 });
 
