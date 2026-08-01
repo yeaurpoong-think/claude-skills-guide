@@ -801,8 +801,7 @@ hr{border:none;border-top:1px solid var(--border);}
   <div class="journey-tint"></div>
   <div class="journey-bird-wrap" id="journeyBirdWrap">
     <div class="journey-bird-glow" id="journeyBirdGlow"></div>
-    <video class="journey-bird" id="journeyBird" src="assets/hummingbird-vid.mp4" poster="assets/hummingbird-poster.jpg"
-           autoplay loop muted playsinline preload="auto"></video>
+    <canvas class="journey-bird" id="journeyBird"></canvas>
   </div>
 </div>
 
@@ -1772,28 +1771,99 @@ hr{border:none;border-top:1px solid var(--border);}
   </div>
 </footer>
 
-<!-- ══ 벌새 영상 렌더러 — 3D(Three.js GLB) 방식은 퀄리티 한계(단일 메시 4,564폴리곤/단일 텍스처)로
-     폐기하고, 실사 참고 영상을 직접 사용하는 방식으로 전환. 발광은 CSS drop-shadow(2D 레이어)로 유지.
-     setGlow는 CSS 변수만 갱신, setBoost는 video.playbackRate로 체감 속도만 살짝 올린다. ══ -->
+<!-- ══ 벌새 스프라이트 렌더러 — 3D(Three.js GLB)는 폴리곤 한계로 폐기, 단순 영상 재생(autoplay video)도
+     "배경이 같이 나오고 스크롤 맥락과 무관하게 재생"되는 문제가 있어 폐기.
+     최종: 실사 참고 영상 121프레임을 rembg(isnet-general-use)로 배경 제거 → 완전 투명 PNG/WebP
+     프레임 시퀀스로 추출 → canvas에 직접 그리는 방식. 배경이 완전히 사라져 사이트 배경과 자연스럽게
+     녹아들고, 프레임 단위로 제어 가능해 스크롤 상태와 실제 인과관계를 만들 수 있다.
+
+     궤적 분석(중심점/바운딩박스 추적) 결과:
+       - 원본 프레임 19~51(로컬 0~32): 꽃 근처 호버링. 19번과 51번 프레임의 위치·크기 차이가
+         가장 작아(최적 루프 지점) 여기서 반복하면 이어붙임이 거의 티가 안 남.
+       - 원본 프레임 51~121(로컬 32~102): 점점 작아지며 화면 밖으로 이탈하는 "퇴장 비행".
+     이 구조를 그대로 스크롤 상호작용에 매핑:
+       평소(호버) → 스크롤 가속 구간(Act III 등)에서 실제로 날아서 퇴장 → 스크롤이 잦아들면
+       같은 시퀀스를 역재생해 되돌아와 호버링 재개. "스크롤을 내리면 새가 진짜 반응해서 날아간다"는
+       인과관계가 생김 (기존 video 방식은 배경 포함 영상이 스크롤과 무관하게 그냥 루프만 돌았음). ══ -->
 <script>
 (function(){
-  const video = document.getElementById('journeyBird');
+  const canvas = document.getElementById('journeyBird');
   const wrap = document.getElementById('journeyBirdWrap');
-  if (!video || !wrap) return;
+  if (!canvas || !wrap) return;
+  const ctx = canvas.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (reduceMotion) {
-    video.pause();
-  } else {
-    video.play().catch(()=>{}); // 일부 브라우저는 autoplay 정책상 첫 상호작용 전엔 재생 실패할 수 있음 — 무음이라 대부분 통과
+  const FRAME_START = 19;   // 원본 프레임 번호(파일명 기준) 시작
+  const FRAME_END = 121;    // 원본 프레임 번호 끝
+  const HOVER_LOCAL_END = 32; // 로컬 인덱스 0~32 = 호버링 루프 구간 (원본 19~51)
+  const FPS = 24; // 원본 영상 프레임레이트와 동일하게 맞춰야 어색한 가속/감속이 없음
+
+  const frames = [];
+  for (let n = FRAME_START; n <= FRAME_END; n++){
+    const img = new Image();
+    img.src = `assets/hummingbird-sprites/hb-${String(n).padStart(3,'0')}.webp`;
+    frames.push(img);
+  }
+  const lastLocalIdx = frames.length - 1; // 102
+
+  // 상태 기계: hover(루프) → exiting(퇴장 비행 재생) → exited(끝에서 대기) → returning(역재생) → hover
+  let state = 'hover';
+  let localIdx = 0;
+  let dir = 1;
+  let acc = 0; // 프레임 타이밍 누적기(ms)
+  const frameMs = 1000 / FPS;
+
+  function resize(){
+    const w = canvas.clientWidth || wrap.clientWidth;
+    const h = canvas.clientHeight || wrap.clientHeight;
+    if (!w || !h) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function draw(){
+    const img = frames[localIdx];
+    if (!img || !img.complete || !img.naturalWidth) return;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    // 프레임마다 벌새 바운딩박스 크기가 달라 contain 방식으로 중앙 배치(레터박싱 없이 항상 캔버스를 채우는 비율로)
+    const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+    const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+    ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
   }
 
   let boosting = false;
+  let last = performance.now();
+  function tick(now){
+    requestAnimationFrame(tick);
+    const dt = now - last; last = now;
+    if (reduceMotion){ draw(); return; }
+    acc += dt;
+    while (acc >= frameMs){
+      acc -= frameMs;
+      if (state === 'hover'){
+        localIdx = (localIdx + 1) % (HOVER_LOCAL_END + 1); // 0..32 반복 (프레임 51 다음 19로 점프 — 위치차 최소라 자연스러움)
+      } else if (state === 'exiting'){
+        localIdx = Math.min(lastLocalIdx, localIdx + 1);
+        if (localIdx >= lastLocalIdx) state = 'exited';
+      } else if (state === 'exited'){
+        // 화면 밖 근처에서 대기 — 스크롤이 잦아들 때까지 마지막 프레임 유지
+      } else if (state === 'returning'){
+        localIdx = Math.max(HOVER_LOCAL_END, localIdx - 1);
+        if (localIdx <= HOVER_LOCAL_END) state = 'hover';
+      }
+    }
+    draw();
+  }
+  requestAnimationFrame((t) => { last = t; requestAnimationFrame(tick); });
 
   // Public API — driven by the scroll waypoint system in the main <script> below
   window.hummingbird3D = {
     setGlow(cssColor){
-      // Parse "rgba(r,g,b,a)" from the waypoint glow string and drive the CSS glow layer with it
       const m = /rgba?\(([^)]+)\)/.exec(cssColor);
       if (!m) return;
       wrap.style.setProperty('--glow-color', cssColor);
@@ -1802,7 +1872,14 @@ hr{border:none;border-top:1px solid var(--border);}
       if (boosting === on) return;
       boosting = on;
       if (reduceMotion) return;
-      video.playbackRate = on ? 1.6 : 1; // 스크롤 가속 구간에서만 살짝 빠르게 재생
+      if (on){
+        // 호버링 중이든 아니든 무조건 퇴장 비행 시작(정확히 32번 지점부터라 항상 이어붙임이 자연스러움)
+        if (state === 'hover') localIdx = HOVER_LOCAL_END;
+        state = 'exiting';
+      } else {
+        // 퇴장 중이었으면 그 지점에서, 이미 다 나갔으면 마지막 지점에서 역재생 시작
+        if (state === 'exiting' || state === 'exited') state = 'returning';
+      }
     }
   };
 })();
@@ -1812,6 +1889,7 @@ hr{border:none;border-top:1px solid var(--border);}
 // Progress bar
 window.addEventListener('scroll', () => {
   const h = document.documentElement;
+
 
   document.getElementById('prog').style.width = (window.scrollY / (h.scrollHeight - h.clientHeight) * 100) + '%';
 });
