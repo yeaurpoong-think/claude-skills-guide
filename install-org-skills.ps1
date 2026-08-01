@@ -22,6 +22,9 @@ claude plugin install superpowers@superpowers-dev
 claude plugin marketplace add ca-who-codes/ultimate.UIUX.design.skills
 claude plugin install ui-ux-design-pro@ultimate-uiux-design-skills
 
+claude plugin marketplace add thedotmack/claude-mem
+claude plugin install claude-mem
+
 Write-Host ""
 Write-Host "2️⃣ npx skills 방식 설치 (Design DNA / Web Animation / Three.js / Remotion / MengTo 종합 스킬 / Superpowers Lab)"
 npx skills add zanwei/design-dna -a claude-code -g -y
@@ -30,6 +33,10 @@ npx skills add CloudAI-X/threejs-skills -a claude-code -g -y
 npx skills add remotion-dev/skills -a claude-code -g -y
 npx skills add MengTo/Skills -a claude-code -g -y
 npx skills add obra/superpowers-lab -a claude-code -g -y
+
+Write-Host ""
+Write-Host "3️⃣ RuFlo MCP 서버 등록 (멀티 에이전트 오케스트레이션)"
+claude mcp add ruflo -- npx ruflo@latest mcp start
 
 Write-Host ""
 Write-Host "✅ 설치 완료! Claude Code를 재시작하면 스킬이 자동 활성화됩니다." -ForegroundColor Green
