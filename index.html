@@ -1793,11 +1793,13 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   // Key + rim light — rim light color is swapped live to match the scroll glow color (§setGlow)
   // 조명 값은 디버그 렌더링 검증을 거쳐 실제로 벌새 텍스처(녹색/청록 메탈릭 깃털)가 드러나는 밝기로 조정함
-  scene.add(new THREE.AmbientLight(0xffffff, 2.2));
-  const key = new THREE.DirectionalLight(0xffffff, 2.6);
+  scene.add(new THREE.AmbientLight(0xffffff, 2.0));
+  // 참고 영상 3편 분석 결과 반영: 머리/목은 청록 메탈릭, 가슴/배는 골드 그라데이션이 두드러짐.
+  // 키 라이트를 살짝 따뜻하게(골드), 필 라이트를 살짝 시안 쪽으로 틀어 그 대비를 부각시킴.
+  const key = new THREE.DirectionalLight(0xfff4e0, 2.7);
   key.position.set(1.5, 2, 2);
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xffffff, 1.4);
+  const fill = new THREE.DirectionalLight(0xbfeaff, 1.5);
   fill.position.set(-2, -1, 2);
   scene.add(fill);
   const rim = new THREE.PointLight(0xc4b5fd, 3.2, 8);
@@ -1805,6 +1807,33 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
   scene.add(rim);
 
   let model = null;
+  let mixer = null;
+  const clips = {}; // name -> THREE.AnimationClip
+  let currentAction = null;
+
+  // 참고 영상에서 확인된 패턴: 평소엔 제자리에서 살짝 회전하며 호버링, 스크롤 가속 구간에서만
+  // 빠르게 날아가는 궤적으로 전환. 실제 새 GLB에 내장된 클립 이름과 정확히 맞춰야 한다.
+  const IDLE_CLIP = 'hover_and_spin';
+  const BOOST_CLIP = 'fast_flight';
+  const CROSSFADE = 0.5; // seconds — 급전환 시 뚝 끊기는 느낌 방지
+
+  function playClip(name, { loop = true } = {}) {
+    const clip = clips[name];
+    if (!clip || !mixer) return;
+    const next = mixer.clipAction(clip);
+    next.reset();
+    next.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
+    next.clampWhenFinished = !loop;
+    next.enabled = true;
+    if (currentAction && currentAction !== next) {
+      next.play();
+      currentAction.crossFadeTo(next, CROSSFADE, false);
+    } else {
+      next.play();
+    }
+    currentAction = next;
+  }
+
   const loader = new GLTFLoader();
   loader.load('assets/hummingbird-3d.glb', (gltf) => {
     model = gltf.scene;
@@ -1817,6 +1846,15 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     model.scale.setScalar(scale);
     model.position.sub(center.multiplyScalar(scale));
     scene.add(model);
+
+    // 신규 GLB는 hover_and_spin / fast_flight / slow_glide / spiral_flight 4개 클립 내장.
+    // 몸통 전체 이동·회전 애니메이션이라 이전의 수동 sin() 회전 흉내보다 훨씬 자연스럽다.
+    if (gltf.animations && gltf.animations.length) {
+      mixer = new THREE.AnimationMixer(model);
+      gltf.animations.forEach(clip => { clips[clip.name] = clip; });
+      const startClip = clips[IDLE_CLIP] ? IDLE_CLIP : gltf.animations[0].name;
+      playClip(startClip, { loop: true });
+    }
   }, undefined, (err) => console.warn('hummingbird glb load failed', err));
 
   function resize(){
@@ -1832,11 +1870,14 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
   let boosting = false;
   let t = 0;
+  const clock = new THREE.Clock();
   function animate(){
     requestAnimationFrame(animate);
+    const delta = reduceMotion ? 0.004 : clock.getDelta();
     t += reduceMotion ? 0.004 : (boosting ? 0.05 : 0.016);
-    if (model){
-      // Idle hover: gentle bob + wing-beat-like yaw shimmer standing in for real wing animation
+    if (mixer) mixer.update(delta * (boosting ? 1.6 : 1)); // 부스트 중엔 클립 재생 속도도 살짝 빠르게
+    if (model && !mixer){
+      // 클립이 없는 폴백(구 GLB) 대비 — 몸통 이동 애니메이션이 없을 때만 수동 흔들림 사용
       model.rotation.y = Math.sin(t * 0.8) * 0.35;
       model.rotation.z = Math.sin(t * 6.5) * (boosting ? 0.05 : 0.02);
     }
@@ -1855,7 +1896,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
       rim.color.setRGB(r/255, g/255, b/255);
       rim.intensity = 2.4 + a * 2.2; // 은은한 발광 — 스크롤 진행에 따라 밝기만 살짝 오간다
     },
-    setBoost(on){ boosting = on; }
+    setBoost(on){
+      if (boosting === on) return;
+      boosting = on;
+      // 참고 영상 패턴: 평소 제자리 호버링(hover_and_spin) ↔ 스크롤 가속 시 빠른 비행 궤적(fast_flight)
+      if (mixer) playClip(on ? BOOST_CLIP : IDLE_CLIP, { loop: true });
+    }
   };
 })();
 </script>
