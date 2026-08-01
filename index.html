@@ -92,14 +92,24 @@ button{font-family:inherit;}
 }
 
 /* ── NAV ── */
+/* 벌새의 움직임이 히어로 뒤에서 역동적으로 비치도록 네비를 대부분 투명하게 —
+   가독성은 backdrop-filter blur로만 확보 (불투명 배경 대신) */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   height:56px;padding:0 var(--s8);
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(15,15,14,0.97);
-  backdrop-filter:blur(10px) saturate(160%);
-  border-bottom:1px solid var(--border);
+  background:rgba(15,15,14,0.22);
+  backdrop-filter:blur(18px) saturate(180%);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  transition:background .3s ease, border-color .3s ease;
 }
+/* 스크롤해서 벌새가 후퇴하는 실행 구간(Act III) 등 텍스트가 밀집한 구간에서는
+   가독성을 위해 네비를 살짝 더 진하게 — JS가 body[data-act] 값으로 토글 */
+body[data-act="3"] nav, body[data-act="4"] nav{
+  background:rgba(15,15,14,0.55);
+}
+
 .nav-logo{
   font-size:13px;font-weight:700;letter-spacing:-0.01em;
   display:flex;align-items:center;gap:var(--s2);
@@ -178,7 +188,7 @@ nav{
      스크롤 중일 때만 속도를 끌어올림 (특정 트리거 없이 로드 즉시 시작)
    ══════════════════════════════════════════ */
 .journey-stage{
-  position:fixed;inset:0;z-index:-5;pointer-events:none;
+  position:fixed;inset:0;z-index:-2;pointer-events:none; /* hero-bg-img(-3)보다 앞, scrim(-1)보다 뒤 — 이전엔 -5라 배경사진에 완전히 가려져 있었음 */
   overflow:hidden;
 }
 .journey-bird-wrap{
@@ -189,15 +199,14 @@ nav{
   will-change:left,top,transform,opacity;
 }
 .journey-bird{
-  display:block;width:100%;
+  display:block;width:100%;height:auto;aspect-ratio:1/1;
   filter:
     saturate(1.15) brightness(1.05) contrast(1.08)
     drop-shadow(0 0 18px var(--glow-color, rgba(196,181,253,.55)))
     drop-shadow(0 0 46px var(--glow-color, rgba(196,181,253,.35)))
     drop-shadow(0 14px 32px rgba(0,0,0,.45));
-  /* 몸통 floating: 3.6초 주기로 위아래 미세 부유 (관찰된 idle/호버링 패턴 반영) */
+  /* 몸통 상하 부유는 3D 모듈 내부에서 처리 — 여기서는 발광 펄스만 CSS로 유지 */
   animation:
-    birdFloat 3.6s ease-in-out infinite,
     birdGlowPulse 4.2s ease-in-out infinite;
   will-change:transform,filter;
 }
@@ -220,7 +229,7 @@ nav{
     drop-shadow(0 14px 32px rgba(0,0,0,.45)); }
 }
 /* 네비 클릭 시 순간적으로 광도를 확 끌어올리는 부스트 이펙트 */
-.journey-bird.is-boosting{ animation:birdFloat 3.6s ease-in-out infinite, birdBoost .9s var(--ease-out); }
+.journey-bird.is-boosting{ animation:birdGlowPulse 4.2s ease-in-out infinite, birdBoost .9s var(--ease-out); }
 @keyframes birdBoost{
   0%{ filter:
     saturate(1.15) brightness(1.0) contrast(1.08)
@@ -736,6 +745,13 @@ hr{border:none;border-top:1px solid var(--border);}
 }
 </style>
 </head>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.165.0/build/three.module.js"
+  }
+}
+</script>
 <body>
 
 <div class="progress-bar" id="prog"></div>
@@ -745,7 +761,7 @@ hr{border:none;border-top:1px solid var(--border);}
 <div class="journey-stage" aria-hidden="true">
   <div class="journey-tint"></div>
   <div class="journey-bird-wrap" id="journeyBirdWrap">
-    <img class="journey-bird" id="journeyBird" src="assets/hummingbird-flap-2.png" alt="">
+    <canvas class="journey-bird" id="journeyBird" width="240" height="240" aria-hidden="true"></canvas>
   </div>
 </div>
 
@@ -1665,6 +1681,8 @@ window.addEventListener('scroll', () => {
     wrap.style.opacity = 1;
     wrap.style.transform = `translate(-50%,-50%) scale(${s.scale}) rotate(${s.rot + tilt}deg)`;
     bird.style.setProperty('--glow-color', s.glow);
+    bird.dataset.bank = String(s.rot);
+    bird.dataset.act = String(s.act);
     document.body.setAttribute('data-act', String(s.act));
 
     // 진행률에 따라 은은한 배경 틴트도 함께 흐르도록 (보라 황혼 → 클레이 노을)
@@ -1693,38 +1711,15 @@ window.addEventListener('scroll', () => {
     }, { passive:true });
   }
 
-  // 날개 퍼덕임 — 로드 즉시 자동 재생되는 idle 루프(트리거 없음).
-  // Act III(실행 구간)에서는 호버링 부스트를 비활성화해 발광·모션을 낮게 유지.
+  // 날개 퍼덕임/부스트 신호 — 실제 날갯짓 렌더링은 아래 3D 벌새 모듈이 담당.
+  // 이 블록은 스크롤 시 is-boosting 클래스만 토글해 3D 모듈에 신호를 전달한다.
   if (!reduceMotion) {
-    const frames = [
-      'assets/hummingbird-flap-1.png',
-      'assets/hummingbird-flap-2.png',
-      'assets/hummingbird-flap-3.png',
-      'assets/hummingbird-flap-2.png'
-    ];
-    let idx = 1;
-    let flapMs = 150; // idle 기본 속도
-    let flapTimer = null;
     let boostTimeout = null;
-
-    function setFrame(i){ if (bird.src.indexOf(frames[i]) === -1) bird.src = frames[i]; }
-    function restartFlap(){
-      if (flapTimer) clearInterval(flapTimer);
-      flapTimer = setInterval(() => { idx = (idx+1) % frames.length; setFrame(idx); }, flapMs);
-    }
-    restartFlap(); // 트리거 없이 즉시 시작
-
     window.addEventListener('scroll', () => {
       if (currentAct === 3) return; // 실행 구간에서는 호버링 가속 생략 — 후퇴 톤 유지
-      flapMs = 70;
-      restartFlap();
       bird.classList.add('is-boosting');
       clearTimeout(boostTimeout);
-      boostTimeout = setTimeout(() => {
-        flapMs = 150;
-        restartFlap();
-        bird.classList.remove('is-boosting');
-      }, 220);
+      boostTimeout = setTimeout(() => bird.classList.remove('is-boosting'), 260);
     }, { passive:true });
   }
 
@@ -1956,6 +1951,196 @@ function runTerm() {
   obs.observe(body);
 }
 runTerm();
+</script>
+
+<!-- ══════════════════════════════════════════════════════
+     3D 벌새 (Three.js, r165, importmap CDN — 빌드 없음)
+     기존 스프라이트 img를 대체하는 절차적 3D 모델.
+     위치·스케일·회전·발광색은 위쪽 스크롤 컨트롤러가 #journeyBirdWrap 의
+     left/top/transform/--glow-color 로 계속 갱신하고, 이 모듈은 그 안의
+     <canvas id="journeyBird"> 에 실제 3D 렌더링만 담당한다.
+     ══════════════════════════════════════════════════════ -->
+<script type="module">
+import * as THREE from 'three';
+
+(function initHummingbird3D(){
+  const canvas = document.getElementById('journeyBird');
+  if (!canvas) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RES = 420; // 캔버스 내부 해상도(선명도용, CSS로는 width:100%로 축소 표시)
+  canvas.width = RES; canvas.height = RES;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(RES, RES, false);
+  renderer.setClearColor(0x000000, 0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.6;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+  camera.position.set(0, 0.15, 6.4);
+  camera.lookAt(0, 0.1, 0);
+
+  // ── 조명: 어두운 배경(--ink:#141413) 위에서도 또렷이 도드라지도록 밝고 대비 강한 3점 조명
+  scene.add(new THREE.AmbientLight(0xffffff, 1.1));
+  const key = new THREE.DirectionalLight(0xffffff, 3.4);
+  key.position.set(2.4, 3, 3);
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xbcd4ff, 1.4);
+  fill.position.set(-2, 1.2, 2.6);
+  scene.add(fill);
+  const rim = new THREE.PointLight(0xc4b5fd, 7.5, 14, 2);
+  rim.position.set(-1.6, 0.6, 2.2);
+  scene.add(rim);
+
+  const bird = new THREE.Group();
+  scene.add(bird);
+
+  // ── 몸통: 이리데센트(무지개빛) PBR 캡슐형 타원체 — 실제 벌새 깃털의 각도별 색변화 흉내
+  //    어두운 페이지 배경(--ink)과 확실히 대비되도록 채도·명도를 높게 잡음
+  const bodyMat = new THREE.MeshPhysicalMaterial({
+    color: 0x2ecc9a,
+    metalness: 0.4,
+    roughness: 0.22,
+    iridescence: 1.0,
+    iridescenceIOR: 1.4,
+    iridescenceThicknessRange: [90, 420],
+    clearcoat: 0.7,
+    clearcoatRoughness: 0.2,
+    emissive: 0x0f6b4a,
+    emissiveIntensity: 0.5,
+  });
+  const torso = new THREE.Mesh(new THREE.SphereGeometry(0.62, 32, 24), bodyMat);
+  torso.scale.set(1, 0.82, 1.55);
+  torso.position.set(0, -0.05, 0);
+  bird.add(torso);
+
+  // 목 발광 패치 (실제 벌새의 gorget — 목 부위만 유독 화려하게 반짝이는 부분)
+  const gorgetMat = new THREE.MeshPhysicalMaterial({
+    color: 0xff5c95, metalness: 0.6, roughness: 0.12,
+    iridescence: 1.0, iridescenceIOR: 1.9, iridescenceThicknessRange: [200, 600],
+    emissive: 0xff2d6b, emissiveIntensity: 1.0,
+  });
+  const gorget = new THREE.Mesh(new THREE.SphereGeometry(0.3, 20, 16), gorgetMat);
+  gorget.scale.set(1, 0.7, 0.55);
+  gorget.position.set(0, 0.08, 0.62);
+  bird.add(gorget);
+
+  // 머리
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.34, 24, 20), bodyMat);
+  head.position.set(0, 0.28, 0.68);
+  bird.add(head);
+
+  // 부리 (가늘고 긴 원뿔)
+  const beakMat = new THREE.MeshStandardMaterial({ color: 0x1a1512, metalness: 0.3, roughness: 0.4 });
+  const beak = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.62, 12), beakMat);
+  beak.rotation.x = Math.PI / 2 + 0.12;
+  beak.position.set(0, 0.24, 1.28);
+  bird.add(beak);
+
+  // 눈 (양쪽)
+  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0a, roughness: 0.15, metalness: 0.1 });
+  [-0.2, 0.2].forEach((sx) => {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 10), eyeMat);
+    eye.position.set(sx, 0.34, 0.9);
+    bird.add(eye);
+  });
+
+  // ── 날개: 곡면 플레인 지오메트리 + 반투명 이리데센트 재질(깃털 사이 빛 투과감)
+  function makeWingGeometry(side) {
+    const geo = new THREE.PlaneGeometry(1.55, 0.78, 14, 8);
+    const pos = geo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i), y = pos.getY(i);
+      const tip = Math.max(0, x * side); // 바깥쪽(날개 끝)일수록 큰 캠버
+      const camber = Math.sin((x * side) * 1.6) * 0.18 * (1 - Math.abs(y) / 0.5);
+      pos.setZ(i, camber - tip * 0.22 * Math.abs(y));
+    }
+    geo.computeVertexNormals();
+    return geo;
+  }
+  const wingMat = new THREE.MeshPhysicalMaterial({
+    color: 0x6a5acd, transparent: true, opacity: 0.9,
+    metalness: 0.25, roughness: 0.3, side: THREE.DoubleSide,
+    iridescence: 0.85, iridescenceIOR: 1.3, iridescenceThicknessRange: [100, 350],
+    transmission: 0.1, emissive: 0x4b3f8a, emissiveIntensity: 0.4,
+  });
+  const wingL = new THREE.Mesh(makeWingGeometry(-1), wingMat);
+  wingL.position.set(-0.55, 0.05, 0.05);
+  wingL.geometry.translate(0.7, 0, 0); // 피벗을 몸통 쪽 끝단으로 이동
+  bird.add(wingL);
+  const wingR = new THREE.Mesh(makeWingGeometry(1), wingMat.clone());
+  wingR.position.set(0.55, 0.05, 0.05);
+  wingR.geometry.translate(-0.7, 0, 0);
+  bird.add(wingR);
+
+  // 꼬리 (부채꼴 깃털 3장)
+  const tailMat = new THREE.MeshStandardMaterial({ color: 0x3a2f5c, roughness: 0.45, emissive: 0x2a1f4a, emissiveIntensity: 0.3, side: THREE.DoubleSide, transparent: true, opacity: 0.92 });
+  for (let i = -1; i <= 1; i++) {
+    const feather = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.72, 3), tailMat);
+    feather.rotation.x = -Math.PI / 2;
+    feather.rotation.z = i * 0.32;
+    feather.position.set(i * 0.16, -0.08, -0.82);
+    bird.add(feather);
+  }
+
+  bird.rotation.y = -0.55; // 3/4 측면 앵글 — 정면(180°)으로 두면 부리·머리가 카메라 반대쪽으로 숨어버려
+                            // 추상적 덩어리로만 보이는 버그가 있었음. 측면 사선으로 부리·양날개·꼬리가
+                            // 동시에 실루엣으로 잡히도록 수정.
+
+  // ── 발광색 동기화: 부모가 갱신하는 --glow-color(rgba문자열)를 읽어 림라이트/이미시브에 반영
+  const tmpColor = new THREE.Color();
+  function syncGlowColor() {
+    const raw = getComputedStyle(canvas).getPropertyValue('--glow-color').trim();
+    const m = raw.match(/rgba?\(([^)]+)\)/);
+    if (!m) return;
+    const [r, g, b] = m[1].split(',').map(parseFloat);
+    tmpColor.setRGB(r / 255, g / 255, b / 255);
+    rim.color.copy(tmpColor);
+    gorgetMat.emissive.copy(tmpColor);
+  }
+
+  // ── 날갯짓 + 부유 + 배킹(뱅킹 회전) 애니메이션
+  const clock = new THREE.Clock();
+  let flapSpeed = 26; // rad/s 기준 배속
+  function render() {
+    const t = clock.getElapsedTime();
+    syncGlowColor();
+
+    const boosting = canvas.classList.contains('is-boosting');
+    const act = canvas.dataset.act || '1';
+    const isRetreat = act === '3';
+    flapSpeed = isRetreat ? 14 : (boosting ? 46 : 24);
+
+    const flap = Math.sin(t * flapSpeed);
+    wingL.rotation.z = flap * 1.15 + 0.25;
+    wingR.rotation.z = -flap * 1.15 - 0.25;
+    wingL.rotation.y = Math.sin(t * flapSpeed * 0.5) * 0.22;
+    wingR.rotation.y = -Math.sin(t * flapSpeed * 0.5) * 0.22;
+
+    bird.position.y = Math.sin(t * 1.75) * 0.06;
+    const bank = parseFloat(canvas.dataset.bank || '0');
+    bird.rotation.z = THREE.MathUtils.degToRad(bank) * 0.4 + Math.sin(t * 0.9) * 0.03;
+
+    const gEmissive = isRetreat ? 0.3 : (boosting ? 1.1 : 0.6);
+    gorgetMat.emissiveIntensity = gEmissive;
+    rim.intensity = isRetreat ? 1.6 : (boosting ? 4.6 : 3.2);
+
+    renderer.render(scene, camera);
+    if (!reduceMotion) requestAnimationFrame(render);
+  }
+
+  if (reduceMotion) {
+    // 모션 최소화 선호 시 정지된 단일 프레임만 렌더 (날갯짓/부유 없음)
+    syncGlowColor();
+    renderer.render(scene, camera);
+  } else {
+    render();
+  }
+})();
 </script>
 
 </body>
