@@ -1795,7 +1795,10 @@ hr{border:none;border-top:1px solid var(--border);}
 
   const FRAME_START = 19;   // 원본 프레임 번호(파일명 기준) 시작
   const FRAME_END = 121;    // 원본 프레임 번호 끝
-  const HOVER_LOCAL_END = 32; // 로컬 인덱스 0~32 = 호버링 루프 구간 (원본 19~51)
+  // 호버링 루프 구간: 로컬 5~32 (원본 24~51). 앞쪽 0~4(원본 19~23)는 루프 진입 지점에서
+  // "꽃에서 입을 떼는" 편집 잔여 동작이 보여 어색했음 — 0.2초(≈5프레임 @24fps) 트리밍해서 제외.
+  const HOVER_LOCAL_START = 5;
+  const HOVER_LOCAL_END = 32; // 로컬 인덱스 5~32 = 호버링 루프 구간 (원본 24~51)
   const FPS = 24; // 원본 영상 프레임레이트와 동일하게 맞춰야 어색한 가속/감속이 없음
 
   const frames = [];
@@ -1808,7 +1811,7 @@ hr{border:none;border-top:1px solid var(--border);}
 
   // 상태 기계: hover(루프) → exiting(퇴장 비행 재생) → exited(끝에서 대기) → returning(역재생) → hover
   let state = 'hover';
-  let localIdx = 0;
+  let localIdx = HOVER_LOCAL_START; // 트리밍된 지점(로컬 5)에서 시작 — 편집 잔여 동작 프레임 스킵
   let dir = 1;
   let acc = 0; // 프레임 타이밍 누적기(ms)
   const frameMs = 1000 / FPS;
@@ -1846,7 +1849,8 @@ hr{border:none;border-top:1px solid var(--border);}
     while (acc >= frameMs){
       acc -= frameMs;
       if (state === 'hover'){
-        localIdx = (localIdx + 1) % (HOVER_LOCAL_END + 1); // 0..32 반복 (프레임 51 다음 19로 점프 — 위치차 최소라 자연스러움)
+        localIdx = localIdx + 1;
+        if (localIdx > HOVER_LOCAL_END) localIdx = HOVER_LOCAL_START; // 5..32 반복 (트리밍된 진입점부터 재시작 — 위치차 최소라 자연스러움)
       } else if (state === 'exiting'){
         localIdx = Math.min(lastLocalIdx, localIdx + 1);
         if (localIdx >= lastLocalIdx) state = 'exited';
