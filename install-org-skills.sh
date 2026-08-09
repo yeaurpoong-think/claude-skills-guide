@@ -31,16 +31,22 @@ claude plugin marketplace add thedotmack/claude-mem || true
 claude plugin install claude-mem || true
 
 echo ""
-echo "2️⃣ npx skills 방식 설치 (Design DNA / Web Animation / Three.js / Remotion / MengTo 종합 스킬 / Superpowers Lab)"
+echo "2️⃣ npx skills 방식 설치 (Design DNA / Web Animation / Three.js / Remotion / MengTo 종합 스킬 / Superpowers Lab / Emil Kowalski 디자인·애니메이션 스킬)"
 npx skills add zanwei/design-dna -a claude-code -g -y || true
 npx skills add iart-ai/web-animation-skills -a claude-code -g -y || true
 npx skills add CloudAI-X/threejs-skills -a claude-code -g -y || true
 npx skills add remotion-dev/skills -a claude-code -g -y || true
 npx skills add MengTo/Skills -a claude-code -g -y || true
 npx skills add obra/superpowers-lab -a claude-code -g -y || true
+npx skills add emilkowalski/skills -a claude-code -g -y || true
 
 echo ""
-echo "3️⃣ RuFlo MCP 서버 등록 (멀티 에이전트 오케스트레이션)"
+echo "3️⃣ Plugin 마켓플레이스 추가 설치 (genjutsu — 모션/3D/디자인시스템 크리에이티브 코딩 15종 서브스킬)"
+claude plugin marketplace add AThevon/genjutsu || true
+claude plugin install genjutsu || true
+
+echo ""
+echo "4️⃣ RuFlo MCP 서버 등록 (멀티 에이전트 오케스트레이션)"
 claude mcp add ruflo -- npx ruflo@latest mcp start || true
 
 echo ""
