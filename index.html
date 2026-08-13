@@ -1719,6 +1719,72 @@ hr{border:none;border-top:1px solid var(--border);}
       </div>
     </div>
 
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(0,112,243,0.08),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🔍</div>
+        <div class="skill-stars">⭐ 28,800+</div>
+      </div>
+      <div class="skill-name">Find Skills</div>
+      <div class="skill-repo">vercel-labs/skills</div>
+      <div class="skill-desc">"이런 걸 하는 스킬 없어?"라고 물으면 오픈 스킬 생태계(72개+ 에이전트 지원)에서 딱 맞는 스킬을 찾아서 바로 설치해주는 메타 스킬. Hermes 전용 설치 경로(.hermes/skills/)가 공식 지원 목록에 명시됨.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">스킬 탐색</span>
+        <span class="tag tag-green">Hermes 공식 지원</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add vercel-labs/skills --skill find-skills</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add vercel-labs/skills --skill find-skills')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/vercel-labs/skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(196,120,224,0.08),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎨</div>
+        <div class="skill-stars">⭐ 76,000+</div>
+      </div>
+      <div class="skill-name">Taste Skill</div>
+      <div class="skill-repo">Leonxlnx/taste-skill</div>
+      <div class="skill-desc">클로드가 만드는 UI가 뻔하고 촌스러워지는(AI slop) 걸 막는 안티슬롭 프론트엔드 스킬. 브리핑을 읽고 디자인 방향을 스스로 판단해 템플릿처럼 안 보이는 인터페이스를 만든다. 설치명은 design-taste-frontend.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">디자인</span>
+        <span class="tag tag-pink">안티슬롭</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add Leonxlnx/taste-skill --skill design-taste-frontend</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add Leonxlnx/taste-skill --skill design-taste-frontend')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/Leonxlnx/taste-skill" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(217,119,6,0.08),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🔌</div>
+        <div class="skill-stars">⭐ 168,000+</div>
+      </div>
+      <div class="skill-name">MCP Builder</div>
+      <div class="skill-repo">anthropics/skills</div>
+      <div class="skill-desc">외부 API·서비스를 MCP(Model Context Protocol) 서버로 연결할 때 쓰는 앤트로픽 공식 스킬. Python(FastMCP)이나 Node/TypeScript(MCP SDK)로 고품질 MCP 서버를 만드는 전체 가이드와 평가 스크립트까지 포함.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">MCP</span>
+        <span class="tag tag-blue">Anthropic 공식</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx skills add anthropics/skills --skill mcp-builder</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add anthropics/skills --skill mcp-builder')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/anthropics/skills" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1797,6 +1863,52 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="skill-btns">
           <button class="skill-copy-btn" onclick="copySkill(this,'https://manus.im')">복사</button>
           <a class="skill-gh-btn" href="https://manus.im" target="_blank">사이트 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- agent-browser -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(0,153,204,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🌍</div>
+        <div class="skill-stars">⭐ 40,500+</div>
+      </div>
+      <div class="skill-name">Agent Browser</div>
+      <div class="skill-repo">vercel-labs/agent-browser</div>
+      <div class="skill-desc">AI 에이전트용 브라우저 자동화 CLI. 네이티브 Rust 바이너리라 빠르고, 웹 스크래핑·폼 입력·테스트 자동화에 씀. Hermes는 이미 자체 브라우저 툴을 갖고 있어 스킬로는 설치하지 않았지만, 순수 CLI로 직접 쓰기엔 유용한 도구.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">브라우저 자동화</span>
+        <span class="tag tag-green">Rust CLI</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npm install -g agent-browser && agent-browser install</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npm install -g agent-browser && agent-browser install')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/vercel-labs/agent-browser" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GSD Core (get-shit-done) -->
+    <div class="skill-card">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(203,56,55,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🚀</div>
+        <div class="skill-stars">⭐ 8,100+</div>
+      </div>
+      <div class="skill-name">GSD Core (Get Shit Done)</div>
+      <div class="skill-repo">open-gsd/gsd-core</div>
+      <div class="skill-desc">Discuss→Plan→Execute→Verify→Ship 5단계 루프로 컨텍스트 손상을 막는 스펙 기반 개발 프레임워크. Claude Code·Codex·Cursor 등을 지원하지만 Hermes는 지원 목록에 없어 설치는 보류.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">스펙 기반 개발</span>
+        <span class="tag tag-purple">Hermes 미지원</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npx @opengsd/gsd-core@latest</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npx @opengsd/gsd-core@latest')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/open-gsd/gsd-core" target="_blank">GitHub →</a>
         </div>
       </div>
     </div>
