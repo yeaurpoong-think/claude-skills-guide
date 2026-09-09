@@ -1345,14 +1345,14 @@ hr{border:none;border-top:1px solid var(--border);}
 <!-- ══ ACT IV: 증거 (추천 스킬 14선) ══ -->
 <section class="section" id="picks" data-act="4">
   <div class="sec-eyebrow">📚 SKILL LIBRARY</div>
-  <h2 class="sec-title">지금까지 검증한<br>스킬 · 도구 40선</h2>
+  <h2 class="sec-title">지금까지 검증한<br>스킬 · 도구 44선</h2>
   <p class="sec-desc">GitHub 스타 수·설치 수·커뮤니티 반응 기준으로 추린 실존하는 스킬·도구들입니다. 전부 무료예요. 카테고리를 눌러 필터링하세요.</p>
 
   <div class="method-tabs" id="skill-filter-tabs">
-    <button class="mtab skill-filter-tab active" data-filter="all">전체 (40)</button>
+    <button class="mtab skill-filter-tab active" data-filter="all">전체 (44)</button>
     <button class="mtab skill-filter-tab" data-filter="essential">⭐ 필수 도구 (10)</button>
     <button class="mtab skill-filter-tab" data-filter="video">🎬 영상·모션·3D (8)</button>
-    <button class="mtab skill-filter-tab" data-filter="design">🎨 디자인·UI (7)</button>
+    <button class="mtab skill-filter-tab" data-filter="design">🎨 디자인·UI (11)</button>
     <button class="mtab skill-filter-tab" data-filter="workflow">🧠 개발 워크플로우 (8)</button>
     <button class="mtab skill-filter-tab" data-filter="discover">📦 스킬 발견 (2)</button>
     <button class="mtab skill-filter-tab" data-filter="productivity">🛠️ 생산성·기타 (5)</button>
@@ -2115,6 +2115,98 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="skill-btns">
           <button class="skill-copy-btn" onclick="copySkill(this,'npx skills add nexu-io/open-design')">복사</button>
           <a class="skill-gh-btn" href="https://github.com/nexu-io/open-design" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Godly -->
+    <div class="skill-card" data-category="design">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(200,120,180,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🖼️</div>
+        <div class="skill-stars">디자인 인스피레이션</div>
+      </div>
+      <div class="skill-name">Godly</div>
+      <div class="skill-repo">godly.website</div>
+      <div class="skill-desc">잘 만든 실제 웹사이트를 스타일·업종·인터랙션 기준으로 큐레이션해 모아둔 갤러리입니다. 새 프로젝트 톤앤매너를 정하기 전에 "이런 느낌으로 만들고 싶다"는 참고 사이트를 빠르게 여러 개 찾고 싶을 때 열어보면 좋습니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">레퍼런스 갤러리</span>
+        <span class="tag tag-green">참고 자료</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">godly.website</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'https://godly.website')">복사</button>
+          <a class="skill-gh-btn" href="https://godly.website" target="_blank">사이트 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lenis -->
+    <div class="skill-card" data-category="design">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(90,150,200,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">📜</div>
+        <div class="skill-stars">⭐ 15,700+</div>
+      </div>
+      <div class="skill-name">Lenis</div>
+      <div class="skill-repo">darkroomengineering/lenis</div>
+      <div class="skill-desc">뚝뚝 끊기는 기본 브라우저 스크롤 대신 부드러운 관성 스크롤을 붙여주는 오픈소스 라이브러리입니다. 랜딩페이지나 포트폴리오 사이트에서 스크롤 자체를 고급스럽게 연출하고 싶을 때 GSAP 등과 함께 자주 쓰입니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">스무스 스크롤</span>
+        <span class="tag tag-orange">웹 라이브러리</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npm install lenis</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npm install lenis')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/darkroomengineering/lenis" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rive -->
+    <div class="skill-card" data-category="design">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(230,150,60,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">⚡</div>
+        <div class="skill-stars">⭐ 1,100+ (JS 런타임)</div>
+      </div>
+      <div class="skill-name">Rive</div>
+      <div class="skill-repo">rive.app</div>
+      <div class="skill-desc">벡터 기반 인터랙티브 애니메이션을 에디터에서 직접 만들고, 웹/앱에 가벼운 런타임으로 바로 재생하는 툴입니다. 로티(Lottie)보다 파일이 가볍고 상태 머신으로 인터랙션(클릭·호버 반응 등)까지 붙일 수 있어, 캐릭터·아이콘 애니메이션을 직접 다루고 싶을 때 유용합니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">인터랙티브 애니메이션</span>
+        <span class="tag tag-purple">벡터 그래픽</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">npm install @rive-app/canvas</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'npm install @rive-app/canvas')">복사</button>
+          <a class="skill-gh-btn" href="https://rive.app" target="_blank">사이트 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Podium -->
+    <div class="skill-card" data-category="design">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(200,80,80,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎬</div>
+        <div class="skill-stars">레퍼런스</div>
+      </div>
+      <div class="skill-name">Podium</div>
+      <div class="skill-repo">podium.global</div>
+      <div class="skill-desc">스포츠 브랜드 전문 실제 크리에이티브 에이전시 사이트입니다. 도구가 아니라 "이 정도 완성도가 시네마틱 퀄리티 기준"으로 삼을 만한 레퍼런스로, 영상·브랜드 사이트의 톤·연출 벤치마크가 필요할 때 참고하면 좋습니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-green">에이전시 레퍼런스</span>
+        <span class="tag tag-purple">시네마틱 벤치마크</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">podium.global</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'https://podium.global')">복사</button>
+          <a class="skill-gh-btn" href="https://podium.global" target="_blank">사이트 →</a>
         </div>
       </div>
     </div>
