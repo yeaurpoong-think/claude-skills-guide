@@ -1346,15 +1346,15 @@ hr{border:none;border-top:1px solid var(--border);}
 <!-- ══ ACT IV: 증거 (추천 스킬 14선) ══ -->
 <section class="section" id="picks" data-act="4">
   <div class="sec-eyebrow">📚 SKILL LIBRARY</div>
-  <h2 class="sec-title">지금까지 검증한<br>스킬 · 도구 50선</h2>
+  <h2 class="sec-title">지금까지 검증한<br>스킬 · 도구 54선</h2>
   <p class="sec-desc">GitHub 스타 수·설치 수·커뮤니티 반응 기준으로 추린 실존하는 스킬·도구들입니다. 전부 무료예요. 카테고리를 눌러 필터링하세요.</p>
 
   <div class="method-tabs" id="skill-filter-tabs">
-    <button class="mtab skill-filter-tab active" data-filter="all">전체 (50)</button>
+    <button class="mtab skill-filter-tab active" data-filter="all">전체 (54)</button>
     <button class="mtab skill-filter-tab" data-filter="essential">⭐ 필수 도구 (11)</button>
     <button class="mtab skill-filter-tab" data-filter="video">🎬 영상·모션·3D (8)</button>
     <button class="mtab skill-filter-tab" data-filter="design">🎨 디자인·UI (12)</button>
-    <button class="mtab skill-filter-tab" data-filter="workflow">🧠 개발 워크플로우 (12)</button>
+    <button class="mtab skill-filter-tab" data-filter="workflow">🧠 개발 워크플로우 (16)</button>
     <button class="mtab skill-filter-tab" data-filter="discover">📦 스킬 발견 (2)</button>
     <button class="mtab skill-filter-tab" data-filter="productivity">🛠️ 생산성·기타 (5)</button>
   </div>
@@ -2392,6 +2392,98 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="skill-btns">
           <button class="skill-copy-btn" onclick="copySkill(this,'npm install -g @playwright/mcp')">복사</button>
           <a class="skill-gh-btn" href="https://github.com/microsoft/playwright-mcp" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perplexity MCP -->
+    <div class="skill-card" data-category="workflow">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(32,159,181,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🔍</div>
+        <div class="skill-stars">⭐ 2,500+</div>
+      </div>
+      <div class="skill-name">Perplexity MCP</div>
+      <div class="skill-repo">perplexityai/modelcontextprotocol</div>
+      <div class="skill-desc">클로드가 학습 시점 이후의 최신 정보를 실시간 웹 검색으로 찾아와 답하게 해주는 공식 MCP 서버입니다. "최근 바뀐 점 정리해줘" 같은 시의성 있는 질문에서 클로드가 옛날 지식으로 헛소리하는 걸 막아줍니다. API 키가 필요합니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">웹 검색</span>
+        <span class="tag tag-green">MCP</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude mcp add perplexity --env PERPLEXITY_API_KEY="키" -- npx -y @perplexity-ai/mcp-server</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude mcp add perplexity --env PERPLEXITY_API_KEY=\'키\' -- npx -y @perplexity-ai/mcp-server')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/perplexityai/modelcontextprotocol" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firecrawl MCP -->
+    <div class="skill-card" data-category="workflow">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(230,120,40,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🔥</div>
+        <div class="skill-stars">⭐ 7,500+</div>
+      </div>
+      <div class="skill-name">Firecrawl MCP</div>
+      <div class="skill-repo">firecrawl/firecrawl-mcp-server</div>
+      <div class="skill-desc">웹사이트나 문서 페이지를 통째로 긁어와 깔끔한 텍스트로 정리해주는 MCP 서버입니다. 공식 문서 사이트를 한 번에 훑어 핵심 기능만 뽑아내거나, 링크 여러 개를 한꺼번에 요약할 때 유용합니다. API 키가 필요합니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">웹 스크래핑</span>
+        <span class="tag tag-green">MCP</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude mcp add firecrawl --env FIRECRAWL_API_KEY="키" -- npx -y firecrawl-mcp</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude mcp add firecrawl --env FIRECRAWL_API_KEY=\'키\' -- npx -y firecrawl-mcp')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/firecrawl/firecrawl-mcp-server" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chrome DevTools MCP -->
+    <div class="skill-card" data-category="workflow">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(66,133,244,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🧭</div>
+        <div class="skill-stars">⭐ 52,700+</div>
+      </div>
+      <div class="skill-name">Chrome DevTools MCP</div>
+      <div class="skill-repo">ChromeDevTools/chrome-devtools-mcp</div>
+      <div class="skill-desc">구글 공식 MCP로, 내가 지금 보고 있는 크롬 탭의 콘솔 로그·네트워크 요청·화면 내용을 클로드가 그대로 읽게 해줍니다. "지금 열린 탭에 에러 있는지 봐줘"처럼 실제 사용 중인 브라우저 상태를 그대로 공유하고 싶을 때 씁니다. 키 없이 바로 설치됩니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-blue">브라우저 디버깅</span>
+        <span class="tag tag-green">MCP</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude mcp add chrome-devtools -- npx chrome-devtools-mcp@latest</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude mcp add chrome-devtools -- npx chrome-devtools-mcp@latest')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/ChromeDevTools/chrome-devtools-mcp" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Glif MCP -->
+    <div class="skill-card" data-category="workflow">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(150,90,220,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎨</div>
+        <div class="skill-stars">호스팅형 서비스</div>
+      </div>
+      <div class="skill-name">Glif MCP</div>
+      <div class="skill-repo">glif.app/mcp</div>
+      <div class="skill-desc">클로드에게 이미지·영상 생성 능력을 붙여주는 호스팅형 MCP입니다. 수백 개의 커뮤니티 제작 AI 모델(이미지 생성, 스타일 변환 등) 중 원하는 걸 골라 바로 실행하게 해줍니다. 브라우저 로그인만 하면 키 없이 사용 가능합니다.</div>
+      <div class="skill-tags">
+        <span class="tag tag-purple">이미지 생성</span>
+        <span class="tag tag-green">MCP</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">claude mcp add --transport http glif "https://glif.app/api/mcp"</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'claude mcp add --transport http glif \'https://glif.app/api/mcp\'')">복사</button>
+          <a class="skill-gh-btn" href="https://glif.app/mcp" target="_blank">사이트 →</a>
         </div>
       </div>
     </div>
