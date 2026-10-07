@@ -93,6 +93,55 @@ button{font-family:inherit;}
   box-shadow:0 0 12px var(--clay);
 }
 
+
+/* ── SKILL SEARCH BAR (메뉴 바로 아래 고정, 외부 서비스 없이 페이지 안에서만 동작) ── */
+.skill-search-bar{
+  position:fixed;top:56px;left:0;right:0;z-index:99;
+  display:flex;justify-content:center;
+  padding:var(--s2) var(--s8);
+  background:rgba(15,15,14,0.25);
+  backdrop-filter:blur(18px) saturate(180%);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.skill-search-inner{
+  position:relative;width:100%;max-width:560px;
+  display:flex;align-items:center;gap:var(--s2);
+  padding:0 var(--s3);height:38px;border-radius:999px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.skill-search-inner:focus-within{
+  border-color:var(--clay-border);
+  background:rgba(255,255,255,0.07);
+  box-shadow:0 0 0 3px var(--clay-subtle);
+}
+.skill-search-icon{width:15px;height:15px;color:var(--text-3);flex-shrink:0;}
+#skillSearch{
+  flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;
+  color:var(--text);font:inherit;font-size:14px;
+}
+#skillSearch::placeholder{color:var(--text-3);}
+#skillSearch::-webkit-search-cancel-button{display:none;}
+.skill-search-count{font-size:12px;color:var(--clay-hi);white-space:nowrap;}
+.skill-search-clear{
+  display:none;border:0;background:rgba(255,255,255,0.08);color:var(--text-2);
+  width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:12px;line-height:22px;padding:0;flex-shrink:0;
+}
+.skill-search-clear:hover{background:var(--clay-subtle);color:var(--text);}
+.skill-search-inner.has-value .skill-search-clear{display:block;}
+.skill-search-empty{
+  display:none;grid-column:1/-1;text-align:center;
+  padding:var(--s7) var(--s4);color:var(--text-3);font-size:14px;
+  border:1px dashed var(--border);border-radius:16px;
+}
+#picks{scroll-margin-top:120px;}
+@media(max-width:768px){
+  .skill-search-bar{padding:var(--s2) var(--s4);}
+  .skill-search-inner{max-width:none;}
+}
+
 /* ── NAV ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
@@ -828,6 +877,16 @@ hr{border:none;border-top:1px solid var(--border);}
   </a>
 </nav>
 
+<!-- 스킬 검색창 (메뉴 바로 아래 고정) -->
+<div class="skill-search-bar" role="search">
+  <label class="skill-search-inner" id="skillSearchBox">
+    <svg class="skill-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input type="search" id="skillSearch" placeholder="스킬 이름, 기능, 키워드로 검색 (예: 영상, 디자인, MCP)" autocomplete="off" aria-label="스킬 검색">
+    <span class="skill-search-count" id="skillSearchCount"></span>
+    <button type="button" class="skill-search-clear" id="skillSearchClear" aria-label="검색어 지우기">✕</button>
+  </label>
+</div>
+
 <!-- Hero (몽환적 보라빛 벌새 정원 컨셉 — 벌새는 아래 journey-stage의 단일 캐릭터가 전담) -->
 <section class="hero" data-act="1">
   <img class="hero-bg-img" src="assets/hero-hummingbird-bg.png" alt="보랏빛 황혼의 라벤더 들판">
@@ -1471,6 +1530,7 @@ hr{border:none;border-top:1px solid var(--border);}
   </div>
 
   <div class="skills-grid" id="skills-grid-all">
+    <div class="skill-search-empty" id="skillSearchEmpty">검색 결과가 없어요. 다른 키워드로 찾아보세요 🔍</div>
 
     <!-- OmniRoute -->
     <div class="skill-card" data-category="essential">
@@ -3310,13 +3370,56 @@ document.querySelectorAll('.skill-filter-tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.skill-filter-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    const filter = tab.getAttribute('data-filter');
-    document.querySelectorAll('#skills-grid-all .skill-card').forEach(card => {
-      const cat = card.getAttribute('data-category');
-      card.style.display = (filter === 'all' || cat === filter) ? '' : 'none';
-    });
+    applySkillFilter();
   });
 });
+
+// 스킬 검색 — 카테고리 탭과 함께 동작 (외부 서비스 없음)
+const norm = s => (s || '').toLowerCase().replace(/\s+/g, '');
+function applySkillFilter() {
+  const activeTab = document.querySelector('.skill-filter-tab.active');
+  const filter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+  const input = document.getElementById('skillSearch');
+  const q = norm(input ? input.value : '');
+  let shown = 0;
+  document.querySelectorAll('#skills-grid-all .skill-card').forEach(card => {
+    const cat = card.getAttribute('data-category');
+    if (!card.dataset.search) card.dataset.search = norm(card.textContent);
+    const ok = (filter === 'all' || cat === filter) && (!q || card.dataset.search.includes(q));
+    card.style.display = ok ? '' : 'none';
+    if (ok) shown++;
+  });
+  const empty = document.getElementById('skillSearchEmpty');
+  if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
+  const count = document.getElementById('skillSearchCount');
+  if (count) count.textContent = q ? shown + '개 찾음' : '';
+  const box = document.getElementById('skillSearchBox');
+  if (box) box.classList.toggle('has-value', !!(input && input.value));
+}
+(function initSkillSearch() {
+  const input = document.getElementById('skillSearch');
+  const clear = document.getElementById('skillSearchClear');
+  const picks = document.getElementById('picks');
+  if (!input) return;
+  let jumped = false;
+  input.addEventListener('input', () => {
+    applySkillFilter();
+    // 처음 입력할 때 스킬 라이브러리가 화면에 없으면 그쪽으로 이동
+    if (input.value && picks && !jumped) {
+      const r = picks.getBoundingClientRect();
+      if (r.top > window.innerHeight * 0.6 || r.bottom < 150) picks.scrollIntoView({ behavior: 'smooth' });
+      jumped = true;
+    }
+    if (!input.value) jumped = false;
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && picks) picks.scrollIntoView({ behavior: 'smooth' });
+    if (e.key === 'Escape') { input.value = ''; applySkillFilter(); }
+  });
+  clear.addEventListener('click', e => {
+    e.preventDefault(); input.value = ''; applySkillFilter(); input.focus();
+  });
+})();
 
 // FAQ
 function toggleFaq(btn) {
