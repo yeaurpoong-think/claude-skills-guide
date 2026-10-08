@@ -1516,13 +1516,13 @@ hr{border:none;border-top:1px solid var(--border);}
 <!-- ══ ACT IV: 증거 (추천 스킬 14선) ══ -->
 <section class="section" id="picks" data-act="4">
   <div class="sec-eyebrow">📚 SKILL LIBRARY</div>
-  <h2 class="sec-title">지금까지 검증한<br>스킬 · 도구 60선</h2>
+  <h2 class="sec-title">지금까지 검증한<br>스킬 · 도구 63선</h2>
   <p class="sec-desc">GitHub 스타 수·설치 수·커뮤니티 반응 기준으로 추린 실존하는 스킬·도구들입니다. 전부 무료예요. 카테고리를 눌러 필터링하세요.</p>
 
   <div class="method-tabs" id="skill-filter-tabs">
-    <button class="mtab skill-filter-tab active" data-filter="all">전체 (60)</button>
+    <button class="mtab skill-filter-tab active" data-filter="all">전체 (63)</button>
     <button class="mtab skill-filter-tab" data-filter="essential">⭐ 필수 도구 (11)</button>
-    <button class="mtab skill-filter-tab" data-filter="video">🎬 영상·모션·3D (8)</button>
+    <button class="mtab skill-filter-tab" data-filter="video">🎬 영상·모션·3D (11)</button>
     <button class="mtab skill-filter-tab" data-filter="design">🎨 디자인·UI (12)</button>
     <button class="mtab skill-filter-tab" data-filter="workflow">🧠 개발 워크플로우 (17)</button>
     <button class="mtab skill-filter-tab" data-filter="discover">📦 스킬 발견 (2)</button>
@@ -1574,6 +1574,29 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="skill-btns">
           <button class="skill-copy-btn" onclick="copySkill(this,'claude plugin marketplace add obra/superpowers && claude plugin install superpowers@superpowers-dev')">복사</button>
           <a class="skill-gh-btn" href="https://github.com/obra/superpowers" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- yt-dlp -->
+    <div class="skill-card" data-category="video">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(220,80,80,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">📥</div>
+        <div class="skill-stars">⭐ 196,200+</div>
+      </div>
+      <div class="skill-name">yt-dlp</div>
+      <div class="skill-repo">yt-dlp/yt-dlp</div>
+      <div class="skill-desc">유튜브·인스타 릴스·틱톡 등 수천 개 사이트의 영상을 링크 하나로 내려받는 무료 명령어 도구입니다. 잘 된 릴스나 경쟁사 영상을 클로드에게 통째로 분석시키고 싶을 때, 먼저 영상 파일을 확보하는 1단계로 씁니다. (저작권이 있는 영상은 개인 분석·참고 용도로만)</div>
+      <div class="skill-tags">
+        <span class="tag tag-orange">영상 다운로드</span>
+        <span class="tag tag-blue">CLI</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">pip install yt-dlp</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'pip install yt-dlp')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/yt-dlp/yt-dlp" target="_blank">GitHub →</a>
         </div>
       </div>
     </div>
@@ -1712,6 +1735,29 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="skill-btns">
           <button class="skill-copy-btn" onclick="copySkill(this,'caveman wrap claude')">복사</button>
           <a class="skill-gh-btn" href="https://github.com/JuliusBrussee/caveman" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Whisper -->
+    <div class="skill-card" data-category="video">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(120,180,120,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">🎙️</div>
+        <div class="skill-stars">⭐ 110,100+</div>
+      </div>
+      <div class="skill-name">Whisper</div>
+      <div class="skill-repo">openai/whisper</div>
+      <div class="skill-desc">OpenAI가 공개한 음성 인식 모델로, 영상·음성 속 말을 내 PC에서 무료로 받아적어 텍스트로 바꿔줍니다. 릴스의 훅 멘트·원고 구조를 글로 뽑아 클로드에게 분석시키거나, 회의 녹음·인터뷰를 문서로 정리할 때 유용합니다. (FFmpeg가 먼저 설치돼 있어야 함)</div>
+      <div class="skill-tags">
+        <span class="tag tag-green">음성→텍스트</span>
+        <span class="tag tag-purple">로컬 무료</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">pip install -U openai-whisper</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'pip install -U openai-whisper')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/openai/whisper" target="_blank">GitHub →</a>
         </div>
       </div>
     </div>
@@ -1988,6 +2034,29 @@ hr{border:none;border-top:1px solid var(--border);}
         <div class="skill-btns">
           <button class="skill-copy-btn" onclick="copySkill(this,'pip install strix-agent')">복사</button>
           <a class="skill-gh-btn" href="https://github.com/usestrix/strix" target="_blank">GitHub →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FFmpeg -->
+    <div class="skill-card" data-category="video">
+      <div class="skill-card-glow" style="background:linear-gradient(135deg,rgba(230,170,60,0.07),transparent)"></div>
+      <div class="skill-head">
+        <div class="skill-emoji">✂️</div>
+        <div class="skill-stars">⭐ 64,800+</div>
+      </div>
+      <div class="skill-name">FFmpeg</div>
+      <div class="skill-repo">FFmpeg/FFmpeg</div>
+      <div class="skill-desc">영상·음성을 자르고, 붙이고, 변환하는 사실상 모든 영상 도구의 기반이 되는 무료 엔진입니다. 분석한 영상에서 첫 3초 훅만 잘라 나만의 "훅 창고"를 만들거나, 클로드가 볼 수 있게 영상을 장면별 이미지로 쪼갤 때 씁니다. (Mac은 brew install ffmpeg)</div>
+      <div class="skill-tags">
+        <span class="tag tag-pink">영상 편집</span>
+        <span class="tag tag-blue">CLI</span>
+      </div>
+      <div class="skill-action-bar">
+        <div class="skill-install-cmd">winget install Gyan.FFmpeg</div>
+        <div class="skill-btns">
+          <button class="skill-copy-btn" onclick="copySkill(this,'winget install Gyan.FFmpeg')">복사</button>
+          <a class="skill-gh-btn" href="https://github.com/FFmpeg/FFmpeg" target="_blank">GitHub →</a>
         </div>
       </div>
     </div>
